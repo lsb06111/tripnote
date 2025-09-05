@@ -7,7 +7,6 @@ import lombok.Getter;
 
 @Component
 @Getter
-@AllArgsConstructor
 public class AreaVO {
 	
 	private int id;
