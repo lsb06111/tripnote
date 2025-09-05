@@ -61,16 +61,11 @@ let tripStartDate = "";
 let tripEndDate = "";
 let tripDest = ""; // 여행 지역
 function checkForNextStep(){
+	event.preventDefault();
 	tripDest = $('input[name="locationRadio"]:checked').next().text().trim();
  	if (tripStartDate && tripEndDate && tripDest){
- 		$.ajax({
- 			url: '/tripnote/trip/plan?startDate='+tripStartDate+"&endDate="+tripEndDate+"&tripDest="+tripDest,
- 			type : 'GET',
- 			async: true, // false : sync
- 			success : function(data, status){
- 				console.log(data+" with "+status);
- 			}
- 		});
+ 		location.href = '/tripnote/trip/plan?startDate='+tripStartDate+'&endDate='+tripEndDate+'&tripDest='+tripDest;
+ 		
  		//$('#trip-loc-step').trigger('click');
  	}else{
  		alert("여행 날짜와 여행지를 먼저 선택하세요.");

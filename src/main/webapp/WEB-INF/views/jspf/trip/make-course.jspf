@@ -41,8 +41,8 @@
 	<!-- 중간 일정 타임라인 -->
 	<section class="trip-schedule" id="trip-loc" style="flex:1; overflow: hidden;">
 		<div class="trip-schedule-header mb-3 d-flex justify-content-between">
-			<span id = "trip-dest" class="fs-3">하와이</span>
-			 <small id = "trip-dates" class="d-flex align-items-end" style="font-weight: normal; color: #999;">2025.9.6 - 2025.9.9</small>
+			<span id = "trip-dest" class="fs-3">${ tripInfoDTO.tripDest }</span>
+			 <small id = "trip-dates" class="d-flex align-items-end" style="font-weight: normal; color: #999;">${ tripInfoDTO.startDate } - ${ tripInfoDTO.endDate }</small>
 		</div>
 		<div class="trip-timeline">
 			<div class="trip-timeline-day">

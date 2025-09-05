@@ -12,5 +12,5 @@ public class TripInfoDTO {
 
 	private String startDate;
 	private String endDate;
-	private AreaVO tripDest;
+	private String tripDest;
 }
