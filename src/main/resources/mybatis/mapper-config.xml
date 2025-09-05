@@ -7,5 +7,6 @@
 	</settings>
 	
 	<typeAliases>
+		<package name="edu.example.tripnote.domain"/>
 	</typeAliases>
 </configuration>
