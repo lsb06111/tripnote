@@ -1,0 +1,103 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.*"%>
+<section id="services" class="services section" style="padding:0">
+<div class="container">
+	<div class="mb-3 input-group">
+	    <input type="text" class="form-control" id="searchUsername" name="username" 
+       required placeholder="아이디를 입력해주세요"
+       oninput="filterCards()">
+	    <button type="button" class="btn text-white"
+	      style="--bs-btn-bg:#5c99ee; 
+	             --bs-btn-hover-bg:#447fcc; 
+	             --bs-btn-border-color:#5c99ee; 
+	             --bs-btn-hover-border-color:#447fcc;">
+	      검색
+	    </button>
+	</div>
+	<div id="noResults" style="display:none; text-align:center; color:#6c757d; padding:40px 0;">
+  검색 결과가 없습니다.
+</div>
+        <div class="row gy-4">
+<%
+String[] info = {
+	    "김민준 @minjun_kim",
+	    "이서준 @seo_jun123",
+	    "박서연 @seoyeon_park",
+	    "최지우 @jiwoo_choi",
+	    "정하준 @hajun_jung",
+	    "윤서현 @seohyun_yoon",
+	    "임도윤 @doyun_lim",
+	    "한지민 @jimin_han",
+	    "오예준 @yejun_oh",
+	    "서하율 @hayul_seo",
+	    "조지호 @jiho_cho",
+	    "배하린 @harin_bae",
+	    "신우진 @woojin_shin",
+	    "권서아 @seoa_kwon"
+	};
+%>    
+<% 
+	Random rand = new Random();
+	for(int i=0; i<14; i++){ 
+		String name = info[i].substring(0,3);
+		String username = info[i].substring(4,info[i].length());
+		boolean randBoolean = rand.nextBoolean();
+%>
+         <div class="col-12">
+			  <div class="service-card" style="padding: 18px 24px; cursor:pointer;" onclick="location.href='/oti_team3/profile.jsp?identify=<%=username%>&name=<%= name %>'">
+			    <div style="display:flex; align-items:center; gap:8px;">
+  
+				  <div class="service-icon" style="margin-bottom:0">
+				    <i class="bi bi-person"></i>
+				  </div>
+				  
+				  <div style="margin-left:10px;">
+				    <h3 style="margin:0;"><%= info[i] %></h3>
+				  </div>
+				  
+				  <%if(randBoolean){ %>
+				  <button type="button" data-mdb-button-init data-mdb-ripple-init 
+						  class="btn btn-outline-primary" 
+						  style="margin-left:auto;
+					             --bs-btn-hover-bg:#447fcc; 
+					             --bs-btn-border-color:#5c99ee; 
+					             --bs-btn-hover-border-color:#447fcc;"
+						  onclick="event.stopPropagation();">팔로우
+	             </button>
+				  <%}else { %>
+  					<button type="button" data-mdb-button-init data-mdb-ripple-init 
+				          class="btn btn-primary"
+				          style="margin-left:auto;
+				                 --bs-btn-bg:#5c99ee; 
+				                 --bs-btn-hover-bg:#447fcc; 
+				                 --bs-btn-border-color:#5c99ee; 
+				                 --bs-btn-hover-border-color:#447fcc;"
+				          onclick="event.stopPropagation();">
+				    맞팔로우
+				  </button>
+  				<%} %>
+				</div>
+			  </div>
+		</div>
+		<%} %>
+</div>
+</div>
+</section>
+<script>
+function filterCards() {
+  var q = document.getElementById('searchUsername').value.trim().toLowerCase();
+  var cols = document.querySelectorAll('.row.gy-4 > .col-12');
+  var shown = 0;
+
+  cols.forEach(function(col){
+    var h3 = col.querySelector('h3');
+    var text = h3 ? h3.textContent.toLowerCase() : '';
+    var match = q === '' || text.includes(q);
+    col.style.display = match ? '' : 'none';
+    if (match) shown++;
+  });
+
+  // show placeholder when nothing matches
+  document.getElementById('noResults').style.display = (shown === 0) ? 'block' : 'none';
+}
+</script>

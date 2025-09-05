@@ -1,0 +1,35 @@
+@charset "UTF-8";
+/* 헤더(월/년 표시 바) 배경만 변경 */
+.ui-datepicker .ui-datepicker-header {
+  background: #5c99ee;   /* 포인트 블루 */
+  color: #fff;
+  border: 1px solid #5c99ee;
+}
+
+/* 기본 날짜 셀 배경 */
+.ui-datepicker .ui-state-default {
+  background: #eef4ff;                 /* 연한 파스텔 블루 */
+  border: 1px solid #d6e6ff;
+  color: #333;
+}
+
+/* 호버 시 배경 */
+.ui-datepicker .ui-state-default:hover {
+  background: #e2edff;                 /* 살짝 진한 블루 */
+  border-color: #c7dcff;
+  color: #2b6fd3;
+}
+
+/* 선택된 날짜(활성) 배경 */
+.ui-datepicker .ui-state-active {
+  background: #5c99ee;                 /* 포인트 블루 */
+  border-color: #5c99ee;
+  color: #fff !important;
+}
+
+/* 비활성(이전/다음달) 날짜는 배경만 더 옅게 */
+.ui-datepicker .ui-priority-secondary .ui-state-default {
+  background: #f6f9ff;
+  color: #9aa6b2;
+  border-color: #e6efff;
+}

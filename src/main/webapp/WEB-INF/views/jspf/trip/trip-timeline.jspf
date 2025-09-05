@@ -1,0 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<div class="trip-timeline-event d-flex flex-column ">
+	<div class="d-flex w-100">
+		<div class="number m-1">${order}</div>
+		<div class="event-info mx-2">
+			<div class="time">12:55-12:55</div>
+			<div style="color: #ff7a7a;">${type}</div> 
+			<div style="white-space: nowrap">${title}</div>
+		</div>
+		<img src="${img}" alt="이미지 없음" class="event-img" />
+		<div class="d-flex flex-column justify-content-around">
+		    <i class="bi bi-pencil-square ms-2" onclick="toggleNote(this)" style="font-size:1.4em"></i>
+		    <i class="bi bi-trash ms-2" style="font-size:1.4em"></i> 
+		</div>
+		
+	</div>
+	<div class="trip-note-area">
+		<textarea class="pe-5" placeholder="메모를 입력하세요..."></textarea>
+		<button class="btn btn-light save-note-btn">완료</button>
+	</div>
+</div>

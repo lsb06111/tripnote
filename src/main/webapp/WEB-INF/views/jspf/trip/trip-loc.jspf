@@ -1,0 +1,92 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<div class="trip-loc-card " onclick="drawRcmdMarker(this)">
+	<div class="trip-loc-top" >
+		<div class="sl-thumb">
+			<img src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20150901_137%2F1441045702624kiY65_JPEG%2F13491921_0.jpg" alt="장소 이미지">
+		</div>
+		<div>
+			<div class="sl-badge">친구추천</div>
+			<div class="sl-badge">명소</div>
+			<div class="sl-badge">月 <b>399</b>명</div>
+		</div>
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this)">+</button>
+	</div>
+	<!-- 하단: 상세 설명 박스 -->
+	<div class="trip-loc-info">
+		<div class="sl-cat d-flex justify-content-start">
+			<span class="sl-type me-1">명소</span>
+			<a href="#" class="sl-name">해운대</a>
+			<div class="trip-sl-address" style="display:none">부산 해운대구 우동</div>
+		</div>
+		<p class="sl-desc">온천장과 해수욕장이 있다. 한국 8경(景)의 하나로 꼽히는 명승지이며, 해운대 자체의 8경이 또 있을 정도로 예로부터 많은 사람들의 찬탄을 받았다.</p>
+		<div class="sl-meta">
+		</div>
+	</div>
+</div>
+<div class="trip-loc-card" onclick="drawRcmdMarker(this)">
+	<div class="trip-loc-top">
+		<div class="sl-thumb">
+			<img src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20150831_291%2F1440992293098C6Wut_JPEG%2F157155537130145_0.jpg" alt="장소 이미지">
+		</div>
+		<div>
+			<div class="sl-badge">친구추천</div>
+			<div class="sl-badge">명소</div> 
+		</div>
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this)">+</button>
+	</div>
+	<!-- 하단: 상세 설명 박스 -->
+	<div class="trip-loc-info">
+		<div class="sl-cat d-flex justify-content-start">
+			<span class="sl-type me-1">명소</span>
+			<a href="#" class="sl-name">광안리해수욕장</a>
+			<div class="trip-sl-address" style="display:none">부산 수영구 광안해변로 219</div>
+		</div>
+		<p class="sl-desc">광안리해수욕장은 부산 수영구에 위치한 아름다운 해변</p>
+		<div class="sl-meta">
+		</div>
+	</div>
+</div>
+<div class="trip-loc-card" onclick="drawRcmdMarker(this)"> 
+	<div class="trip-loc-top">
+		<div class="sl-thumb">
+			<img src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20250815_163%2F1755214729200aRnPM_JPEG%2FIMG_6817.jpeg" alt="장소 이미지">
+		</div>
+		<div>
+			<div class="sl-badge">명소</div>
+		</div>
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this)">+</button>
+	</div>
+	<!-- 하단: 상세 설명 박스 -->
+	<div class="trip-loc-info">
+		<div class="sl-cat d-flex justify-content-start">
+			<span class="sl-type me-1">명소</span>
+			<a href="#" class="sl-name">부산박물관</a>
+			<div class="trip-sl-address" style="display:none">부산 남구 유엔평화로 63 부산박물관</div>
+		</div>
+		<p class="sl-desc">1978년 개관한 부산박물관은 부산의 대표적인 종합박물관입니다. 선사에서 근현대까지 부산의 역사와 문화를 전반적으로 다루고 있는 역사박물관입니다.</p>
+		<div class="sl-meta">
+		</div>
+	</div>
+</div>
+<div class="trip-loc-card" onclick="drawRcmdMarker(this)"> 
+	<div class="trip-loc-top">
+		<div class="sl-thumb">
+			<img src="https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20150925_56%2F1443161115812slsBW_JPEG%2F166875553533979_0.jpg">
+		</div>
+		<div>
+			<div class="sl-badge">식당</div>
+		</div>
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this)">+</button>
+	</div>
+	<!-- 하단: 상세 설명 박스 -->
+	<div class="trip-loc-info">
+		<div class="sl-cat d-flex justify-content-start">
+			<a href="#" class="sl-name">춘하추동밀면 서면본점</a>
+			<div class="trip-sl-address" style="display:none">부산 부산진구 서면문화로 48-1</div>
+		</div>
+		<p class="sl-desc">입에서 입으로! 최고의 맛을 아는 미식가들의 강력 추전 춘하추동.춘하추동은 미식가들의 최고 추천을 자랑하는 맛 집 중의 맛집이다.</p>
+		<div class="sl-meta">
+		</div>
+	</div>
+</div>
