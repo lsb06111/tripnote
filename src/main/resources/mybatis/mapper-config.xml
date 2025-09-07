@@ -8,5 +8,6 @@
 	
 	<typeAliases>
 		<package name="edu.example.tripnote.domain"/>
+		<package name="edu.example.tripnote.domain.vo"/>
 	</typeAliases>
 </configuration>
