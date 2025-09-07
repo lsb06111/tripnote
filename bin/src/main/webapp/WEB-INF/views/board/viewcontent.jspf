@@ -1,0 +1,206 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- Tabs Section -->
+    <section id="tabs" class="tabs section">
+		<div class="container section-title" style="margin-top:200px;">
+	        <h2>부산 관광지 리뷰</h2>
+	        <p>정동윤님의 리뷰글 입니다!</p>
+      </div><!-- End Section Title -->
+      
+   <section id="portfolio-details" class="portfolio-details section">
+
+      <div class="container">
+
+        <div class="project-hero">
+          <div class="project-meta-grid">
+            <div class="meta-column">
+              <div class="meta-label">작성자(닉네임)</div>
+              <div class="meta-value">정동윤</div>
+            </div>
+            <div class="meta-column">
+              <div class="meta-label">작성일</div>
+              <div class="meta-value">2025.08.12</div>
+            </div>
+            <div class="meta-column">
+              <div class="meta-label">여행코스(부산)</div>
+              <div class="meta-value">해운대-광안리-서면</div>
+            </div>
+            <div class="meta-column">
+              <div class="meta-label">여행일정</div>
+              <div class="meta-value">2025.08.12 ~ 2025.08.16</div>
+            </div>
+            <div class="meta-column">
+              <div class="meta-label">팔로우</div>
+              <div class="meta-value">
+				<input type="submit" class = "folling" value="팔로우 신청">
+				
+				</div>
+            </div>
+          </div>
+        </div>
+       </div>
+      </section>
+      
+      <div class="container">
+        <div class="tabs-wrapper">
+        
+<% String reqTitle = request.getParameter("title"); %>
+    <section id="tabs" class="tabs section mt-5">
+      <div class="container">
+
+        <div class="tabs-wrapper">
+          <div class="tabs-header">
+            <ul class="nav nav-tabs">
+            <%for(int i=0; i<4; i++){ %>
+	              <li class="nav-item">
+	                <a class="nav-link <%= i==0? "active show" : "" %>" data-bs-toggle="tab" data-bs-target="#tabs-tab-<%= (i+1) %>">
+	                  <div class="tab-content-preview">
+	                    <span class="tab-number">0<%= (i+1) %></span>
+	                    <div class="tab-text">
+	                      <h6 style="margin-bottom:0"><%= (i+1) + "일차" %></h6>
+	                    </div>
+	                  </div>
+	                </a>
+	              </li>
+              <%} %>
+              
+            </ul>
+          </div>
+
+          <div class="tab-content">
+
+			<%
+			int tabNumber = 4;
+			for(int ii=0; ii < tabNumber; ii++){ %>
+            <div class="tab-pane fade <%= ii==0 ? "active show" : "" %>" id="tabs-tab-<%= (ii+1) %>">
+
+  <!-- NODES BAR -->
+  <div id="routeBar-<%= ii %>" data-group="<%= ii %>" class="d-flex justify-content-start my-4">
+  <div class="d-flex flex-column align-items-start justify-content-start w-auto">
+    <%
+      int nodeNumber = 5;
+      String[] spots = {"해운대", "광안리", "서면", "남포동", "송정"};
+      String[] times = {"15분", "12분", "20분", "18분"};
+      String[] nodeIcons = {"house-door", "leaf-fill", "fork-knife", "leaf-fill", "house-door"};
+
+      for (int i = 0; i < nodeNumber; i++) {
+    %>
+      <!-- Node + label -->
+      <div class="d-flex flex-column align-items-start">
+        <button type="button"
+                class="route-node btn btn-outline-primary rounded-circle fw-bold d-flex align-items-center justify-content-center p-0 <%= i==0 ? "active" : "" %>"
+                data-target="#spot-pane-<%= ii %>-<%= i %>"
+                data-group="<%= ii %>"
+                style="width:60px;height:60px;
+                       --bs-btn-color:#5c99ee;
+                       --bs-btn-border-color:#5c99ee;
+                       --bs-btn-hover-bg:#5c99ee;
+                       --bs-btn-hover-border-color:#5c99ee;
+                       --bs-btn-hover-color:#fff;
+                       --bs-btn-active-bg:#5c99ee;
+                       --bs-btn-active-border-color:#5c99ee;
+                       --bs-btn-active-color:#fff;">
+          <i class="bi bi-<%= nodeIcons[i] %>" style="font-size:1.4em"></i>
+        </button>
+        <small class="mt-1 text-muted" style="font-size:1.05em"><%= spots[i] %></small>
+      </div>
+
+      <% if (i < nodeNumber - 1) { %>
+        <!-- 세로 연결선 + pill time -->
+        <div class="d-flex flex-column align-items-center my-2">
+          <div class="border-start border-2 h-100" style="min-height:40px;"></div>
+          <span class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2" style="font-size:0.85em">
+            <i class="bi bi-bus-front"></i> <%= times[i] %>
+          </span>
+        </div>
+      <% } %>
+    <%
+      }
+    %>
+  </div>
+</div>
+
+
+
+  <!-- NODE CONTENT PANES (unique per day) -->
+  <div id="spotPanes-<%= ii %>" class="tab-content mt-4">
+    <% for (int i = 0; i < nodeNumber; i++) { %>
+      <div id="spot-pane-<%= ii %>-<%= i %>" class="tab-pane fade <%= i==0 ? "show active" : "" %>">
+        <!-- your per-node content -->
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="content-area">
+              <div class="content-badge">
+                <i class="bi bi-lightbulb"></i><span>planning</span>
+              </div>
+              <h3><%= spots[i] %> 소개 (Day <%= ii+1 %>)</h3>
+              <p><%= spots[i] %> 관련 설명…</p>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <img src="assets/img/illustration/feature<%= (i%4)+1 %>.png" class="img-fluid" style="width:85%">
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+      
+      
+
+          </div>
+          <%} %>
+        </div>
+
+      </div>
+	</div>
+    </section><!-- /Tabs Section -->
+
+<script>
+(function(){
+  // initialize all day groups
+  document.querySelectorAll('[id^="routeBar-"]').forEach(function(bar){
+    var group = bar.getAttribute('data-group');
+    var nodes = bar.querySelectorAll('.route-node');
+    var panes = document.querySelectorAll('#spotPanes-' + group + ' .tab-pane');
+
+    function showPane(id){
+      panes.forEach(function(p){ p.classList.remove('show','active'); });
+      var el = document.querySelector(id);
+      if (el) el.classList.add('show','active');
+    }
+
+    nodes.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        nodes.forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        showPane(btn.getAttribute('data-target'));
+      });
+    });
+  });
+})();
+</script> 
+    
+    
+    
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+        </div>
+
+      </div>
+
+    </section><!-- /Tabs Section -->

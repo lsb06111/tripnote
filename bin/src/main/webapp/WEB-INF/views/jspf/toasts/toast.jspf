@@ -1,0 +1,44 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<!-- 
+	토스트 부를 때 부르는 jsp 파일에서 include 상단에 변수명을 아래처럼 선언해주세요
+	String toastTitle = "토스트 제목"
+	String toastMsg = "토스트 내용"
+	boolean toastSuccess = true or false; // true : 초록색 배경 / false : 빨간색 배경
+ -->
+ 
+<%
+	String toastIcon = toastSuccess ?
+			"check-circle-fill"
+			:
+			"exclamation-triangle-fill";
+	String toastColorStyle = toastSuccess ? 
+			"background-color: rgb(219.75, 241.35, 228.3);color: rgb(12, 98.4, 46.2);border-color: rgb(161, 218.6, 183.8);" 
+			: 
+			"background-color: rgb(249.75, 228.15, 231.75);color: rgb(176, 60.8, 80);border-color: rgb(241, 183.4, 193);";
+	String toastHeaderColorStyle = toastSuccess ?
+			"background-color: rgb(219.75, 241.35, 228.3);color: rgb(12, 98.4, 46.2);border-color: rgb(161, 218.6, 183.8);"
+			:
+			"background-color: rgb(249.75, 228.15, 231.75);color: rgb(176, 60.8, 80);border-color: rgb(241, 183.4, 193);";
+%>
+ 
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="<%= toastColorStyle %>">
+    
+    <div class="toast-header" style="<%= toastHeaderColorStyle %>font-weight:bold; ">
+      <!-- <img src="..." class="rounded me-2" alt="..."> -->
+      <i class="bi bi-<%= toastIcon %> fs-5"></i>
+      <strong class="me-auto"> &nbsp;&nbsp;<%= toastTitle %></strong>
+      <small>TripNote</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <%= toastMsg %>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>

@@ -1,0 +1,103 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<section id="features" class="features section">
+
+      <div class="container">
+
+        <div class="features-grid">
+          <div class="features-card">
+            <div class="icon-wrapper">
+              <i class="bi bi-airplane"></i>
+            </div>
+            <h3>편리한 여행 계획 세우기</h3>
+            <p>
+              여행 계획에 필요한 모든 편리한 기능이 TripNote 한 곳에 있어요.
+            </p>
+            <div class="features-list">
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>한국관광공사 데이터와 팔로우 기반 추천 관광지를 바탕으로 맞춤형 코스를 만나보세요</span>
+              </div>
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>드래그 앤 드롭으로 일정을 직관적으로 관리할 수 있어 여행 준비가 더욱 쉬워져요</span>
+              </div>
+            </div>
+            <div class="image-container">
+              <img src="assets/img/illustration/feature1.png" alt="Streamlined Workflow" class="img-fluid">
+            </div>
+          </div>
+
+          <div class="features-card">
+            <div class="icon-wrapper">
+             <i class="bi bi-journal-check"></i>
+            </div>
+            <h3>장소별 노트 기능</h3>
+            <p>
+            	각 코스의 장소별로 노트를 활용하여 계획적으로 일정을 관리하세요.
+            </p>
+            <div class="features-list">
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>여행 멤버들과 실시간으로 계획을 작성하고 공유할 수 있어요</span>
+              </div>
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>필요한 준비물부터 일정까지 함께 편집하며 놓치지 않고 준비해요</span>
+              </div>
+            </div>
+            <div class="image-container">
+              <img src="assets/img/illustration/feature2.png" alt="Performance Analytics" class="img-fluid">
+            </div>
+          </div>
+
+          <div class="features-card">
+            <div class="icon-wrapper">
+              <i class="bi bi-card-list"></i>
+            </div>
+            <h3>관광지별 리뷰</h3>
+            <p>
+              팔로워 혹은 다른 사람들의 관광지별 리뷰를 확인하세요.
+            </p>
+            <div class="features-list">
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>다녀온 여행지를 기록하고, 나만의 추억을 사진과 글로 남겨보세요</span>
+              </div>
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>다른 이용자들의 후기를 통해 새로운 여행 아이디어를 얻을 수 있어요</span>
+              </div>
+            </div>
+            <div class="image-container">
+              <img src="assets/img/illustration/feature3.png" alt="Security Framework" class="img-fluid">
+            </div>
+          </div>
+
+          <div class="features-card">
+            <div class="icon-wrapper">
+              <i class="bi bi-people"></i>
+            </div>
+            <h3>여행 멤버 초대</h3>
+            <p>
+              여행에 동반자가 있으신가요? 바로 추가해서 함께 계획해요!
+            </p>
+            <div class="features-list">
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>친구를 초대하거나 팔로우 기능으로 새로운 여행 동행을 만나보세요</span>
+              </div>
+              <div class="feature-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>함께하는 사람들과의 소통이 여행을 더욱 즐겁게 만들어요</span>
+              </div>
+            </div>
+            <div class="image-container">
+              <img src="assets/img/illustration/feature4.png" alt="Team Environment" class="img-fluid">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Features Section -->

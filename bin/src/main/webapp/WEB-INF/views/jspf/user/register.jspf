@@ -1,0 +1,112 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<form method="post" action="/oti_team3/auth/register" class="needs-validation" novalidate>
+
+  <div class="row g-3 mb-2">
+    <div class="col-md-6" style="margin-top:0">
+      <label for="regName" class="form-label">이름</label>
+      <input type="text" class="form-control" id="regName" name="name" required placeholder="홍길동">
+      <div class="invalid-feedback">이름을 입력해주세요.</div>
+    </div>
+    <div class="col-md-6" style="margin-top:0">
+      <label for="regNickname" class="form-label">닉네임</label>
+      <input type="text" class="form-control" id="regNickname" name="nickname" required placeholder="닉네임">
+      <div class="invalid-feedback">닉네임을 입력해주세요.</div>
+    </div>
+   </div>
+<div class="mb-2">
+  <label for="regUsername" class="form-label">아이디</label>
+  <div class="input-group">
+    <input type="text" class="form-control" id="regUsername" name="username" required placeholder="triplover">
+    <button type="button" class="btn text-white"
+      style="--bs-btn-bg:#5c99ee; 
+             --bs-btn-hover-bg:#447fcc; 
+             --bs-btn-border-color:#5c99ee; 
+             --bs-btn-hover-border-color:#447fcc;">
+      중복체크
+    </button>
+  </div>
+  <div class="invalid-feedback">이메일을 입력해주세요.</div>
+</div>
+ 
+ <div class="mb-2">
+  <label for="regEmail" class="form-label">이메일</label>
+  <div class="input-group">
+    <input type="email" class="form-control" id="regEmail" name="email" required placeholder="you@example.com">
+    <button type="button" class="btn text-white"
+      style="--bs-btn-bg:#5c99ee; 
+             --bs-btn-hover-bg:#447fcc; 
+             --bs-btn-border-color:#5c99ee; 
+             --bs-btn-hover-border-color:#447fcc;"
+      onclick="showCert();">
+      인증요청
+    </button>
+  </div>
+  <div class="invalid-feedback">유효한 이메일을 입력해주세요.</div>
+</div>
+
+ <div class="mb-2 cert-number" style="display:none;">
+  <label for="regCertNumber" class="form-label">인증코드</label>
+  <div class="input-group">
+    <input type="text" class="form-control" id="regCertNumber" name="certNumber" required placeholder="인증번호">
+    <button type="button" class="btn text-white"
+      style="--bs-btn-bg:#5c99ee; 
+             --bs-btn-hover-bg:#447fcc; 
+             --bs-btn-border-color:#5c99ee; 
+             --bs-btn-hover-border-color:#447fcc;">
+      인증
+    </button>
+  </div>
+  <div class="invalid-feedback">유효한 이메일을 입력해주세요.</div>
+</div>
+ 
+<div class="row g-3 mb-2">
+    <div class="col-md-6">
+      <label for="regPassword" class="form-label">비밀번호</label>
+      <input type="password" class="form-control" id="regPassword" name="password" required placeholder="최소 8자">
+      <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+    </div>
+    <div class="col-md-6">
+      <label for="regPassword2" class="form-label">비밀번호 확인</label>
+      <input type="password" class="form-control" id="regPassword2" name="passwordConfirm" required placeholder="다시 입력">
+      <div class="invalid-feedback">비밀번호 확인을 입력해주세요.</div>
+    </div>
+</div>
+  <div class="form-check mt-3">
+    <input class="form-check-input" type="checkbox" value="true" id="terms" required>
+    <label class="form-check-label" for="terms">
+      <a href="#" class="text-decoration-none">이용약관</a>에 동의합니다.
+    </label>
+    <div class="invalid-feedback">약관에 동의해주세요.</div>
+  </div>
+
+  <button type="submit" class="btn w-100 mt-3 text-white"
+          style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;">
+    회원가입
+  </button>
+</form>
+
+<script>
+
+	const certDom = document.querySelector(".cert-number");
+	function showCert(){
+			certDom.style.display = 'block';
+	}  
+
+
+  (function () {
+    const form = document.currentScript?.previousElementSibling;
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      const p1 = form.querySelector('#regPassword');
+      const p2 = form.querySelector('#regPassword2');
+      if (p1 && p2 && p1.value !== p2.value) {
+        e.preventDefault(); e.stopPropagation();
+        p2.setCustomValidity('비밀번호가 일치하지 않습니다.');
+        form.classList.add('was-validated');
+      } else if (p2) {
+        p2.setCustomValidity('');
+      }
+    });
+  })();
+</script>

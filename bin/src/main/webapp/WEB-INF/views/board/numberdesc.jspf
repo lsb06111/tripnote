@@ -1,0 +1,32 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+        <div class="metrics-showcase">
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <div class="metrics-content">
+                <h3>한 눈에 보는 여행 정보 &amp; 후기</h3>
+                <p>Consectetur adipiscing elit pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus.</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="metrics-grid">
+                <div class="metric-item">
+                  <div class="metric-number">250%</div>
+                  <div class="metric-label">Increase in conversions</div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-number">45k</div>
+                  <div class="metric-label">Monthly active users</div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-number">4.9/5</div>
+                  <div class="metric-label">평점</div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-number">200,000원</div>
+                  <div class="metric-label">소요비용</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

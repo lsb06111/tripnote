@@ -1,0 +1,78 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" import="java.util.*"%>
+<div class="d-flex p-2">
+	<section class="trip-sidebar-left" aria-label="장소 리스트"
+		style="flex: 0.8">
+		<%@ include file="/WEB-INF/views/jspf/trip/calendar.jspf"%>
+	</section>
+	<!-- 중간 일정 타임라인 -->
+	<div class="d-flex flex-column" style="flex: 3; padding: 15px;">
+		<span class="fs-2 mb-2">여행지</span>
+		<section class="portfolio section pt-3" aria-label="일정 타임라인">
+			<div class="container">
+				<div class="isotope-layout" data-default-filter="*"
+					data-layout="fitRows" data-sort="original-order">
+
+					<div class="portfolio-filters-wrapper" style="margin-bottom: 0">
+						<ul class="portfolio-filters isotope-filters">
+							<li data-filter="*" class="filter-active">전 지역</li>
+							<li data-filter=".filter-capital">수도권</li>
+							<li data-filter=".filter-middle">중부권</li>
+							<li data-filter=".filter-honam">호남권</li>
+							<li data-filter=".filter-youngnam">영남권</li>
+						</ul>
+					</div>
+					<%
+					HashMap<String, String[]> map = new HashMap<>();
+					map.put("capital", new String[] { "서울", "인천", "경기도" });
+					map.put("middle", new String[] { "대전", "세종", "충청북도", "충청남도", "강원도" });
+					map.put("honam", new String[] { "광주", "전라북도", "전라남도" });
+					map.put("youngnam", new String[] { "부산", "대구", "울산", "경상북도", "경상남도" });
+					%>
+
+					<div class="row gy-4 portfolio-grid isotope-container"
+						style="position: relative; width: 80%; height: 256px; margin: auto; margin-top: 0">
+
+						<%
+						int idx = 0; // id 중복 방지를 위해 인덱스
+						for (String category : map.keySet()) {
+							String[] locations = map.get(category);
+							for (String location : locations) {
+								idx++;
+						%>
+						<div
+							class="col-lg-3 col-md-6 portfolio-item isotope-item filter-<%=category%>">
+							<div class="location-card">
+
+								<!-- 숨겨진 라디오 버튼 -->
+								<input type="radio" class="btn-check" name="locationRadio" form = "preTripForm"
+									id="loc-<%=idx%>" autocomplete="off"> <label
+									class="btn text-white fw-semibold w-100 shadow-sm py-2 rounded"
+									for="loc-<%=idx%>"
+									style="--bs-btn-bg: #5c99ee; --bs-btn-hover-bg: #447fcc; --bs-btn-border-color: #5c99ee; --bs-btn-hover-border-color: #447fcc; --bs-btn-active-bg: #2f6fb8; --bs-btn-active-border-color: #2f6fb8;"
+									>
+									<%=location%>
+								</label>
+
+							</div>
+						</div>
+						<%
+						}
+						}
+						%>
+
+					</div>
+					<!-- End Portfolio Grid -->
+
+				</div>
+			</div>
+		</section>
+		<div class="d-grid gap-2 col-2 mx-auto mt-5">
+			<form id = "preTripForm" action="" method="post">
+				<button id="trip-pre-done-btn" class="btn btn-primary" type = "submit" onclick="checkForNextStep()">설정 완료</button>
+			</form>
+		</div>
+
+	</div>
+</div>
+

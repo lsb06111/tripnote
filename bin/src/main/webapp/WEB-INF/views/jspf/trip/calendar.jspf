@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<link rel="stylesheet" href="/tripnote/resources/assets/css/calendar.css">
+<div>
+	<span class="fs-2 mb-2">날짜</span><br>
+	<p class="m-5"></p>
+	<div class="d-flex align-items-center justify-content-around">
+		<div class="fs-5" onclick="checkcal()">출발일</div>
+		<input class="p-1" type="text" id="trip-start-date" name= "trip-sd" form = "preTripForm">
+	</div>
+	<br>
+	<div class="d-flex align-items-center justify-content-around">
+		<span class="fs-5">도착일</span>
+		<input class="p-1" type="text" id="trip-end-date" name= "trip-ed" form = "preTripForm">
+	</div>
+</div>

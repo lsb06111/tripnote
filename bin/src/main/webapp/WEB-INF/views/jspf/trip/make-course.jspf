@@ -1,0 +1,97 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
+<div class="d-flex" style="height:100vh">
+	<section class="trip-sidebar-left" style="flex:1.2;">
+		<div class="trip-tabs mb-3 mt-2" id="trip-loc-tab" role="tablist">
+			<button class="trip-tab is-active fs-5" id="trip-tab-rcmd" role="tab" aria-selected="true" onclick="toggleLocTab(this)" >추천</button>
+			<button class="trip-tab fs-5" id="trip-tab-search" role="tab" aria-selected="false" onclick="toggleLocTab(this)">직접 검색</button>
+			<!-- 파란 인디케이터 -->
+			<span class="trip-tab-indicator"></span>
+		</div>
+		<form onsubmit="searchPlaces(); return false;" id="trip-search-form" style="display:none; " class="mt-1">
+			<div style="position: relative; width: 300px;">
+			  <input type="text" name="query" class="form-control"
+			  		 id = "trip-search-input"
+			         placeholder="장소명을 입력하세요"
+			         style="padding-right: 40px;"> <!-- 버튼 공간 확보 -->
+			  <button class="btn-search" 
+			          style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); border: none; background: none; cursor: pointer;">
+			    <i class="fa fa-search"></i>
+			  </button>
+			</div>
+		</form>
+		<div id="trip-rcmds">
+		    <div class="trip-loc-tags mt-2 mb-2">
+	            <span class="trip-loc-tag">명소</span>
+	            <span class="trip-loc-tag">식당</span>
+	            <span class="trip-loc-tag">카페</span>
+	            <span class="trip-loc-tag">친구 추천</span>
+            </div>
+            <div style=" max-height: calc(100vh - 140px); overflow-y: auto;">
+				<%@ include file="/WEB-INF/views/jspf/trip/trip-loc.jspf"%>
+            </div>
+		</div>
+		<div id="trip-search-result" class="w-100" style="display:none">
+        	<ul id="placesList" style="padding-left:2px"></ul>
+        	<div id="pagination"></div>
+		</div>
+		
+	</section>
+	<!-- 중간 일정 타임라인 -->
+	<section class="trip-schedule" id="trip-loc" style="flex:1; overflow: hidden;">
+		<div class="trip-schedule-header mb-3 d-flex justify-content-between">
+			<span id = "trip-dest" class="fs-3">${ tripInfoDTO.tripDest }</span>
+			 <small id = "trip-dates" class="d-flex align-items-end" style="font-weight: normal; color: #999;">${ tripInfoDTO.startDate } - ${ tripInfoDTO.endDate }</small>
+		</div>
+		<div class="trip-timeline">
+			<div class="trip-timeline-day">
+				<div class="trip-timeline-day-header mb-3">
+					<!-- Tabs: 일정 일차 선택 -->
+					<% 
+					int[] timelines = {0,0,0,0};
+					int tripLen = timelines.length;
+					request.setAttribute("timelines", timelines);
+			        request.setAttribute("tripLen", tripLen);
+					%>
+					<div class="trip-tabs w-100 d-flex justify-content-around" id="dayTabs" role="tablist" aria-label="일차 선택">
+						<c:forEach var="i" begin="1" end="${tripLen}" varStatus="st">
+						<button class="trip-tab${st.first ? ' is-active' : ''}"
+						       role="tab"
+						       aria-selected="${st.first ? 'true' : 'false'}"
+						       data-day="${i}"
+						       onclick="switchDay(this)">
+						 ${i}일
+						</button> 
+						</c:forEach>
+						<span class="trip-tab-indicator"></span>
+					</div>
+				</div>
+			</div>
+		    <!-- 콘텐츠 영역: 하루당 패널 1개 -->
+		    <div style="max-height:calc(100vh - 150px); overflow-y:auto;">
+		      <c:forEach var="day" begin="1" end="${tripLen}" varStatus="st">
+		        <div class="trip-timelineForDay"
+		             data-day="${day}"
+		             style="${st.first ? '' : 'display:none;'}">
+		
+		          <%-- 이 일차(day)의 아이템 개수 만큼 내부 아이템 렌더링 : 추후 db 객체 정보로 html 생성 --%>
+		          <c:set var="count" value="${timelines[day-1]}" />
+		          <c:forEach begin="1" end="${count}">
+		            <%@ include file="/WEB-INF/views/jspf/trip/trip-timeline.jspf" %>
+		          </c:forEach>
+		        </div>
+		      </c:forEach>
+		    </div>
+		</div>
+	</section>
+
+	<!-- 오른쪽: 지도 -->
+	<section class="map-container p-0 ms-3" aria-label="지도" style="flex:2.5; height:100vh;">
+		<div id="rcmd-map" style="width:100%;height:100%;">
+
+		</div>
+		<button class="btn-info">이용방법</button>
+	</section>
+</div>
+		

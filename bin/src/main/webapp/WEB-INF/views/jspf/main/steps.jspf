@@ -1,0 +1,251 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- Tabs Section -->
+    <section id="tabs" class="tabs section">
+		<div class="container section-title">
+	        <h2>TripNote로 여행 계획 짜는 방법</h2>
+	        <p>간단한 방법으로 편리하게 여행 계획을 짜보세요</p>
+      </div><!-- End Section Title -->
+      
+      <div class="container">
+
+        <div class="tabs-wrapper">
+          <div class="tabs-header">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#tabs-tab-1">
+                  <div class="tab-content-preview">
+                    <span class="tab-number">01</span>
+                    <div class="tab-text">
+                      <h6>가고 싶은 여행지 고르기</h6>
+                      <small>리뷰 게시판을 활용해요!</small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tabs-tab-2">
+                  <div class="tab-content-preview">
+                    <span class="tab-number">02</span>
+                    <div class="tab-text">
+                      <h6>일정 만들기</h6>
+                      <small>여행 계획을 시작해요!</small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tabs-tab-3">
+                  <div class="tab-content-preview">
+                    <span class="tab-number">03</span>
+                    <div class="tab-text">
+                      <h6>(선택)여행 멤버 추가</h6>
+                      <small>같이 갈 멤버를 추가해요!</small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tabs-tab-4">
+                  <div class="tab-content-preview">
+                    <span class="tab-number">04</span>
+                    <div class="tab-text">
+                      <h6>다녀온 곳 리뷰 작성</h6>
+                      <small>여행의 후기를 작성해요!</small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="tab-content">
+
+            <div class="tab-pane fade active show" id="tabs-tab-1">
+              <div class="row align-items-center">
+                <div class="col-lg-6">
+                  <div class="content-area">
+                    <div class="content-badge">
+                      <i class="bi bi-lightbulb"></i>
+                      <span>planning</span>
+                    </div>
+                    <h3>가고 싶은 여행지 고르기</h3>
+                    <p>리뷰 게시판을 활용해서 가고 싶은 곳을 둘러보아요 <br> TripNote 이용자들의 여행코스 및 후기들을 확인할 수 있어요</p>
+
+                    <div class="highlight-stats">
+                      <div class="stat-item">
+                        <span class="stat-value">95%</span>
+                        <span class="stat-label">리뷰 신뢰도</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-value">28,000개</span>
+                        <span class="stat-label">현재까지 리뷰 수</span>
+                      </div>
+                    </div>
+
+                    <div class="feature-points">
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>지역별 네비게이션 바로 원하는 여행지를 쉽게 탐색할 수 있어요</span>
+                      </div>
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>인기 게시글과 팔로잉 게시물을 통해 믿을 수 있는 여행 코스를 발견해 보세요</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="visual-content">
+                    <img src="assets/img/illustration/feature1.png" alt="" class="img-fluid">
+                    <div class="floating-element">
+                      <div class="floating-card">
+                      <i class="bi bi-lightning-charge"></i>
+                      <a href="/oti_team3/board/">
+                        <div class="card-info">
+                          <strong>리뷰 보러가기</strong>
+                        </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="tabs-tab-2">
+              <div class="row align-items-center">
+                <div class="col-lg-6">
+                  <div class="content-area">
+                    <div class="content-badge">
+                      <i class="bi bi-lightbulb"></i>
+                      <span>creation</span>
+                    </div>
+                    <h3>일정 만들기</h3>
+                    <p>한국 관광 공사 데이터 기반의 추천 리스트로 나만의 일정을 만들어보아요.</p>
+
+                    <div class="highlight-stats">
+                      <div class="stat-item">
+                        <span class="stat-value">35,221곳</span>
+                        <span class="stat-label">등록된 관광지</span>
+                      </div>
+                    </div>
+
+                    <div class="feature-points">
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>관광지의 위치, 거리, 소개 등 필요한 정보를 한눈에 확인할 수 있어요</span>
+                      </div>
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>팔로잉한 친구들의 추천 리스트를 참고해 믿을 수 있는 코스로 일정을 완성하세요</span>
+                      </div>
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>초대한 멤버와 계획 노트를 공유하고 함께 편집하며 협업할 수 있어요</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="visual-content">
+                    <img src="assets/img/illustration/feature2.png" alt="" class="img-fluid" style="width:85%">
+                    <div class="floating-element">
+                      <div class="floating-card">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        <a href="/oti_team3/trip/">
+                        <div class="card-info">
+                          <strong>일정 만들기</strong>
+                        </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="tabs-tab-3">
+              <div class="row align-items-center">
+                <div class="col-lg-6">
+                  <div class="content-area">
+                    <div class="content-badge">
+                      <i class="bi bi-lightbulb"></i>
+                      <span>collaboration</span>
+                    </div>
+                    <h3>(선택)여행 멤버 추가</h3>
+                    <p>같이 여행할 멤버를 추가하고 함께 일정을 짜보세요.</p>
+                    <div class="feature-points">
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>팔로우한 친구들을 초대해 함께 여행을 떠나 보세요</span>
+                      </div>
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>새로운 동행자를 만나 색다른 여행을 경험할 수 있어요</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="visual-content">
+                    <img src="assets/img/illustration/feature4.png" alt="" class="img-fluid" style="width:85%">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="tabs-tab-4">
+              <div class="row align-items-center">
+                <div class="col-lg-6">
+                  <div class="content-area">
+                    <div class="content-badge">
+                      <i class="bi bi-lightbulb"></i>
+                      <span>review</span>
+                    </div>
+                    <h3>다녀온 곳 리뷰 작성</h3>
+                    <p>리뷰 작성을 통해 다녀온 장소의 정보를 공유해요.</p>
+
+                    <div class="feature-points">
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>나만의 여행 추억을 손쉽게 기록하고 간직해요</span>
+                      </div>
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>리뷰를 통해 TripNote 사용자들과 여행 코스와 후기를 공유하며 자랑할 수 있어요</span>
+                      </div>
+                      <div class="point-item">
+                        <i class="bi bi-arrow-right"></i>
+                        <span>블로그에 길게 쓰지 않아도, 각 관광지별로 간편하게 리뷰를 남길 수 있어요</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="visual-content">
+                    <img src="assets/img/illustration/feature3.png" alt="" class="img-fluid" style="width:85%">
+                    <div class="floating-element">
+                      <div class="floating-card">
+                        <i class="bi bi-link-45deg"></i>
+                        <a href="/oti_team3/board/write.jsp">
+	                        <div class="card-info">
+	                          <strong>리뷰 작성하기</strong>
+	                        </div>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Tabs Section -->

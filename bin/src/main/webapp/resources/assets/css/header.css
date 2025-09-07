@@ -1,0 +1,6 @@
+@charset "UTF-8";
+.modal-content {
+   /* remove default white */
+  border: none;
+  box-shadow: none; /* remove Bootstrap's shadow */
+}
