@@ -2,6 +2,7 @@
 /build/
 /target/
 *.class
+/bin/
 
 # Log files
 *.log
@@ -16,9 +17,11 @@
 .project
 .settings/
 .wtpmodules/
+.metadata/
 
 # IDE temporary files
 *.tmp
 
 # Other common files to ignore
 .DS_Store
+/bin/
