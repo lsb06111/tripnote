@@ -4,7 +4,7 @@
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-      <a href="/oti_team3/" class="logo d-flex align-items-center">
+      <a href="/tripnote/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.webp" alt=""> -->
         <h1 class="sitename">TripNote</h1>
@@ -13,7 +13,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="/tripnote/" class="active">Home</a></li>
-          <li><a href="/oti_team3/trip/">일정 만들기</a></li>
+          <li><a href="/tripnote//trip/">일정 만들기</a></li>
           <li><a href="/tripnote/review">리뷰 게시판</a></li>
           <li><a href="/oti_team3/profile.jsp?identify=myself">마이페이지</a></li>
           <li>

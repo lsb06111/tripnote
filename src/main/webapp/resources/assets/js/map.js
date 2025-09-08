@@ -9,6 +9,23 @@ var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리
 var geocoder = new kakao.maps.services.Geocoder();
 var markers = [];
 
+function drawMarkerWithXY(mapx, mapy){
+	var coords = new kakao.maps.LatLng(mapy, mapx);
+    
+    // 2. 결과 좌표로 지도에 마커를 표시합니다
+    var marker = new kakao.maps.Marker({
+        map: map,
+        position: coords
+    });
+
+    // 3. 생성된 마커를 마커 배열에 추가합니다
+    markers.push(marker);
+
+    // 4. 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+    map.setCenter(coords);
+}
+
+
 function drawRcmdMarker(el){
     const $el = $(el);
     const address = $el.find('.trip-sl-address').text();
@@ -42,7 +59,30 @@ function relayoutKeepCenter(map) {
 }
 
 // 장소 검색 객체를 생성합니다
-var ps = new kakao.maps.services.Places();  
+var ps = new kakao.maps.services.Places();
+let isRestaurant = false;
+////
+//모든 검색 결과를 담을 배열입니다
+var allPlaces = [];
+var currentPage = 1;
+
+// 키워드로 장소를 검색하고, 모든 페이지를 순회하는 함수
+function searchAndGetAll() {
+    var keyword = '부산 식당';
+    isRestaurant = true;
+    console.log(`'${keyword}'에 대한 전체 검색을 시작합니다...`);
+    
+    // 첫 페이지 검색을 시작합니다.
+    ps.keywordSearch(keyword, placesSearchCB);
+}
+
+// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+
+
+// ✨ 검색 실행
+searchAndGetAll();
+
+////
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
@@ -60,26 +100,61 @@ function searchPlaces() {
 
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 function placesSearchCB(data, status, pagination) {
-    if (status === kakao.maps.services.Status.OK) {
+	if(isRestaurant){
+		if (status === kakao.maps.services.Status.OK) {
+	        
+	        // 현재 페이지의 결과를 allPlaces 배열에 추가합니다
+	        allPlaces = allPlaces.concat(data);
+	        console.log(`페이지 ${currentPage} 로드 완료. (현재까지 총 ${allPlaces.length}개)`);
+	        
+	        // 다음 페이지가 있으면
+	        if (pagination.hasNext) {
+	            currentPage++;
+	            // 다음 페이지를 검색하도록 요청합니다
+	            pagination.nextPage();
+	        } else {
+	            // 모든 페이지 검색이 완료되면 최종 결과를 콘솔에 출력합니다
+	            console.log('--- 모든 페이지 검색 완료 ---');
+	            console.log(allPlaces);
+	            console.log(`최종 검색된 장소의 수: ${allPlaces.length}개`);
+	        }
 
-        // 정상적으로 검색이 완료됐으면
-        // 검색 목록과 마커를 표출합니다
-        displayPlaces(data);
+	    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+	        alert('검색 결과가 존재하지 않습니다.');
+	        // 검색 결과가 없더라도 이전에 쌓인 결과가 있으면 출력
+	        if (allPlaces.length > 0) {
+	            console.log('--- 최종 검색 결과 ---');
+	            console.log(allPlaces);
+	        }
+	    } else if (status === kakao.maps.services.Status.ERROR) {
+	        alert('검색 결과 중 오류가 발생했습니다.');
+	    }
+		isRestaurant = false;
+		return;
+	}else{
+		if (status === kakao.maps.services.Status.OK) {
 
-        // 페이지 번호를 표출합니다
-        displayPagination(pagination);
+	        // 정상적으로 검색이 완료됐으면
+	        // 검색 목록과 마커를 표출합니다
+	        displayPlaces(data);
 
-    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+	        // 페이지 번호를 표출합니다
+	        displayPagination(pagination);
 
-        alert('검색 결과가 존재하지 않습니다.');
-        return;
+	    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-    } else if (status === kakao.maps.services.Status.ERROR) {
+	        alert('검색 결과가 존재하지 않습니다.');
+	        return;
 
-        alert('검색 결과 중 오류가 발생했습니다.');
-        return;
+	    } else if (status === kakao.maps.services.Status.ERROR) {
 
-    }
+	        alert('검색 결과 중 오류가 발생했습니다.');
+	        return;
+
+	    }
+	}
+	
+    
 }
 
 // 검색 결과 목록과 마커를 표출하는 함수입니다

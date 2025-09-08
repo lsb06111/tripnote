@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.example.tripnote.dao.AttractionsDAO">
+
+
+<insert id="insert"  parameterType="AttractionDTO">
+	insert into attractions (contentId, title, addr1, firstimage, mapx, mapy, overview, locations) values (#{contentId}, #{title}, #{addr1}, #{firstimage}, #{mapx}, #{mapy}, #{overview}, #{locations})
+</insert>
+
+<select id="getAttractionList" parameterType="string" resultType="AttractionDTO">
+	select * from attractions where locations = #{tripDest}
+</select>
+
+</mapper>

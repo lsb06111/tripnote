@@ -16,4 +16,5 @@ public class AttractionDTO {
     private String mapx;
     private String mapy;
     private String overview;
+    private String locations;
 }

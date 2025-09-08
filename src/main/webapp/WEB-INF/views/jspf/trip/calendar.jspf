@@ -5,11 +5,11 @@
 	<p class="m-5"></p>
 	<div class="d-flex align-items-center justify-content-around">
 		<div class="fs-5" onclick="checkcal()">출발일</div>
-		<input class="p-1" type="text" id="trip-start-date" name= "trip-sd" form = "preTripForm">
+		<input class="p-1" type="text" id="trip-start-date" name= "trip-sd" form = "preTripForm" autocomplete="off">
 	</div>
 	<br>
 	<div class="d-flex align-items-center justify-content-around">
 		<span class="fs-5">도착일</span>
-		<input class="p-1" type="text" id="trip-end-date" name= "trip-ed" form = "preTripForm">
+		<input class="p-1" type="text" id="trip-end-date" name= "trip-ed" form = "preTripForm" autocomplete="off">
 	</div>
 </div>

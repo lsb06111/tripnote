@@ -50,11 +50,11 @@
 		<!-- 왼쪽 네비 -->
 		<nav class="nav my-4 mx-3 d-flex flex-column justify-content-between" role="tablist" style="flex:1;">
 			<div class="step-nav">  
-	      		<a href="/oti_team3/" class="trip-sitename">TripNote</a>
-				<button id = "trip-pre-step" class="nav-link step-item" data-bs-toggle="tab" data-bs-target="" role="tab" onclick="location.href='/oti_team3/trip'">
+	      		<a href="/tripnote/" class="trip-sitename">TripNote</a>
+				<button id = "trip-pre-step" class="nav-link step-item" data-bs-toggle="tab" data-bs-target="" role="tab" onclick="location.href='/tripnote/trip'">
 					<span class="step-title">날짜/지역</span> 
 				</button> 
-				<button id = "trip-loc-step" class="nav-link step-item active" data-bs-toggle="tab" data-bs-target="" role="tab" onclick="location.href='/oti_team3/trip/index2.jsp'">
+				<button id = "trip-loc-step" class="nav-link step-item active" data-bs-toggle="tab" data-bs-target="" role="tab" onclick="location.href='/tripnote/trip/plan'">
 					<span class="step-title">장소 선택</span>
 				</button>
 			</div>
