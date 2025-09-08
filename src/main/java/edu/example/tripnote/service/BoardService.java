@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import edu.example.tripnote.dao.BoardDAO;
 import edu.example.tripnote.domain.board.BoardDTO;
+import edu.example.tripnote.domain.board.BoardParamDTO;
 import edu.example.tripnote.domain.board.BoardVO;
 import lombok.RequiredArgsConstructor;
 
@@ -14,8 +15,8 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 	private final BoardDAO boardDAO;
 	
-	public List<BoardDTO> listAll() {
-		return boardDAO.listAll();
+	public List<BoardDTO> listAll(BoardParamDTO boardParam) {
+		return boardDAO.listAll(boardParam);
 	}
 
 }

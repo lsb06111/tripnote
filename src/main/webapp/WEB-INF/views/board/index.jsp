@@ -129,6 +129,19 @@
 			</div>
 		</div>
 	</div>
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+		  <li class="page-item disabled">
+		    <a class="page-link">&lt;</a>
+		  </li>
+		  <li class="page-item"><a class="page-link" href="#">1</a></li>
+		  <li class="page-item"><a class="page-link" href="#">2</a></li>
+		  <li class="page-item"><a class="page-link" href="#">3</a></li>
+		  <li class="page-item">
+		    <a class="page-link" href="#">&gt;</a>
+		  </li>
+		</ul>
+	</nav>
 
 	<%@ include file="/WEB-INF/views/jspf/footer.jspf"%>
 </body>
