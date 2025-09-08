@@ -1,6 +1,5 @@
 package edu.example.tripnote.controller;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,16 +9,17 @@ import edu.example.tripnote.dao.UserDAO;
 import edu.example.tripnote.domain.UserDTO;
 
 @Controller
-public class LoginController {
+public class RegisterController {
 	@Autowired
-	private UserDAO dao;
+	public UserDAO dao;
 	
 	@ResponseBody
-	@RequestMapping(value = "/login", produces="application/json; charset=utf-8")
-	public UserDTO Login(@Param("username") String username,
-						@Param("password") String password) {
-		UserDTO user = dao.login(username, password);
+	@RequestMapping(value="/register", produces="application/json; charset=utf-8")
+	public UserDTO Register(UserDTO dto) {
 		
-		return user;
+		dao.insertUser(dto);
+		
+		return dto;
 	}
+
 }

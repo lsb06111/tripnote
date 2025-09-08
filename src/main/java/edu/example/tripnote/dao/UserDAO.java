@@ -10,12 +10,12 @@ public interface UserDAO {
 	public UserDTO login(@Param("username") String username,
 						@Param("password") String password);
 	
-	public UserDTO searchId(String email);
+	public String searchId(@Param("email") String email);
 	
-	public UserDTO searchPassword(@Param("username") String username,
+	public String searchPassword(@Param("username") String username,
 								@Param("email") String email);
 	
-	public UserDTO createUser (UserDTO user);
+	public int insertUser (UserDTO dto);
 	
-	public int countByUsername(String username); 
+	public int countByUsername (@Param("username") String username);
 }

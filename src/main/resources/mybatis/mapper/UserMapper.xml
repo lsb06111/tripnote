@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.example.tripnote.dao.UserDAO">
-<select id="login" resultType="UserDTO" parameterType="String">
-   select id, username, password, email, name, nickname, profile_image
-   from user
+
+<!-- 로그인 -->
+<select id="login" resultType="UserDTO">
+   select id, username, password, email, users_name, nickname, profile_image
+   from users
    where username = #{username}
    AND password = #{password}
 </select>
-<select id="searchId" resultType="UserDTO" parameterType="String">
+
+<!-- 아이디찾기 -->
+<select id="searchId" resultType="string">
    select username
-   from user
+   from users
    where email = #{email}
 </select>
+
+<!-- 비밀번호찾기 -->
+<select id="searchPassword" resultType="string">
+	select password
+	from users
+	where username = #{username}
+	AND email = #{email}
+</select>
+
+<!-- 회원가입 -->
+<insert id="insertUser" parameterType="UserDTO" useGeneratedKeys="true" keyProperty = "id" keyColumn="id">
+	insert into users (username, password, email, users_name, nickname)
+	values(#{username}, #{password}, #{email}, #{users_name}, #{nickname})
+</insert>
+
+<!-- 아이디 중복 확인 -->
+<select id="countByUsername" resultType = "int">
+	select COUNT(*)
+	from users
+	where username = #{username}
+</select>
+  
 </mapper>
