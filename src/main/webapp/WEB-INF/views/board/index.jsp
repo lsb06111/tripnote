@@ -3,7 +3,6 @@
 <%@ include file="/WEB-INF/views/jspf/head.jspf"%>
 </head>
 <body>
-<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<%
 		String boardSearchValue = request.getParameter("search");
@@ -37,8 +36,8 @@
 							href="#" role="button" data-bs-toggle="dropdown"
 							aria-expanded="false"> 최신순 </a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#">최신순</a></li>
-							<li><a class="dropdown-item" href="#">추천순</a></li>
+							<li><a class="dropdown-item" href="/tripnote/board?order=latest">최신순</a></li>
+							<li><a class="dropdown-item" href="/tripnote/board?order=like">추천순</a></li>
 							<li><a class="dropdown-item" href="#">팔로워만</a></li>
 						</ul>
 					</div>
@@ -142,7 +141,19 @@
 		  </li>
 		</ul>
 	</nav>
-
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		let board_order = new URLSearchParams(location.search).get('order');
+		console.log("뭐야 : " + board_order )
+		let orderName;
+		if (board_order == 'latest'){
+			orderName = '최신순'
+		}else if(board_order == 'like'){
+			orderName = '추천순'
+		}
+		document.querySelector('.dropdown-toggle').textContent = orderName;
+	});
+	</script>
 	<%@ include file="/WEB-INF/views/jspf/footer.jspf"%>
 </body>
 </html>
