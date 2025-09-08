@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import edu.example.tripnote.domain.vo.BoardVO;
+import edu.example.tripnote.domain.board.BoardDTO;
+import edu.example.tripnote.domain.board.BoardVO;
 
 @Mapper
 public interface BoardDAO {
-	public List<BoardVO> listAll();
+	public List<BoardDTO> listAll();
 }
