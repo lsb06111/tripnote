@@ -11,4 +11,5 @@ import edu.example.tripnote.domain.board.BoardVO;
 @Mapper
 public interface BoardDAO {
 	public List<BoardDTO> listAll(BoardParamDTO boardParam);
+	public int countListAll(BoardParamDTO boardParam);
 }

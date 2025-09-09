@@ -48,8 +48,38 @@
 	     	ORDER BY b.created_at DESC
 	    </otherwise>
     </choose>
-    
+    offset #{offset} rows
+    fetch next #{size} rows only
 
+</select>
+<select id="countListAll" parameterType="BoardParamDTO" resultType="int">
+   SELECT 
+		count(*)
+	FROM
+    	board b
+        JOIN users  u ON b.user_id = u.id
+        JOIN course c ON b.course_id = c.id
+        JOIN area   a ON c.area_id = a.id
+        LEFT JOIN (
+            SELECT
+                board_id,
+                COUNT(*) AS likes
+            FROM
+                likes
+            GROUP BY
+                board_id
+        )   l ON b.id = l.board_id
+    
+    <where>
+    	<if test="loc != null and loc != '' and loc != 'undefined'">
+    		and area_name = #{loc}
+    	</if>
+    	<if test="keyword != null and keyword != ''">
+    		and (b.title like '%' || #{keyword} || '%'
+    			or b.board_content like '%' || #{keyword} || '%'
+    			or a.area_name like '%' || #{keyword} || '%')
+    	</if>
+    </where>
 </select>
 
 </mapper>

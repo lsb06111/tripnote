@@ -1,12 +1,12 @@
 package edu.example.tripnote.controller;
 
-import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import edu.example.tripnote.domain.PageResponseDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
 import edu.example.tripnote.service.BoardService;
@@ -20,8 +20,9 @@ public class BoardController {
 	
 	@GetMapping
 	public String index(Model model,  BoardParamDTO boardParam) {
-		List<BoardDTO> list =  boardService.listAll(boardParam);
-		model.addAttribute("posts", list);
+		PageResponseDTO<BoardDTO> response =  boardService.listAll(boardParam);
+		model.addAttribute("response", response);
+		
 		return "board/index";
 	}
 

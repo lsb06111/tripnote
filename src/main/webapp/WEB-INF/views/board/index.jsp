@@ -6,9 +6,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/jspf/header.jspf" %>
 	<%
-		String boardSearchValue = request.getParameter("search");
-		boardSearchValue = boardSearchValue == null ? "" : boardSearchValue;
-
 		HashMap<String, String[]> map = new HashMap<>();
 		map.put("capital", new String[] { "서울", "인천", "경기도" });
 		map.put("middle", new String[] { "대전", "세종", "충청북도", "충청남도"});
@@ -20,7 +17,7 @@
 	<section id="portfolio" class="portfolio services section mt-5">
 
 		<div class="container section-title" style="padding-bottom: 60px;">
-			<h2>리뷰 게시판</h2>
+			<h2 onclick="location.href='/tripnote/board'">리뷰 게시판</h2>
 			<a href="" id="modal-reviewSelection" data-bs-toggle="modal"
 				data-bs-target="#modalReviewSelection">리뷰 쓰러가기<i
 				class="bi bi-arrow-right"></i></a>
@@ -63,7 +60,7 @@
 				</div>
 				<div class="row gy-4 portfolio-grid isotope-container"
 					style="position: relative; width: 95%; height: 264px; margin: 0px auto auto;">
-					<c:forEach var="item" items="${posts}">
+					<c:forEach var="item" items="${response.content}">
 						<!-- 여행 후기 item -->
 						<div class="col-lg-3 col-md-6 portfolio-item isotope-item">
 							<div class="service-card"
@@ -133,9 +130,16 @@
 		  <li class="page-item ">
 		    <a class="page-link">&lt;</a>
 		  </li>
-		  <li class="page-item active"><a class="page-link" href="">1</a></li>
-		  <li class="page-item"><a class="page-link" href="">2</a></li>
-		  <li class="page-item"><a class="page-link" href="">3</a></li>
+		  <c:forEach var="num" begin="1" end="${response.totalCount}">
+		  	<c:choose>
+		  		<c:when test="${num == response.page}">
+		  			<li class="page-item active"><a class="page-link " onclick="setBoardParam('page', ${num})" style ="cursor:pointer;">${num}</a></li>
+		  		</c:when>
+		  		<c:otherwise>
+		  			<li class="page-item"><a class="page-link " onclick="setBoardParam('page', ${num})" style ="cursor:pointer;">${num}</a></li>
+		  		</c:otherwise>
+		  	</c:choose>
+		  </c:forEach>
 		  <li class="page-item">
 		    <a class="page-link" href="">&gt;</a>
 		  </li>
@@ -169,6 +173,7 @@
 		
 		function setBoardParam(key, value) {
 			  const url = new URL(window.location.href);
+			  url.searchParams.delete('page');
 			  if (value != null){
 				  console.log("value not null : " + value);
 				  url.searchParams.set(key, value);  // 기존 query 유지하면서 order만 세팅
@@ -178,6 +183,7 @@
 			  }
 			  window.location.href = url.toString(); // url로 이동
 		}
+		
 	</script>
 	<%@ include file="/WEB-INF/views/jspf/footer.jspf"%>
 </body>
