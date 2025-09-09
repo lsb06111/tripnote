@@ -179,6 +179,18 @@
 			<artifactId>spring-security-taglibs</artifactId>
 			<version>${springframework-security-version}</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>com.sun.mail</groupId>
+		  <artifactId>javax.mail</artifactId>
+		  <version>1.6.2</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework</groupId>
+		  <artifactId>spring-context-support</artifactId>
+		  <version>4.3.30.RELEASE</version> <!-- 프로젝트 스프링 버전에 맞춰 조정 -->
+		</dependency>
+
 
 	</dependencies>
   

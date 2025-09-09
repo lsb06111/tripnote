@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<c:set var="_csrf_header" value="${_csrf.headerName}" />
+<c:set var="_csrf_token"  value="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf_header}"/>
+<meta name="_csrf"        content="${_csrf_token}"/>
+
 <form method="post" action="/tripnote/register" class="needs-validation" novalidate>
 
   <div class="row g-3 mb-2">
@@ -25,24 +30,7 @@
     </button>
   </div>
   <div id="msgArea" class="invalid-feedback" style="display:none"></div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $("#btnCheck").on("click", function () {
-      var username = $("#regUsername").val();
-      $.getJSON("${pageContext.request.contextPath}/checkUsername", { username: username })
-        .done(function (res) {
-          $("#msgArea").text(res.msg).show();
-          if (res.invalid) {
-            $("#regUsername").addClass("is-invalid");
-          } else {
-            $("#regUsername").removeClass("is-invalid");
-          }
-        })
-        .fail(function(xhr){
-          console.log("중복체크 실패", xhr.status, xhr.responseText);
-        });
-    });
-  </script>
+
 </div>
  <div class="mb-2">
   <label for="regEmail" class="form-label">이메일</label>
@@ -57,7 +45,7 @@
       인증요청
     </button>
   </div>
-  <div class="invalid-feedback">유효한 이메일을 입력해주세요.</div>
+  <div class="invalid-feedback"></div>
 </div>
 
  <div class="mb-2 cert-number" style="display:none;">
@@ -68,11 +56,12 @@
       style="--bs-btn-bg:#5c99ee; 
              --bs-btn-hover-bg:#447fcc; 
              --bs-btn-border-color:#5c99ee; 
-             --bs-btn-hover-border-color:#447fcc;">
+             --bs-btn-hover-border-color:#447fcc;"
+             onclick="verifyCert();">
       인증
     </button>
   </div>
-  <div class="invalid-feedback">유효한 이메일을 입력해주세요.</div>
+  <div class="invalid-feedback"></div>
 </div>
  
 <div class="row g-3 mb-2">
@@ -101,7 +90,188 @@
   </button>
 </form>
 
+<!-- id 중복체크 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+  $("#btnCheck").on("click", function () {
+    const $input = $("#regUsername");
+    const username = $input.val().trim();
+    const $msg = $("#msgArea"); // <div id="msgArea" class="invalid-feedback" style="display:none"></div>
+
+    // 초기화
+    $input.removeClass("is-invalid is-valid");
+    $msg.removeClass("invalid-feedback valid-feedback d-block").hide().text("");
+
+    // 프론트 유효성
+    if (!username) {
+      $msg
+        .addClass("invalid-feedback d-block")
+        .text("아이디를 입력해주세요.")
+        .show();
+      $input.addClass("is-invalid");
+      return;
+    }
+
+    // 서버 중복 체크 (컨텍스트 경로 안전)
+    $.getJSON("<c:url value='/checkUsername'/>", { username })
+      .done(function (res) {
+        if (res.invalid) {
+          // 사용 불가(중복) → 빨간색
+          $msg
+            .removeClass("valid-feedback")
+            .addClass("invalid-feedback d-block")
+            .text(res.msg || "이미 사용 중인 아이디입니다.")
+            .show();
+          $input.addClass("is-invalid").removeClass("is-valid");
+        } else {
+          // 사용 가능 → 초록색
+          $msg
+            .removeClass("invalid-feedback")
+            .addClass("valid-feedback d-block")
+            .text(res.msg || "사용 가능한 아이디입니다.")
+            .show();
+          $input.addClass("is-valid").removeClass("is-invalid");
+        }
+      })
+      .fail(function (xhr) {
+        // 네트워크/서버 오류 → 빨간색
+        $msg
+          .removeClass("valid-feedback")
+          .addClass("invalid-feedback d-block")
+          .text("중복체크 실패: " + (xhr.responseText || xhr.status))
+          .show();
+        $input.addClass("is-invalid").removeClass("is-valid");
+      });
+  });
+</script>
+
+
+
+<!-- 이메일 인증 요청 or 인증 -->
+<script>
+(function () {
+  // CSRF 메타가 없으면 자동으로 빈 헤더 리턴 → 보안 미사용 환경에서도 안전
+  function getCsrfHeaders() {
+    const h = document.querySelector('meta[name="_csrf_header"]')?.content;
+    const t = document.querySelector('meta[name="_csrf"]')?.content;
+    return h && t ? { [h]: t } : {};
+  }
+
+  // 공통: 입력칸 컨테이너(.mb-2)와 피드백 엘리먼트 얻기
+  function groupOf(input) { return input.closest('.mb-2'); }
+  function invalidBoxOf(input) { return groupOf(input)?.querySelector('.invalid-feedback'); }
+
+  // 오류 메시지 표시: invalid-feedback + is-invalid
+  function showError(input, msg) {
+    const box = invalidBoxOf(input);
+    if (box) {
+      box.textContent = msg || '입력값을 확인해주세요.';
+      box.style.display = 'block';
+    }
+    input.classList.add('is-invalid');
+    input.setAttribute('aria-invalid', 'true');
+  }
+  function clearError(input) {
+    const box = invalidBoxOf(input);
+    if (box) {
+      box.textContent = '';
+      box.style.display = 'none';
+    }
+    input.classList.remove('is-invalid');
+    input.removeAttribute('aria-invalid');
+  }
+
+  // 성공 메시지(초록): valid-feedback 동적 생성
+  function showSuccess(input, msg) {
+    const group = groupOf(input);
+    if (!group) return;
+    let ok = group.querySelector('.valid-feedback');
+    if (!ok) {
+      ok = document.createElement('div');
+      ok.className = 'valid-feedback d-block';
+      group.appendChild(ok);
+    }
+    ok.textContent = msg || '완료되었습니다.';
+    input.classList.remove('is-invalid');
+    input.classList.add('is-valid');
+  }
+
+  // === 인증코드 전송 ===
+  window.showCert = async function () {
+    const emailEl = document.getElementById('regEmail');
+    if (!emailEl) return;
+    const email = emailEl.value.trim();
+
+    if (!email) { showError(emailEl, '유효한 이메일을 입력해주세요.'); return; }
+    clearError(emailEl);
+
+    try {
+      const res = await fetch('<c:url value="/mail/send-cert"/>', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', ...getCsrfHeaders() },
+        body: new URLSearchParams({ email })
+      });
+      const text = await res.text();
+
+      if (!res.ok) {
+        // 서버가 에러 문자열을 주면 그대로 출력
+        showError(emailEl, text || '인증요청 중 문제가 발생했습니다.');
+        return;
+      }
+
+      // 성공: 인증번호 입력칸 열고 성공 메시지
+      document.querySelector('.cert-number')?.style?.setProperty('display', '');
+      document.getElementById('regCertNumber')?.focus();
+      showSuccess(emailEl, '인증코드를 전송했습니다. (5분 유효)');
+    } catch (e) {
+      showError(emailEl, '네트워크 오류: ' + e.message);
+    }
+  };
+
+  // === 인증코드 검증 ===
+  window.verifyCert = async function () {
+    const emailEl = document.getElementById('regEmail');
+    const codeEl  = document.getElementById('regCertNumber');
+    const email = emailEl?.value.trim();
+    const code  = codeEl?.value.trim();
+
+    if (!email) { showError(emailEl, '이메일을 먼저 입력하세요.'); return; }
+    if (!code)  { showError(codeEl,  '인증번호를 입력하세요.');    return; }
+
+    clearError(codeEl);
+
+    try {
+      const res = await fetch('<c:url value="/mail/verify-cert"/>', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', ...getCsrfHeaders() },
+        body: new URLSearchParams({ email, code })
+      });
+      const text = await res.text();
+
+      if (!res.ok) {
+        if (text.includes('EXPIRED'))     showError(codeEl,  '만료된 코드입니다. 다시 요청하세요.');
+        else if (text.includes('MISMATCH')) showError(codeEl, '인증번호가 일치하지 않습니다.');
+        else if (text.includes('NOT_ISSUED')) showError(emailEl, '먼저 인증요청을 해주세요.');
+        else showError(codeEl, text || '인증에 실패했습니다.');
+        return;
+      }
+
+      // 성공 처리
+      clearError(codeEl);
+      showSuccess(codeEl, '이메일 인증이 완료되었습니다.');
+      // 필요 시 숨은 필드에 플래그 저장
+      // document.getElementById('emailVerified')?.value = 'true';
+    } catch (e) {
+      showError(codeEl, '네트워크 오류: ' + e.message);
+    }
+  };
+})();
+</script>
+
+
+
+<!-- <script>
 
 	const certDom = document.querySelector(".cert-number");
 	function showCert(){
@@ -124,4 +294,4 @@
       }
     });
   })();
-</script>
+</script> -->
