@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="587"/> <!-- STARTTLS -->
+        <property name="username" value="iamjdy12@gmail.com"/>
+        <property name="password" value="mqrdibaygdwilemb"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.required">true</prop>
+                <prop key="mail.smtp.connectiontimeout">5000</prop>
+                <prop key="mail.smtp.timeout">5000</prop>
+                <prop key="mail.smtp.writetimeout">5000</prop>
+                <!-- TLS1.2 강제 (SSLHandshake 에러 예방) -->
+                <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+                <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+                <!-- 디버그 로그 보고 싶으면 -->
+                <!-- <prop key="mail.debug">true</prop> -->
+            </props>
+        </property>
+    </bean>
+
+</beans>

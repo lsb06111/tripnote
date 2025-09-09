@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import edu.example.tripnote.dao.UserDAO;
 
 @Controller
-public class CountByUsername {
+public class CountByUsernameController {
 	@Autowired
 	UserDAO dao;
 	
 	@ResponseBody
-	@RequestMapping("/checkUsername")
+	@RequestMapping("/Usernamecheck")
 	public Map<String, Object> check(@RequestParam String username) {
 		Map<String, Object> result = new HashMap<>();
 		// 아이디 중복 체크
