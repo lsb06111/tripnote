@@ -26,7 +26,17 @@
             GROUP BY
                 board_id
         )   l ON b.id = l.board_id
-        
+    
+    <where>
+    	<if test="loc != null and loc != '' and loc != 'undefined'">
+    		and area_name = #{loc}
+    	</if>
+    	<if test="keyword != null and keyword != ''">
+    		and (b.title like '%' || #{keyword} || '%'
+    			or b.board_content like '%' || #{keyword} || '%'
+    			or a.area_name like '%' || #{keyword} || '%')
+    	</if>
+    </where>
     <choose>
 	    <when test="order == 'latest'">
 	    	ORDER BY b.created_at DESC
@@ -38,6 +48,7 @@
 	     	ORDER BY b.created_at DESC
 	    </otherwise>
     </choose>
+    
 
 </select>
 

@@ -21,7 +21,7 @@ public class BoardController {
 	@GetMapping
 	public String index(Model model,  BoardParamDTO boardParam) {
 		List<BoardDTO> list =  boardService.listAll(boardParam);
-		model.addAttribute("list", list);
+		model.addAttribute("posts", list);
 		return "board/index";
 	}
 
