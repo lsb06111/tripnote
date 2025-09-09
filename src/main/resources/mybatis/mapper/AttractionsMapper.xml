@@ -7,8 +7,19 @@
 	insert into attractions (contentId, title, addr1, firstimage, mapx, mapy, overview, locations) values (#{contentId}, #{title}, #{addr1}, #{firstimage}, #{mapx}, #{mapy}, #{overview}, #{locations})
 </insert>
 
+<insert id="insertRestaurant"  parameterType="AttractionDTO">
+	insert into restaurants (contentId, title, addr1, firstimage, mapx, mapy, overview, locations) values (#{contentId}, #{title}, #{addr1}, #{firstimage}, #{mapx}, #{mapy}, #{overview}, #{locations})
+</insert>
+
+
 <select id="getAttractionList" parameterType="string" resultType="AttractionDTO">
-	select * from attractions where locations = #{tripDest}
+	select * from attractions where locations = #{tripDest} fetch first 30 rows only
 </select>
+
+<select id="getRestaurantList" parameterType="string" resultType="AttractionDTO">
+	select * from restaurants where locations = #{tripDest} fetch first 30 rows only
+</select>
+
+
 
 </mapper>

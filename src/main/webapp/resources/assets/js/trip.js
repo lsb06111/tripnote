@@ -177,24 +177,42 @@ function switchDay(btn){
 }; 
 
 // 장소를 타임라인에 추가
-function insertToTimeline(btn) {
-	  const container = $(btn).closest(".trip-loc-card");
-	  const title = container.find('.sl-name').text();
-	  const type = container.find('.sl-type').text();
-	  let img = container.find('img');
-	  if (img){
-		 img =  img.attr('src')
-	  }
+function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId) {
+
+	const container = $(btn).closest(".trip-loc-card");
+	const title = container.find('.sl-name').text();
+	const type = container.find('.sl-type').text();
+	let img = container.find('img');
+	if (img){
+		img =  img.attr('src')
+	}
 	  
 	  // 표시 중인 타임라인(보이는 것) 선택
-	  const $target = $('.trip-timelineForDay:visible').first();
-	  const order = $target.children().length;
-      $target.append(getTimelineEvent(title, type, img, order+1));
-	};
+	const $target = $('.trip-timelineForDay:visible').first();
+	const order = $target.children().length+1;
+	
+	let tourNth = document.querySelector('#dayTabs .trip-tab.is-active').textContent.split(' ')[1].substring(0,1);
+	let tourLocId = -1;
+	$.post("/tripnote/trip/saveTour",
+			{
+				code : contentId,
+				tourLocName : tourLocName,
+				imgSrc : imgSrc,
+				courseId : courseId,
+				tourOrder : order,
+				tourNth : tourNth
+			},
+			function(data, status){
+				$target.append(getTimelineEvent(title, type, img, order, data.id));
+			});
+	
+	
+};
 
-function getTimelineEvent(title, type, img, order){
+function getTimelineEvent(title, type, img, order, tourLocId){
 	let text = `
 	<div class="trip-timeline-event d-flex flex-column p-2">
+		<div class="tour-loc-id" style="display:none">${tourLocId}</div>
 		<div class="d-flex w-100">
 			<div class="trip-idx m-1">${order}</div>
 			<div class="event-info mx-2">

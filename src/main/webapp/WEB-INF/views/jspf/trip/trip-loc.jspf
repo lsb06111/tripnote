@@ -1,28 +1,65 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:forEach var="attraction" items="${ attList }">
-<div class="trip-loc-card" onclick="drawMarkerWithXY(${attraction.mapx}, ${attraction.mapy})">
+<div class="trip-tag tag-tour">
+	<%
+		Random tripRnd = new Random();
+	%>
+	<c:forEach var="attraction" items="${ attList }">
+		<%
+			int fRecRnd = tripRnd.nextInt(5);
+		%>
+		<div class="trip-loc-card" onclick="drawMarkerWithXY(${attraction.mapx}, ${attraction.mapy})">
+			<div class="trip-loc-top">
+				<div class="sl-thumb">
+					<img src="${ attraction.firstimage != null ? attraction.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
+				</div>
+				
+				<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this, '${attraction.contentId}','${attraction.title}', '${attraction.firstimage}', '${courseDTO.id}')">+</button>
+			</div>
+			<!-- 하단: 상세 설명 박스 -->
+			<div class="trip-loc-info">
+				<div class="sl-cat d-flex justify-content-start">
+					<span class="sl-type me-1">명소</span>
+					<a href="#" class="sl-name">${ attraction.title }</a>
+					<% if(fRecRnd == 1){ %>
+						<div class="sl-badge">친구추천</div>
+					<% } %>
+					<div class="trip-sl-address" style="display:none">${ attraction.addr1 }</div>
+				</div>
+				<p class="sl-desc">${ attraction.overview }</p>
+				<div class="sl-meta">
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+</div>
+
+<div class="trip-tag tag-restaurant">
+<c:forEach var="restaurant" items="${ restaurantList }">
+<div class="trip-loc-card" onclick="drawMarkerWithXY(${restaurant.mapx}, ${restaurant.mapy})">
 	<div class="trip-loc-top">
 		<div class="sl-thumb">
-			<img src="${ attraction.firstimage != null ? attraction.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
+			<img src="${ restaurant.firstimage != null ? restaurant.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
 		</div>
-		<div>
-			<div class="sl-badge">친구추천</div>
-			<div class="sl-badge">명소</div> 
-		</div>
+		
 		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this)">+</button>
 	</div>
 	<!-- 하단: 상세 설명 박스 -->
 	<div class="trip-loc-info">
 		<div class="sl-cat d-flex justify-content-start">
-			<span class="sl-type me-1">명소</span>
-			<a href="#" class="sl-name">${ attraction.title }</a>
-			<div class="trip-sl-address" style="display:none">${ attraction.addr1 }</div>
+			<span class="sl-type me-1">식당</span>
+			<a href="#" class="sl-name">${ restaurant.title }</a>
+			<div class="trip-sl-address" style="display:none">${ restaurant.addr1 }</div>
 		</div>
-		<p class="sl-desc">${ attraction.overview }</p>
+		<p class="sl-desc">${ restaurant.overview }</p>
 		<div class="sl-meta">
 		</div>
 	</div>
 </div>
 </c:forEach>
+</div>
+
+
+
+

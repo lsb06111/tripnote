@@ -228,7 +228,7 @@
 /* 추천 장소의 이미지와 버튼 부분 */
 .trip-loc-top {
 	display: grid;
-	grid-template-columns: 8fr 4fr 1fr; /* 우측 + 버튼 폭 */
+	grid-template-columns: 15fr 2fr; /* 우측 + 버튼 폭 */
 	gap: 10px;
 	height: 140px; /* 이미지 높이(조절 포인트) */
 }
@@ -237,6 +237,18 @@
 	display: grid;
 	grid-template-columns: 5fr 1fr; /* 우측 + 버튼 폭 */
 	gap: 10px;
+}
+
+.trip-cards {
+	&::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For Firefox */
+  scrollbar-width: none;  
+
+  /* For IE and Edge (older versions) */
+  -ms-overflow-style: none;  
 }
 
 /* 이미지(조금 줄임) */

@@ -1,4 +1,4 @@
-package edu.example.tripnote.domain;
+package edu.example.tripnote.domain.trip;
 
 import org.springframework.stereotype.Component;
 

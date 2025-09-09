@@ -11,7 +11,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.example.tripnote.domain.AttractionDTO;
+import edu.example.tripnote.domain.trip.AttractionDTO;
 
 public class Attractions {
 	
@@ -63,7 +63,7 @@ public class Attractions {
 		return destinations;
 	}
 	
-	public static List<AttractionDTO> getAttractions(String destinationName){
+	public static List<AttractionDTO> getAttractions(String destinationName, String cCode){
 		String apiKey = "lko%2FQ9p5fG2SHKaH17oj9oV1ozNgrXqumBMjwhqzbnO90KLkpGLEDHBAXlfxGwSaAyRzRJOywKsyp%2Bnm9TVThA%3D%3D";
 		String areaCode = "";
 
@@ -112,13 +112,13 @@ public class Attractions {
 			try {
 				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B551011/KorService2/areaBasedList2");
 				urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
-				urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=100");
+				urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=500");
 				urlBuilder.append("&" + URLEncoder.encode("pageNo", "UTF-8") + "=1");
 				urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=ETC");
 				urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=AppTest");
 				urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=json");
 				urlBuilder.append("&" + URLEncoder.encode("arrange", "UTF-8") + "=A");
-				urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "=12");
+				urlBuilder.append("&" + URLEncoder.encode("contentTypeId", "UTF-8") + "="+cCode);
 				urlBuilder.append("&" + URLEncoder.encode("areaCode", "UTF-8") + "=" + areaCode);
 
 				URL url = new URL(urlBuilder.toString());

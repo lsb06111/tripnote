@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.example.tripnote.dao.TripDAO">
+
+<select id="getAreaId" parameterType="string" resultType="_int">
+	select id from area where area_name = #{areaName}
+</select>
+
+<insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="false">
+	<selectKey keyProperty="id" resultType="_int" order="AFTER">
+        SELECT ISEQ$$_83781.currval FROM dual
+    </selectKey>
+	insert into course (title, start_date, end_date, user_id, area_id) values(#{title}, #{startDate}, #{endDate}, #{userId}, #{areaId})
+</insert>
+
+<insert id="insertTourLoc" parameterType="TourLocDTO">
+	<selectKey keyProperty="id" resultType="_int" order="AFTER">
+        SELECT ISEQ$$_83762.currval FROM dual
+    </selectKey>
+
+	insert into tour_loc (code, tour_loc_name, tour_order, start_time, end_time, tour_nth, time_taken, course_id, img_src) 
+			values(#{code}, #{tourLocName}, #{tourOrder}, #{startTime}, #{endTime}, #{tourNth}, #{timeTaken}, #{courseId}, #{imgSrc})
+</insert>
+
+</mapper>
