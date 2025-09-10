@@ -17,6 +17,10 @@
 	</div>
 	<div class="trip-note-area">
 		<textarea class="pe-5" placeholder="메모를 입력하세요..."></textarea>
-		<button class="btn btn-light save-note-btn">완료</button>
+		<button class="btn btn-light save-note-btn" >저장</button>
 	</div>
 </div>
+
+<script>
+
+</script>

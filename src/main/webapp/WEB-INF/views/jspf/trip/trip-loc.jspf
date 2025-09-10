@@ -43,12 +43,12 @@
 			<img src="${ restaurant.firstimage != null ? restaurant.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
 		</div>
 		
-		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this)">+</button>
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this, '${restaurant.contentId}','${restaurant.title}', '${restaurant.firstimage}', '${courseDTO.id}')">+</button>
 	</div>
 	<!-- 하단: 상세 설명 박스 -->
 	<div class="trip-loc-info">
 		<div class="sl-cat d-flex justify-content-start">
-			<span class="sl-type me-1">식당</span>
+			<span class="sl-type me-1">음식점</span>
 			<a href="#" class="sl-name">${ restaurant.title }</a>
 			<div class="trip-sl-address" style="display:none">${ restaurant.addr1 }</div>
 		</div>
@@ -59,6 +59,25 @@
 </div>
 </c:forEach>
 </div>
+
+<script>
+
+window.onload = function(){
+	$.get('/tripnote/trip/getAllTour?courseId='+${courseDTO.id},
+			function(data,status){
+				
+				if(data != null){
+					data.forEach(e => {
+						const $target = $('#tab_'+e.tourNth+'.trip-timelineForDay').first();
+						$target.append(getTimelineEvent(e.tourLocName, '명소', e.imgSrc, e.tourOrder, e.id))
+					});
+					
+				}
+			})
+	
+	
+}
+</script>
 
 
 

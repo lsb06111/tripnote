@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8" import="edu.example.tripnote.domain.trip.TripInfoDTO"%>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.temporal.ChronoUnit" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>	
 <div class="d-flex" style="height:100vh">
 	<section class="trip-sidebar-left" style="flex:1.2;">
@@ -49,12 +52,23 @@
 				<div class="trip-timeline-day-header mb-3">
 					<!-- Tabs: 일정 일차 선택 -->
 					<% 
-					int[] timelines = {0,0,0,0};
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.M.d");
+
+					String startStr = ((TripInfoDTO)request.getAttribute("tripInfoDTO")).getStartDate();
+				    String endStr = ((TripInfoDTO)request.getAttribute("tripInfoDTO")).getEndDate();
+
+				    LocalDate start = LocalDate.parse(startStr, formatter);
+				    LocalDate end = LocalDate.parse(endStr, formatter);
+
+			        int totalDays = (int)ChronoUnit.DAYS.between(start, end)+1;
+
+					int[] timelines = new int[totalDays];
 					int tripLen = timelines.length;
 					request.setAttribute("timelines", timelines);
 			        request.setAttribute("tripLen", tripLen);
 					%>
-					<div class="trip-tabs w-100 d-flex justify-content-around" id="dayTabs" role="tablist" aria-label="일차 선택">
+					<div class="trip-tabs w-100 d-flex justify-content-around" id="dayTabs" role="tablist" aria-label="일차 선택"
+					style="overflow-x: auto; overflow-y: hidden; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none;">
 						<c:forEach var="i" begin="1" end="${tripLen}" varStatus="st">
 						<button class="trip-tab${st.first ? ' is-active' : ''}"
 						       role="tab"
@@ -71,7 +85,7 @@
 		    <!-- 콘텐츠 영역: 하루당 패널 1개 -->
 		    <div style="max-height:calc(100vh - 150px); overflow-y:auto;">
 		      <c:forEach var="day" begin="1" end="${tripLen}" varStatus="st">
-		        <div class="trip-timelineForDay"
+		        <div class="trip-timelineForDay" id="tab_${day}"
 		             data-day="${day}"
 		             style="${st.first ? '' : 'display:none;'}">
 		

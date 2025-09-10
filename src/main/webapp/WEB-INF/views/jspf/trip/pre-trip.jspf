@@ -69,7 +69,7 @@
 		</section>
 		<div class="d-grid gap-2 col-2 mx-auto mt-5">
 			<form id = "preTripForm" action="" method="post">
-				<button id="trip-pre-done-btn" class="btn btn-primary" type = "submit" onclick="checkForNextStep()">설정 완료</button>
+				<button id="trip-pre-done-btn" class="btn btn-primary" type = "submit" onclick="checkForNextStep(${user.id})">설정 완료</button>
 			</form>
 		</div>
 

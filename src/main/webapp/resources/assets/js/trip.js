@@ -60,11 +60,13 @@ $("#trip-end-date").datepicker({
 let tripStartDate = "";
 let tripEndDate = "";
 let tripDest = ""; // 여행 지역
-function checkForNextStep(){
+function checkForNextStep(userId){
 	event.preventDefault();
 	tripDest = $('input[name="locationRadio"]:checked').next().text().trim();
  	if (tripStartDate && tripEndDate && tripDest){
- 		location.href = '/tripnote/trip/plan?startDate='+tripStartDate+'&endDate='+tripEndDate+'&tripDest='+tripDest;
+ 		location.href = '/tripnote/trip/plan?startDate='
+ 			+tripStartDate+'&endDate='+tripEndDate+'&tripDest='+tripDest
+ 			+'&userId='+userId;
  		
  		//$('#trip-loc-step').trigger('click');
  	}else{
@@ -228,18 +230,41 @@ function getTimelineEvent(title, type, img, order, tourLocId){
 			
 		</div>
 		<div class="trip-note-area">
-			<textarea class="pe-5" placeholder="메모를 입력하세요..."></textarea>
-			<button class="btn btn-light save-note-btn">완료</button>
+			<textarea id="content_${tourLocId}" class="pe-5" placeholder="메모를 입력하세요..."></textarea>
+			<button class="btn btn-light save-note-btn"onclick="saveNote(${tourLocId})">저장</button>
 		</div>
 	</div>`;
 	return text;
 }
-
+function saveNote(tourLocId){
+	const noteContent = document.querySelector('#content_'+tourLocId).value;
+	$.post('/tripnote/trip/saveNote',
+			{
+				tourLocId : tourLocId,
+				noteContent : noteContent
+			});
+}
 // tripnote 관광지의 순서번호 부여
 function assignLocIndex(){
 	$list = $('.trip-timelineForDay:visible');
 	$list.children().each(function(idx, el){
 		$(el).find('.trip-idx').text(idx+1);
+	});
+	let tourLocIds = document.querySelectorAll('.tour-loc-id');
+	let dataObjs = [];
+	tourLocIds.forEach((el, idx) => {
+	    let dataObj = {};
+	    dataObj.id = parseInt(el.textContent);
+	    dataObj.tourOrder = (idx+1);   // 인덱스를 tourOrder로
+	    dataObjs.push(dataObj);
+	});
+
+	$.ajax({
+		url: "/tripnote/trip/updateTour",
+		type: "POST",
+		contentType: "application/json",
+		data: JSON.stringify(dataObjs),
+		success: function(data, status) {console.log("done!");}
 	});
 }
 
@@ -255,7 +280,14 @@ function toggleNote(btn) {
 
 function deleteNote(btn){
 	$card = $(btn).closest('.trip-timeline-event');
+	let tourLocId = $card.find(".tour-loc-id").text().trim();
 	$card.remove();
+	$.ajax({
+		url: '/tripnote/trip/deleteTour?id='+tourLocId,
+		type: "GET"
+	});
+	
+	
 	assignLocIndex();
 }
 

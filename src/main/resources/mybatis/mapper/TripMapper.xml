@@ -6,6 +6,10 @@
 	select id from area where area_name = #{areaName}
 </select>
 
+<select id="getAllTourLoc"  parameterType="_int" resultType="TourLocDTO">
+	select * from tour_loc where course_id = #{courseId}
+</select>
+
 <insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="false">
 	<selectKey keyProperty="id" resultType="_int" order="AFTER">
         SELECT ISEQ$$_83781.currval FROM dual
@@ -21,5 +25,29 @@
 	insert into tour_loc (code, tour_loc_name, tour_order, start_time, end_time, tour_nth, time_taken, course_id, img_src) 
 			values(#{code}, #{tourLocName}, #{tourOrder}, #{startTime}, #{endTime}, #{tourNth}, #{timeTaken}, #{courseId}, #{imgSrc})
 </insert>
+
+<update id="updateTourLoc" parameterType="TourLocDTO">
+	update tour_loc set
+		tour_order = #{tourOrder}
+	where id = #{id}
+</update>
+<delete id="deleteTourLoc"  parameterType="_int"  >
+    	delete from tour_loc where id = #{id}
+</delete>
+
+<insert id="insertNote" parameterType="NoteDTO">
+	<selectKey keyProperty="id" resultType="_int" order="AFTER">
+        SELECT ISEQ$$_83787.currval FROM dual
+    </selectKey>
+    insert into note (note_content, tour_loc_id) values(#{id}, #{tourLocId})
+</insert>
+
+<update id="updateNote" parameterType="NoteDTO">
+	update note set note_content = #{noteContent} where id = #{id}
+</update>
+
+<select id="getNote" parameterType="_int">
+	select * from note where tour_loc_id = #{tourLocId}
+</select>
 
 </mapper>

@@ -14,7 +14,7 @@
         <ul>
           <li><a href="/tripnote/" class="active">Home</a></li>
           <li><a href="/tripnote//trip/">일정 만들기</a></li>
-          <li><a href="/tripnote/review">리뷰 게시판</a></li>
+          <li><a href="/tripnote/board">리뷰 게시판</a></li>
           <li><a href="/oti_team3/profile.jsp?identify=myself">마이페이지</a></li>
           <li>
           <a href="#" class="text-decoration-none" id="modal-login"
@@ -73,7 +73,7 @@
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll("nav ul li a");
+    const navLinks = document.querySelectorAll(".navmenu nav ul li a");
 
     navLinks.forEach(link => {
       const linkPath = new URL(link.href).pathname;
