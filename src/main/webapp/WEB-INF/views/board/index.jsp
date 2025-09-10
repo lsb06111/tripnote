@@ -17,9 +17,9 @@
 	<section id="portfolio" class="portfolio services section mt-5">
 
 		<div class="container section-title" style="padding-bottom: 60px;">
-			<h2 onclick="location.href='/tripnote/board'">리뷰 게시판</h2>
+			<h2 onclick="location.href='/tripnote/board'">여행 후기</h2>
 			<a href="" id="modal-reviewSelection" data-bs-toggle="modal"
-				data-bs-target="#modalReviewSelection">리뷰 쓰러가기<i
+				data-bs-target="#modalReviewSelection">후기 쓰러가기<i
 				class="bi bi-arrow-right"></i></a>
 		</div>
 		<div class="container">
@@ -41,8 +41,9 @@
 					</div>
 
 					<ul class="portfolio-filters isotope-filters mb-0 position-absolute start-50 translate-middle-x d-flex gap-3">
-						<li onclick="setBoardParam('loc')"><a class="text-reset">전지역</a></li>
-						<li onclick="setBoardParam('loc','수도권')"><a class="text-reset" >수도권</a></li>
+						<li onclick="setBoardParam('loc')"><a class="text-reset">전체</a></li>
+						<li onclick="setBoardParam('loc','서울')"><a class="text-reset" >서울</a></li>
+						<li onclick="setBoardParam('loc','경기인천')"><a class="text-reset" >경기·인천</a></li>
 						<li onclick="setBoardParam('loc','충청도')"><a class="text-reset" >충청도</a></li>
 						<li onclick="setBoardParam('loc','강원도')"><a class="text-reset" >강원도</a></li>
 						<li onclick="setBoardParam('loc','전라도')"><a class="text-reset" >전라도</a></li>
@@ -63,10 +64,8 @@
 					<c:forEach var="item" items="${response.content}">
 						<!-- 여행 후기 item -->
 						<div class="col-lg-3 col-md-6 portfolio-item isotope-item">
-							<div class="service-card"
-								style="padding: 15px 12px; cursor: pointer"
-								onclick="location.href='/oti_team3/board/view.jsp?title=강원도 주말 힐링 여행'">
-	
+							<div class="service-card" style="padding: 15px 12px; cursor: pointer"
+								onclick="location.href='/tripnote/board/detail'">
 								<figure
 									style="display: flex; align-items: center; margin: 0; width: 100%; margin: 5px">
 									<img style="width: 15%; border: 1px solid black; border-radius: 50%; margin-right: 10px; cursor: pointer"
