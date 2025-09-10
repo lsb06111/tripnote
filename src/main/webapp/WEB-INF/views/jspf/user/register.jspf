@@ -6,7 +6,7 @@
 <meta name="_csrf_header" content="${_csrf_header}"/>
 <meta name="_csrf"        content="${_csrf_token}"/>
 
-<form method="post" action="/tripnote/register" class="needs-validation" novalidate>
+<form id="registerForm" method="post" action="${pageContext.request.contextPath}/register" class="needs-validation" novalidate>
 
   <div class="row g-3 mb-2">
     <div class="col-md-6" style="margin-top:0">
@@ -269,29 +269,45 @@
 })();
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	var registerStatus = '<c:out value="${registerStatus}" default=""/>';
+	
+	if (registerStatus === 'success') {
+		alert('회원가입이 완료되었습니다.');
+	}
+	else if (registerStatus === 'fail') {
+		alert('회원가입을 실패하셨습니다.');
+	}
+});
+</script>
 
 
-<!-- <script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('registerForm');
+  if (!form) return;
 
-	const certDom = document.querySelector(".cert-number");
-	function showCert(){
-			certDom.style.display = 'block';
-	}  
+  form.addEventListener('submit', function (e) {
+    const p1 = form.querySelector('#regPassword');
+    const p2 = form.querySelector('#regPassword2');
 
+    // 1) HTML5/Bootstrap 검증: 유효하지 않으면 전송 막고 invalid-feedback 표시
+    if (!form.checkValidity()) {
+      e.preventDefault(); e.stopPropagation();
+    }
 
-  (function () {
-    const form = document.currentScript?.previousElementSibling;
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
-      const p1 = form.querySelector('#regPassword');
-      const p2 = form.querySelector('#regPassword2');
-      if (p1 && p2 && p1.value !== p2.value) {
-        e.preventDefault(); e.stopPropagation();
-        p2.setCustomValidity('비밀번호가 일치하지 않습니다.');
-        form.classList.add('was-validated');
-      } else if (p2) {
-        p2.setCustomValidity('');
-      }
-    });
-  })();
-</script> -->
+    // 2) 비밀번호 일치 추가검증
+    if (p1 && p2 && p1.value !== p2.value) {
+      e.preventDefault(); e.stopPropagation();
+      p2.setCustomValidity('비밀번호가 일치하지 않습니다.');
+    } else if (p2) {
+      p2.setCustomValidity('');
+    }
+
+    // Bootstrap 스타일 표시
+    form.classList.add('was-validated');
+  }, false);
+});
+</script>
+

@@ -8,12 +8,12 @@
   
 <%@ include file="/WEB-INF/views/jspf/header.jspf" %>
   <main class="main">
-
+	
     <!-- Hero Section -->
     <%@ include file="/WEB-INF/views/jspf/main/welcome.jspf" %>
 
     <%-- <%@ include file="/WEB-INF/views/jspf/serviceinfo.jspf" %> --%>
-
+	
     <%@ include file="/WEB-INF/views/jspf/main/featureinfo.jspf" %> 
 
 	<%@ include file="/WEB-INF/views/jspf/main/steps.jspf" %>

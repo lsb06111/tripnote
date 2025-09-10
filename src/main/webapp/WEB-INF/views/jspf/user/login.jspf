@@ -1,31 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-<form method="post" action="" class="needs-validation" novalidate>
+
+<form id="loginForm" method="post"
+      action="${pageContext.request.contextPath}/login"
+      class="needs-validation" novalidate>
+
   <div class="mb-3 login-component">
     <label for="loginUsername" class="form-label">아이디</label>
-    <input type="text" class="form-control" id="loginUsername" name="username" required placeholder="아이디">
+    <input type="text" class="form-control" id="loginUsername"
+           name="login_username" placeholder="아이디" required>
     <div class="invalid-feedback">아이디를 입력해주세요.</div>
   </div>
 
   <div class="mb-3 login-component">
     <label for="loginPassword" class="form-label">비밀번호</label>
-    <input type="password" class="form-control" id="loginPassword" name="password" required placeholder="비밀번호" style="font-weight: 400;">
+    <input type="password" class="form-control" id="loginPassword"
+           name="login_password" required placeholder="비밀번호" style="font-weight: 400;">
     <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
   </div>
-  
+
+  <!-- find-* 입력은 처음에 숨기고 disabled로 시작 (검증 제외) -->
   <div class="mb-3 find-component" style="display:none">
     <label for="findUsername" class="form-label">아이디</label>
-    <input type="text" class="form-control" id="findUsername" name="username" required placeholder="아이디">
+    <input type="text" class="form-control" id="findUsername"
+           name="find_username" required placeholder="아이디" disabled>
     <div class="invalid-feedback">아이디를 입력해주세요.</div>
   </div>
-  
-    <div class="mb-3 find-component find-id" style="display:none">
+
+  <div class="mb-3 find-component find-id" style="display:none">
     <label for="findEmail" class="form-label">이메일</label>
-    <input type="email" class="form-control" id="findEmail" name="email" required placeholder="you@example.com">
+    <input type="email" class="form-control" id="findEmail"
+           name="find_email" required placeholder="you@example.com" disabled>
     <div class="invalid-feedback">올바른 이메일을 입력해주세요.</div>
   </div>
-
 
   <div class="d-flex justify-content-between align-items-center mb-3 login-component">
     <div class="form-check">
@@ -33,67 +41,104 @@
       <label class="form-check-label" for="rememberMe">로그인 상태 유지</label>
     </div>
     <div>
-    <a href="#" class="small text-decoration-none" onclick="findAction('id')">아이디 찾기</a> 
-    <span>/</span> 
-    <a href="#" class="small text-decoration-none" onclick="findAction('password')">비밀번호 찾기</a>
+      <!-- return false로 링크 기본 동작 방지 -->
+      <a href="#" class="small text-decoration-none" onclick="return findAction('id')">아이디 찾기</a>
+      <span>/</span>
+      <a href="#" class="small text-decoration-none" onclick="return findAction('password')">비밀번호 찾기</a>
     </div>
   </div>
 
-  <button type="submit" class="btn w-100 text-white login-submit-button" id="liveToastBtn"
+  <button type="submit" class="btn w-100 text-white login-submit-button"
           style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;">
     로그인
   </button>
-	<c:if test="${not empty msg}">
-	  <div class="invalid-feedback d-block">${msg}</div>
-	</c:if>
-  
+
+  <c:if test="${not empty msg}">
+    <div class="invalid-feedback d-block">${msg}</div>
+  </c:if>
 </form>
 
-<%
-	String toastTitle = "토스트 제목";
-	String toastMsg = "토스트 내용";
-	boolean toastSuccess = true;
-%>
+<script>
+(() => {
+  'use strict';
 
-<!-- <script>
-const findIdDom = document.querySelector('.find-component.find-id');
-const findPassDom = document.querySelectorAll('.find-component');
-const loginDom = document.querySelectorAll('.login-component');
-const submitButtonLogin = document.querySelector('.login-submit-button');
+  const form = document.getElementById('loginForm');
 
-function findAction(action){
-	loginDom.forEach(e => {
-		e.style.setProperty('display', 'none', 'important');
-	});
-	if(action == 'id'){
-		findIdDom.style.display = 'block';
-		submitButtonLogin.textContent = '아이디 찾기';
-	}else{
-		findPassDom.forEach(e => {
-			e.style.display = 'block';
-		});
-		submitButtonLogin.textContent = '비밀번호 찾기';
-	}
-}
+  // 범위 한정된 셀렉터(이 폼 내부만)
+  const findIdDom      = form.querySelector('.find-component.find-id');
+  const findPassDomAll = form.querySelectorAll('.find-component');
+  const loginDomAll    = form.querySelectorAll('.login-component');
+  const submitBtn      = form.querySelector('.login-submit-button');
 
+  const loginInputs = form.querySelectorAll('.login-component input');
+  const findInputs  = form.querySelectorAll('.find-component input');
 
-  (() => {
-	  
-	  
-    'use strict';
-    const forms = document.querySelectorAll('.needs-validation');
-    Array.from(forms).forEach(form => {
-      form.addEventListener('submit', event => {
-        if (!form.checkValidity()) { event.preventDefault(); event.stopPropagation(); }
-        form.classList.add('was-validated');
-      }, false);
+  function toggleInputsRequiredDisabled(nodeList, enable) {
+    nodeList.forEach(el => {
+      el.disabled = !enable;                 // disabled면 검증 제외
+      if (enable) el.setAttribute('required', '');
+      else        el.removeAttribute('required');
     });
-  })();
-  
-</script> -->
+  }
 
+  function show(el) { el.style.removeProperty('display'); }
+  function hide(el) { el.style.display = 'none'; }
 
+  function setLoginMode() {
+    loginDomAll.forEach(show);
+    findPassDomAll.forEach(hide);
+    toggleInputsRequiredDisabled(loginInputs, true);
+    toggleInputsRequiredDisabled(findInputs,  false);
+    submitBtn.textContent = '로그인';
+  }
 
+  function setFindIdMode() {
+    loginDomAll.forEach(el => el.style.setProperty('display', 'none', 'important'));
+    findPassDomAll.forEach(hide);
+    show(findIdDom);
+    toggleInputsRequiredDisabled(loginInputs, false);
+    toggleInputsRequiredDisabled(findInputs,  true);
+    submitBtn.textContent = '아이디 찾기';
+  }
 
+  function setFindPasswordMode() {
+    loginDomAll.forEach(el => el.style.setProperty('display', 'none', 'important'));
+    findPassDomAll.forEach(show);
+    toggleInputsRequiredDisabled(loginInputs, false);
+    toggleInputsRequiredDisabled(findInputs,  true);
+    submitBtn.textContent = '비밀번호 찾기';
+  }
 
+  // 링크에서 호출하는 전역 함수로 노출
+  window.findAction = function (action) {
+    if (action === 'id') setFindIdMode();
+    else setFindPasswordMode();
+    return false; // a href="#" 기본 동작 막기
+  };
+
+  // 초기 상태: 로그인 모드
+  setLoginMode();
+
+  // Bootstrap 예제: 유효하지 않으면만 제출 막기
+  form.addEventListener('submit', (event) => {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var loginStatus = '<c:out value="${loginStatus}" default=""/>'; // FlashAttr
+
+  if (loginStatus === 'success') {
+    alert('로그인이 완료되었습니다.');
+  } else if (loginStatus === 'fail') {
+    alert('아이디 또는 비밀번호가 불일치합니다.');
+  }
+});
+</script>
 
