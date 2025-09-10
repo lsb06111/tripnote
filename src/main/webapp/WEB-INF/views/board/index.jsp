@@ -125,26 +125,33 @@
 			</div>
 		</div>
 	</div>
-	<nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-center">
-		  <li class="page-item ">
-		    <a class="page-link">&lt;</a>
-		  </li>
-		  <c:forEach var="num" begin="1" end="${response.totalCount}">
-		  	<c:choose>
-		  		<c:when test="${num == response.page}">
-		  			<li class="page-item active"><a class="page-link " onclick="setBoardParam('page', ${num})" style ="cursor:pointer;">${num}</a></li>
-		  		</c:when>
-		  		<c:otherwise>
-		  			<li class="page-item"><a class="page-link " onclick="setBoardParam('page', ${num})" style ="cursor:pointer;">${num}</a></li>
-		  		</c:otherwise>
-		  	</c:choose>
-		  </c:forEach>
-		  <li class="page-item">
-		    <a class="page-link" href="">&gt;</a>
-		  </li>
-		</ul>
-	</nav>
+	<c:if test="${response.totalPages > 0 }">
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<c:if test="${response.hasPrev}">
+				  <li class="page-item ">
+				    <a class="page-link" onclick="setBoardParam('page', ${response.start - response.blockSize})" style ="cursor:pointer;">&lt;</a>
+				  </li>
+				</c:if>
+			  <c:forEach var="num" begin="${response.start}" end="${response.end}">
+			  	<c:choose>
+			  		<c:when test="${num == response.page}">
+			  			<li class="page-item active"><a class="page-link " onclick="setBoardParam('page', ${num})" style ="cursor:pointer;">${num}</a></li>
+			  		</c:when>
+			  		<c:otherwise>
+			  			<li class="page-item"><a class="page-link " onclick="setBoardParam('page', ${num})" style ="cursor:pointer;">${num}</a></li>
+			  		</c:otherwise>
+			  	</c:choose>
+			  </c:forEach>
+			  <c:if test="${response.hasNext}">
+				  <li class="page-item">
+				    <a class="page-link" onclick="setBoardParam('page', ${response.end + 1})" style ="cursor:pointer;">&gt;</a>
+				  </li>
+			  </c:if>
+			</ul>
+		</nav>
+	
+	</c:if>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			// 정렬 기준 드롭다운 쿼리스트링에서 읽어오기

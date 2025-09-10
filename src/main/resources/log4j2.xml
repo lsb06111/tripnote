@@ -15,7 +15,6 @@
 		</Logger>
 		<Logger name="jdbc.sqlonly" level="info" additivity="false">
 			<AppenderRef ref="Out" />
-			<AppenderRef ref="SqlFile" />
 		</Logger>
 		<Root level="error">
 			<AppenderRef ref="Out" />

@@ -4,13 +4,18 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import edu.example.tripnote.Constants;
 import edu.example.tripnote.dao.BoardDAO;
 import edu.example.tripnote.domain.PageResponseDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
-import edu.example.tripnote.domain.board.BoardVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import static edu.example.tripnote.Constants.BOARD_Block_SIZE;
+import static edu.example.tripnote.Constants.BOARD_PAGE_SIZE;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -18,7 +23,7 @@ public class BoardService {
 	
 	public PageResponseDTO<BoardDTO> listAll(BoardParamDTO boardParam) {
 		int page = boardParam.getPage();
-		int size = boardParam.getSize();
+		int size = BOARD_PAGE_SIZE;
 		int offset;
 		if (page>0) 
 			offset =  (page-1) * size;
@@ -29,9 +34,19 @@ public class BoardService {
 		List<BoardDTO> list = boardDAO.listAll(boardParam);
 		
 		int totalPages = (int)Math.ceil(((double)totalCount/size)); 
-		boolean hasPrev = page>1 ? true:false;
-		boolean hasNext = totalPages>page ? true:false;
-		PageResponseDTO<BoardDTO> response = new PageResponseDTO<>(list,page,size, totalCount,totalPages,hasPrev, hasNext );
+		int totalBlocks = (int)Math.ceil((double)totalPages/BOARD_Block_SIZE);
+		int block = (int)Math.ceil((double)page/BOARD_Block_SIZE);
+		if (totalBlocks <0) totalBlocks = 0;
+		int blockStart = (block-1)*BOARD_Block_SIZE + 1;
+		int blockEnd = block < totalBlocks ? (block*BOARD_Block_SIZE) : (block*BOARD_Block_SIZE -  totalPages % BOARD_Block_SIZE);
+		boolean hasPrev = block>1 ? true:false;
+		boolean hasNext = totalBlocks>block ? true:false;
+		PageResponseDTO<BoardDTO> response = new PageResponseDTO<>(list,page,totalCount,totalPages,hasPrev, hasNext,blockStart, blockEnd);
+		
+		log.debug("BoardService listAll- totalblock : " + totalBlocks);
+		log.debug("BoardService listAll- block : " + block);
+		log.debug("BoardService listAll- start : " + blockStart);
+		log.debug("BoardService listAll- end : " + blockEnd);
 		return response;
 	}
 
