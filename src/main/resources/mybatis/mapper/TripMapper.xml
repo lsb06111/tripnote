@@ -7,19 +7,19 @@
 </select>
 
 <select id="getAllTourLoc"  parameterType="_int" resultType="TourLocDTO">
-	select * from tour_loc where course_id = #{courseId}
+	select tour_loc.*, tour_type.type_name, note.note_content from tour_loc join tour_type on tour_loc.id = tour_type.tour_loc_id join note on tour_loc.id = note.tour_loc_id where course_id = #{courseId} order by tour_nth, tour_order asc
 </select>
 
 <insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="false">
 	<selectKey keyProperty="id" resultType="_int" order="AFTER">
-        SELECT ISEQ$$_83781.currval FROM dual
+        SELECT ISEQ$$_85375.currval FROM dual
     </selectKey>
 	insert into course (title, start_date, end_date, user_id, area_id) values(#{title}, #{startDate}, #{endDate}, #{userId}, #{areaId})
 </insert>
 
 <insert id="insertTourLoc" parameterType="TourLocDTO">
 	<selectKey keyProperty="id" resultType="_int" order="AFTER">
-        SELECT ISEQ$$_83762.currval FROM dual
+        SELECT ISEQ$$_85358.currval FROM dual
     </selectKey>
 
 	insert into tour_loc (code, tour_loc_name, tour_order, start_time, end_time, tour_nth, time_taken, course_id, img_src) 
@@ -37,9 +37,9 @@
 
 <insert id="insertNote" parameterType="NoteDTO">
 	<selectKey keyProperty="id" resultType="_int" order="AFTER">
-        SELECT ISEQ$$_83787.currval FROM dual
+        SELECT ISEQ$$_85381.currval FROM dual
     </selectKey>
-    insert into note (note_content, tour_loc_id) values(#{id}, #{tourLocId})
+    insert into note (note_content, tour_loc_id) values(#{noteContent}, #{tourLocId})
 </insert>
 
 <update id="updateNote" parameterType="NoteDTO">
@@ -49,5 +49,9 @@
 <select id="getNote" parameterType="_int">
 	select * from note where tour_loc_id = #{tourLocId}
 </select>
+
+<insert id="insertTourType" parameterType="TourLocDTO">
+	insert into tour_type values(#{id}, #{typeName})
+</insert>
 
 </mapper>

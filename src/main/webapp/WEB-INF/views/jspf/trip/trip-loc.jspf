@@ -15,7 +15,7 @@
 					<img src="${ attraction.firstimage != null ? attraction.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
 				</div>
 				
-				<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this, '${attraction.contentId}','${attraction.title}', '${attraction.firstimage}', '${courseDTO.id}')">+</button>
+				<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this, '${attraction.contentId}','${attraction.title}', '${attraction.firstimage}', '${courseDTO.id}', '명소')">+</button>
 			</div>
 			<!-- 하단: 상세 설명 박스 -->
 			<div class="trip-loc-info">
@@ -43,7 +43,7 @@
 			<img src="${ restaurant.firstimage != null ? restaurant.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
 		</div>
 		
-		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this, '${restaurant.contentId}','${restaurant.title}', '${restaurant.firstimage}', '${courseDTO.id}')">+</button>
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(this, '${restaurant.contentId}','${restaurant.title}', '${restaurant.firstimage}', '${courseDTO.id}', '음식점')">+</button>
 	</div>
 	<!-- 하단: 상세 설명 박스 -->
 	<div class="trip-loc-info">
@@ -69,7 +69,8 @@ window.onload = function(){
 				if(data != null){
 					data.forEach(e => {
 						const $target = $('#tab_'+e.tourNth+'.trip-timelineForDay').first();
-						$target.append(getTimelineEvent(e.tourLocName, '명소', e.imgSrc, e.tourOrder, e.id))
+						let imgSrc = e.imgSrc ? e.imgSrc : "/tripnote/resources/assets/img/trip/sampleTourImg.jpg";
+						$target.append(getTimelineEvent(e.tourLocName, e.typeName, imgSrc, e.tourOrder, e.id, e.noteContent != undefined ? e.noteContent : ''))
 					});
 					
 				}

@@ -16,5 +16,7 @@ public class TourLocDTO {
 	private int timeTaken;
 	private String imgSrc;
 	private int courseId;
+	private String typeName;
+	private String noteContent;
 
 }

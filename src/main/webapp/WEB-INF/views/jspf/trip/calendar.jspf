@@ -3,13 +3,17 @@
 <div>
 	<span class="fs-2 mb-2">날짜</span><br>
 	<p class="m-5"></p>
+	<div class="d-flex align-items-center justify-content-around mb-4">
+		<input type="text" id="course_title" placeholder="제목을 입력하세요" value="제목 없음" style="width:95%;height:32px; border:1px solid #ccc; border-radius:6px; padding:4px 8px; font-size:14px;">
+	</div>
+	
 	<div class="d-flex align-items-center justify-content-around">
 		<div class="fs-5" onclick="checkcal()">출발일</div>
-		<input class="p-1" type="text" id="trip-start-date" name= "trip-sd" form = "preTripForm" autocomplete="off">
+		<input class="p-1" type="text" id="trip-start-date" name= "trip-sd" form = "preTripForm" autocomplete="off" style="height:32px; border:1px solid #ccc; border-radius:6px; padding:4px 8px; font-size:14px;">
 	</div>
 	<br>
 	<div class="d-flex align-items-center justify-content-around">
 		<span class="fs-5">도착일</span>
-		<input class="p-1" type="text" id="trip-end-date" name= "trip-ed" form = "preTripForm" autocomplete="off">
+		<input class="p-1" type="text" id="trip-end-date" name= "trip-ed" form = "preTripForm" autocomplete="off" style="height:32px; border:1px solid #ccc; border-radius:6px; padding:4px 8px; font-size:14px;">
 	</div>
 </div>
