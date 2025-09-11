@@ -8,8 +8,16 @@ var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리
 // 주소-좌표 변환 객체를 생성합니다
 var geocoder = new kakao.maps.services.Geocoder();
 var markers = [];
-
+var previousMarker;
 function drawMarkerWithXY(mapx, mapy){
+	
+	if(previousMarker){
+		if(!isInsertedToTimeline)
+			previousMarker.setMap(null);
+		else
+			isInsertedToTimeline = false;
+	}
+	
 	var coords = new kakao.maps.LatLng(mapy, mapx);
     
     // 2. 결과 좌표로 지도에 마커를 표시합니다
@@ -19,7 +27,8 @@ function drawMarkerWithXY(mapx, mapy){
     });
 
     // 3. 생성된 마커를 마커 배열에 추가합니다
-    markers.push(marker);
+    previousMarker = marker;
+    //markers.push(marker);
 
     // 4. 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
     map.setCenter(coords);

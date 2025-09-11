@@ -64,9 +64,10 @@ function checkForNextStep(userId){
 	event.preventDefault();
 	tripDest = $('input[name="locationRadio"]:checked').next().text().trim();
  	if (tripStartDate && tripEndDate && tripDest){
+ 		const courseTitle = document.querySelector('#course_title').value;
  		location.href = '/tripnote/trip/plan?startDate='
  			+tripStartDate+'&endDate='+tripEndDate+'&tripDest='+tripDest
- 			+'&userId='+userId;
+ 			+'&userId='+userId+'&courseTitle='+courseTitle;
  		
  		//$('#trip-loc-step').trigger('click');
  	}else{
@@ -177,10 +178,10 @@ function switchDay(btn){
 		el.style.display = (i+1 == idx ? 'block' : 'none');
 	});
 }; 
-
+var isInsertedToTimeline = false;
 // 장소를 타임라인에 추가
-function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId) {
-
+function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId, tourType) {
+	isInsertedToTimeline = true;
 	const container = $(btn).closest(".trip-loc-card");
 	const title = container.find('.sl-name').text();
 	const type = container.find('.sl-type').text();
@@ -202,16 +203,17 @@ function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId) {
 				imgSrc : imgSrc,
 				courseId : courseId,
 				tourOrder : order,
-				tourNth : tourNth
+				tourNth : tourNth,
+				typeName : tourType
 			},
 			function(data, status){
-				$target.append(getTimelineEvent(title, type, img, order, data.id));
+				$target.append(getTimelineEvent(title, type, img, order, data.id, ''));
 			});
 	
 	
 };
 
-function getTimelineEvent(title, type, img, order, tourLocId){
+function getTimelineEvent(title, type, img, order, tourLocId, noteContent){
 	let text = `
 	<div class="trip-timeline-event d-flex flex-column p-2">
 		<div class="tour-loc-id" style="display:none">${tourLocId}</div>
@@ -230,7 +232,7 @@ function getTimelineEvent(title, type, img, order, tourLocId){
 			
 		</div>
 		<div class="trip-note-area">
-			<textarea id="content_${tourLocId}" class="pe-5" placeholder="메모를 입력하세요..."></textarea>
+			<textarea id="content_${tourLocId}" class="pe-5" placeholder="메모를 입력하세요...">${noteContent}</textarea>
 			<button class="btn btn-light save-note-btn"onclick="saveNote(${tourLocId})">저장</button>
 		</div>
 	</div>`;
@@ -246,18 +248,16 @@ function saveNote(tourLocId){
 }
 // tripnote 관광지의 순서번호 부여
 function assignLocIndex(){
+	let dataObjs = [];
 	$list = $('.trip-timelineForDay:visible');
 	$list.children().each(function(idx, el){
 		$(el).find('.trip-idx').text(idx+1);
-	});
-	let tourLocIds = document.querySelectorAll('.tour-loc-id');
-	let dataObjs = [];
-	tourLocIds.forEach((el, idx) => {
-	    let dataObj = {};
+		let dataObj = {};
 	    dataObj.id = parseInt(el.textContent);
 	    dataObj.tourOrder = (idx+1);   // 인덱스를 tourOrder로
 	    dataObjs.push(dataObj);
 	});
+	
 
 	$.ajax({
 		url: "/tripnote/trip/updateTour",

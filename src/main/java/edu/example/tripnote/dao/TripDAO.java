@@ -28,4 +28,7 @@ public interface TripDAO {
 	public int updateNote(NoteDTO noteDTO);
 	
 	public NoteDTO getNote(int tourLocId);
+	
+	public int insertTourType(TourLocDTO tourLocDTO);
+	
 }

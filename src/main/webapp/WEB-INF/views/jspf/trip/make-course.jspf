@@ -44,7 +44,14 @@
 	<!-- 중간 일정 타임라인 -->
 	<section class="trip-schedule" id="trip-loc" style="flex:1; overflow: hidden;">
 		<div class="trip-schedule-header mb-3 d-flex justify-content-between">
-			<span id = "trip-dest" class="fs-3">${ tripInfoDTO.tripDest }</span>
+			<%
+				String destination = ((TripInfoDTO)request.getAttribute("tripInfoDTO")).getTripDest();
+				if(destination.length()>4)
+					destination = destination.substring(0,2);
+				else if(destination.length()==4)
+					destination = destination.charAt(0)+""+destination.charAt(2);
+			%>
+			<span id = "trip-dest" class="fs-3"><%= destination %></span>
 			 <small id = "trip-dates" class="d-flex align-items-end" style="font-weight: normal; color: #999;">${ tripInfoDTO.startDate } - ${ tripInfoDTO.endDate }</small>
 		</div>
 		<div class="trip-timeline">

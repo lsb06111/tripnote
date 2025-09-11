@@ -40,7 +40,7 @@ public class TripController {
 	
 	@ModelAttribute("user")
 	public UserDTO makeUser() {
-		return new UserDTO(2, "qwer", "qwer", "qwer@w.com", "이수빈", "짱짱맨", false);
+		return new UserDTO(1, "qwer", "qwer", "qwer@w.com", "이수빈", "짱짱맨", false);
 	}
 	
 	@RequestMapping("")
@@ -51,12 +51,13 @@ public class TripController {
 	@RequestMapping("/plan")
 	public String goPlan(TripInfoDTO tripInfoDTO,
 						 @ModelAttribute CourseDTO courseDTO, int userId,
+						 String courseTitle,
 						 RedirectAttributes redirectAttributes,
 						 HttpSession session) {
 		
 		if(session.getAttribute("courseDTO") != null)
 			session.removeAttribute("courseDTO");
-		courseDTO.setTitle("제목 없음");
+		courseDTO.setTitle(courseTitle);
 		courseDTO.setStartDate(tripInfoDTO.getStartDate());
 		courseDTO.setEndDate(tripInfoDTO.getEndDate());
 		courseDTO.setUserId(userId);
@@ -126,6 +127,7 @@ public class TripController {
 		tourLocDTO.setTourNth(tourLocDTO.getTourNth());
 		System.out.println(tourLocDTO.getImgSrc());
 		tripDao.insertTourLoc(tourLocDTO);
+		tripDao.insertTourType(tourLocDTO);
 		
 		NoteDTO noteDTO = new NoteDTO();
 		noteDTO.setTourLocId(tourLocDTO.getId());
