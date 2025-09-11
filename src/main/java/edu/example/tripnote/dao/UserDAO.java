@@ -10,7 +10,7 @@ public interface UserDAO {
 	public UserDTO login(@Param("username") String username,
 						@Param("password") String password);
 	
-	public String searchId(@Param("email") String email);
+	public String searchUsername(@Param("email") String email);
 	
 	public String searchPassword(@Param("username") String username,
 								@Param("email") String email);

@@ -73,7 +73,7 @@
     <div class="col-md-6">
       <label for="regPassword2" class="form-label">비밀번호 확인</label>
       <input type="password" class="form-control" id="regPassword2" name="passwordConfirm" required placeholder="다시 입력">
-      <div class="invalid-feedback">비밀번호 확인을 입력해주세요.</div>
+      <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
     </div>
 </div>
   <div class="form-check mt-3">
@@ -94,57 +94,63 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-  $("#btnCheck").on("click", function () {
+  // 어디에 두어도 안전
+  $(document).on('click', '#btnCheck', function () {
+    runUsernameCheck();
+  });
+
+  function runUsernameCheck() {
     const $input = $("#regUsername");
     const username = $input.val().trim();
-    const $msg = $("#msgArea"); // <div id="msgArea" class="invalid-feedback" style="display:none"></div>
+    // 같은 id가 여러 개 있을 가능성도 있으니, 스코프를 좁혀 타겟팅
+    const $msg = $input.closest('.mb-2').find('#msgArea');
 
-    // 초기화
+    console.log('[중복체크] click', { username, msgFound: $msg.length });
+
     $input.removeClass("is-invalid is-valid");
     $msg.removeClass("invalid-feedback valid-feedback d-block").hide().text("");
 
-    // 프론트 유효성
     if (!username) {
-      $msg
-        .addClass("invalid-feedback d-block")
-        .text("아이디를 입력해주세요.")
-        .show();
+      $msg.addClass("invalid-feedback d-block")
+          .text("아이디를 입력해주세요.")
+          .css({display:'block', visibility:'visible'})   // 강제 표시
+          .show();
       $input.addClass("is-invalid");
       return;
     }
 
-    // 서버 중복 체크 (컨텍스트 경로 안전)
-    $.getJSON("<c:url value='/checkUsername'/>", { username })
+    $.getJSON("<c:url value='/Usernamecheck'/>", { username })
       .done(function (res) {
+        console.log('[중복체크] 응답', res);
         if (res.invalid) {
-          // 사용 불가(중복) → 빨간색
-          $msg
-            .removeClass("valid-feedback")
-            .addClass("invalid-feedback d-block")
-            .text(res.msg || "이미 사용 중인 아이디입니다.")
-            .show();
+          $msg.removeClass("valid-feedback")
+              .addClass("invalid-feedback d-block")
+              .text(res.msg || "이미 사용 중인 아이디입니다.")
+              .css({display:'block', visibility:'visible'})
+              .show();
           $input.addClass("is-invalid").removeClass("is-valid");
         } else {
-          // 사용 가능 → 초록색
-          $msg
-            .removeClass("invalid-feedback")
-            .addClass("valid-feedback d-block")
-            .text(res.msg || "사용 가능한 아이디입니다.")
-            .show();
+          $msg.removeClass("invalid-feedback")
+              .addClass("valid-feedback d-block")
+              .text(res.msg || "사용 가능한 아이디입니다.")
+              .css({display:'block', visibility:'visible'})
+              .show();
           $input.addClass("is-valid").removeClass("is-invalid");
         }
       })
       .fail(function (xhr) {
-        // 네트워크/서버 오류 → 빨간색
-        $msg
-          .removeClass("valid-feedback")
-          .addClass("invalid-feedback d-block")
-          .text("중복체크 실패: " + (xhr.responseText || xhr.status))
-          .show();
+        console.error('[중복체크] 실패', xhr);
+        $msg.removeClass("valid-feedback")
+            .addClass("invalid-feedback d-block")
+            .text("중복체크 실패: " + (xhr.responseText || xhr.status))
+            .css({display:'block', visibility:'visible'})
+            .show();
         $input.addClass("is-invalid").removeClass("is-valid");
       });
-  });
+  }
 </script>
+
+
 
 
 

@@ -32,7 +32,7 @@
     <label for="findEmail" class="form-label">이메일</label>
     <input type="email" class="form-control" id="findEmail"
            name="find_email" required placeholder="you@example.com" disabled>
-    <div class="invalid-feedback">올바른 이메일을 입력해주세요.</div>
+    <div id="msgArea" class="invalid-feedback"></div>
   </div>
 
   <div class="d-flex justify-content-between align-items-center mb-3 login-component">
@@ -140,5 +140,36 @@ document.addEventListener('DOMContentLoaded', function () {
     alert('아이디 또는 비밀번호가 불일치합니다.');
   }
 });
+</script>
+
+<!-- 아이디 찾기 -->
+<script>
+	$("btnCheck").on("click", function () {
+		const $input = $("#findUsername");
+		const username = $input.val().trim();
+		cont $msg = $("#msgArea");
+		
+		$input.removeClass("is-invalid is-valid");
+		$msg.removeClass("invalid-feedback valid-feedback d-block").hide().text("");
+		
+		if (!email) {
+			$msg
+				.addClass("invalid-feedback d-block");
+				.text("이메일을 입력해주세요.");
+				.show();
+			$input.addClass("is-invalid");
+			return;
+		}
+	})
+	
+	$.getJSON("<c:url value='/SearchUsername'/>", {email})
+		.don (function (res) {
+			if (res.invalid) {
+				$msg
+					.removeClass("valid-feedback")
+					.addClass("invalid-feedback d-block")
+					.text(res.msg || "")
+			}
+		})	
 </script>
 

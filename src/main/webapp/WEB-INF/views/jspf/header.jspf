@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
@@ -16,14 +16,21 @@
           <li><a href="/tripnote//trip/">일정 만들기</a></li>
           <li><a href="/tripnote/board">리뷰 게시판</a></li>
           <li><a href="/oti_team3/profile.jsp?identify=myself">마이페이지</a></li>
-          <li>
-          <a href="#" class="text-decoration-none" id="modal-login"
-             data-bs-toggle="modal" data-bs-target="#modalLogin">로그인</a>
-        </li>
-        <li>
-          <a href="#" class="text-decoration-none" id="modal-register"
-             data-bs-toggle="modal" data-bs-target="#modalRegister">회원가입</a>
-        </li>
+          
+          <c:if test="${empty loginUser}">
+	        <li>
+	          <a href="#" class="text-decoration-none" id="modal-login"
+	             data-bs-toggle="modal" data-bs-target="#modalLogin">로그인</a>
+	        </li>
+	        <li>
+	          <a href="#" class="text-decoration-none" id="modal-register"
+	             data-bs-toggle="modal" data-bs-target="#modalRegister">회원가입</a>
+	        </li>
+        </c:if>
+        <c:if test="${!empty loginUser}">
+        	<li><a href="/tripnote/logout">로그아웃</a></li>
+        </c:if>
+        
 
         <%--  <%@ include file="/WEB-INF/views/jspf/dropdown.jspf" %> --%>
 			<%-- <%@ include file="/WEB-INF/views/jspf/extendedDropdown.jspf" %> --%>
