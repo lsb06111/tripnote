@@ -368,7 +368,6 @@ writeTitleInputDom.addEventListener('keyup', ()=> {
 </script> 
 
 
-		<%-- <%@ include file="/board/numberdesc.jspf" %> --%>
  <style>
 .custom-toggle {
     background-color: white;

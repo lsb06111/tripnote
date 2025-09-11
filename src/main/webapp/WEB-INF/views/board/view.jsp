@@ -368,16 +368,12 @@ function setReviewContent(tIndex, nIndex){
 })();
 </script> 
 
-<%-- <%@ include file="/board/numberdesc.jspf" %> --%>
 <div style="text-align:center;">
 <i id="heartIcon" class="bi bi-heart" 
  style="font-size: 2.5rem; cursor: pointer; color:#5c99ee"></i>
  <p class="mb-0" style="color:#5c99ee"><strong>253</strong></p>
 </div>
      <hr style="color: lightgray; margin-bottom : 50px; margin-top: 50px;">
-<%-- <%@ include file="/WEB-INF/views/jspf/board/reply.jspf" %> --%>
-		
-
 <script>
 heartIcon.addEventListener("click", () => {
 	  heartIcon.classList.toggle("bi-heart");
