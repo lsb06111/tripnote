@@ -8,6 +8,7 @@
 	    board_content,
 	    to_char(b.created_at,'YYYY"."MM"."dd') as createdAt,
 	    to_char(b.modified_at,'YYYY"."MM"."dd') as modifiedAt,
+	    u.username,
 	    u.nickname,
 	    a.area_name,
 	    b.thumbnail,
@@ -29,7 +30,20 @@
     
     <where>
     	<if test="loc != null and loc != '' and loc != 'undefined'">
-    		and area_name = #{loc}
+    		and c.area_id in 
+    		 (	SELECT
+			    	id
+				FROM
+				    area
+				WHERE
+				    parent_id = (
+				        SELECT
+				            id
+				        FROM
+				            area
+				        WHERE
+				            area_name = #{loc})
+             )
     	</if>
     	<if test="keyword != null and keyword != ''">
     		and (b.title like '%' || #{keyword} || '%'
@@ -52,8 +66,8 @@
     </choose>
     offset #{offset} rows
     fetch next #{size} rows only
-
 </select>
+
 <select id="countListAll" parameterType="BoardParamDTO" resultType="int">
    SELECT 
 		count(*)

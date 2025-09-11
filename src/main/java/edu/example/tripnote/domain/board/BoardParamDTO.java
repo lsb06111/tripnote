@@ -17,8 +17,6 @@ public class BoardParamDTO {
 	private int size = Constants.BOARD_PAGE_SIZE;
 	private int offset; // sql의 offset 값
 	private String loc;
-	private List<String> locations;
 	private String order;
 	private String keyword;
-
 }

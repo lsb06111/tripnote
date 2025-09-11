@@ -42,13 +42,9 @@
 
 					<ul class="portfolio-filters isotope-filters mb-0 position-absolute start-50 translate-middle-x d-flex gap-3">
 						<li onclick="setBoardParam('loc')"><a class="text-reset">전체</a></li>
-						<li onclick="setBoardParam('loc','서울')"><a class="text-reset" >서울</a></li>
-						<li onclick="setBoardParam('loc','경기인천')"><a class="text-reset" >경기·인천</a></li>
-						<li onclick="setBoardParam('loc','충청도')"><a class="text-reset" >충청도</a></li>
-						<li onclick="setBoardParam('loc','강원도')"><a class="text-reset" >강원도</a></li>
-						<li onclick="setBoardParam('loc','전라도')"><a class="text-reset" >전라도</a></li>
-						<li onclick="setBoardParam('loc','경상도')"><a class="text-reset" >경상도</a></li>
-						<li onclick="setBoardParam('loc','제주도')"><a class="text-reset" >제주도</a></li>
+						<c:forEach var="dto" items="${locList}">
+							<li onclick="setBoardParam('loc','${dto.areaName}')"><a class="text-reset" >${dto.areaName}</a></li>
+						</c:forEach>
 					</ul>
 
 					<form action="/tripnote/board" method="get" class="input-group ms-auto" style="width: 250px;">
@@ -75,7 +71,7 @@
 									<div style="display: flex; align-items: center; width: 100%">
 										<div style="display: flex; flex-direction: column; margin-right: 20px; cursor: pointer"
 											onclick="event.stopPropagation();location.href='/oti_team3/profile.jsp?identify=9uiopa@gmail.com&name=김성배'">
-											<h6 style="margin: 0; font-size: 12px;">${item.nickname}</h6>
+											<h6 style="margin: 0; font-size: 12px;">${item.nickname} @${item.username}</h6>
 											<h6 style="margin: 0; font-size: 10px;">${item.createdAt}</h6>
 										</div>
 	

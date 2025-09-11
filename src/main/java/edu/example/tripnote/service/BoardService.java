@@ -23,12 +23,9 @@ public class BoardService {
 	
 	public PageResponseDTO<BoardDTO> listAll(BoardParamDTO boardParam) {
 		int page = boardParam.getPage();
-
 		int offset;
 		offset = page > 0 ? (page-1) * BOARD_PAGE_SIZE : 0;
 		boardParam.setOffset(offset);
-		
-		
 		int totalCount = boardDAO.countListAll(boardParam);
 		List<BoardDTO> list = boardDAO.listAll(boardParam);
 		
@@ -51,5 +48,4 @@ public class BoardService {
 		log.debug("BoardService listAll- hasNext : " + hasNext);
 		return response;
 	}
-
 }

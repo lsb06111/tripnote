@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import edu.example.tripnote.domain.PageResponseDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
+import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardController {
 	private final BoardService boardService;
+	private final AreaService AreaService;
 	
 	@GetMapping
 	public String index(Model model,  BoardParamDTO boardParam) {
+		model.addAttribute("locList" ,AreaService.listParentLoc());
 		PageResponseDTO<BoardDTO> response =  boardService.listAll(boardParam);
 		model.addAttribute("response", response);
-		
 		return "board/index";
 	}
 	
