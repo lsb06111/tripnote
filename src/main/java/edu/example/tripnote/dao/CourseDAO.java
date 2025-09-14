@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import edu.example.tripnote.domain.board.CourseSelectRsps;
+import edu.example.tripnote.domain.board.CourseSelectResDTO;
 
 @Mapper
 public interface CourseDAO {
-	public List<CourseSelectRsps> getCourses(int id);
+	public List<CourseSelectResDTO> getCourses(int id);
+	public void getTourLocByCourse(int id);
 }

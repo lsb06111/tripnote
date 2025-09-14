@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.example.tripnote.dao.CourseDAO">
-<select id="getCourses" parameterType="int" resultType="CourseSelectRsps">
+<select id="getCourses" parameterType="int" resultType="CourseSelectResDTO">
 	SELECT
+		c.id courseId,
 	    c.title,
+	    to_char(c.start_date, 'YYYY"."MM"."dd') startDate,
+	    to_char(c.end_date, 'YYYY"."MM"."dd') endDate,
 	    ( end_date - start_date ) AS days,
 	    a.area_name AS loc
 	FROM

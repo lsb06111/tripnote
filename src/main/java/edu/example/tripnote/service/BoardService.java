@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import edu.example.tripnote.Constants;
 import edu.example.tripnote.dao.BoardDAO;
-import edu.example.tripnote.domain.PageResponseDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
+import edu.example.tripnote.domain.board.PageResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +26,8 @@ public class BoardService {
 		offset = page > 0 ? (page-1) * BOARD_PAGE_SIZE : 0;
 		boardParam.setOffset(offset);
 		int totalCount = boardDAO.countListAll(boardParam);
+		log.info("totalCount : " + totalCount);
+
 		List<BoardDTO> list = boardDAO.listAll(boardParam);
 		
 		int totalPages = (int)Math.ceil(((double)totalCount/BOARD_PAGE_SIZE)); 

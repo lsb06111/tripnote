@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class AreaDTO {
 	private int id;
-	private int parent_id;
+	private int parentId;
 	private String areaName;
 }

@@ -1,4 +1,4 @@
-package edu.example.tripnote.domain;
+package edu.example.tripnote.domain.board;
 
 import java.util.List;
 

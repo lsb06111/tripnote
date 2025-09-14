@@ -11,14 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.example.tripnote.dao.CourseDAO;
-import edu.example.tripnote.domain.PageResponseDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
+import edu.example.tripnote.domain.board.BoardFormReqDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
-import edu.example.tripnote.domain.board.CourseSelectRsps;
+import edu.example.tripnote.domain.board.CourseSelectResDTO;
+import edu.example.tripnote.domain.board.PageResponseDTO;
 import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
+import jdk.internal.org.jline.utils.Log;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -36,21 +40,21 @@ public class BoardController {
 	}
 	@ResponseBody
 	@GetMapping("/mycourse")
-	public List<CourseSelectRsps> getCourse() {
+	public List<CourseSelectResDTO> getCourse() {
 		int id = 1;
-		List<CourseSelectRsps> response = courseDAO.getCourses(id);
-		return response;
+		List<CourseSelectResDTO> myCourses = courseDAO.getCourses(id);
+		return myCourses;
 	}
 	
-	@GetMapping("/form")
-	public String form() {
+	@PostMapping("/form")
+	public String form(BoardFormReqDTO reqDTO, Model model) {
+		log.debug("course id : " + reqDTO.getCourseId());
 		
 		return "board/form";
 	}
 	
 	@GetMapping("/detail")
 	public String detail(Model model) {
-		
 		return "board/view";
 	}
 

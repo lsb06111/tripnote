@@ -5,15 +5,7 @@
 <body>
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
-	<%
-		HashMap<String, String[]> map = new HashMap<>();
-		map.put("capital", new String[]{"서울", "인천", "경기도"});
-		map.put("middle", new String[]{"대전", "세종", "충청북도", "충청남도"});
-		map.put("kangwon", new String[]{"강원도"});
-		map.put("honam", new String[]{"광주", "전라북도", "전라남도"});
-		map.put("youngnam", new String[]{"부산", "대구", "울산", "경상북도", "경상남도"});
-		map.put("jeju", new String[]{"제주"});
-	%>
+
 	<section id="portfolio" class="portfolio services section mt-5">
 
 		<div class="container section-title" style="padding-bottom: 60px;">
@@ -65,6 +57,7 @@
 				</div>
 				<div class="row gy-4 portfolio-grid isotope-container"
 					style="position: relative; width: 95%; height: 264px; margin: 0px auto auto;">
+
 					<c:forEach var="item" items="${response.content}">
 						<!-- 여행 후기 item -->
 						<div class="col-lg-3 col-md-6 portfolio-item isotope-item">
@@ -129,12 +122,11 @@
 						aria-label="닫기"></button>
 				</div>
 				<div class="modal-body p-4">
-				<!-- 모달 내용 -->
-					<section id="services" class="services section" style="padding: 0">
+					<!-- <section id="services" class="services section" style="padding: 0">
 						<div class="container">
 							<div class="row gy-4" id="tripCardsRow">
 								<div class="col-12">
-									<!-- tag this card with its location -->
+									tag this card with its location
 									<div class="service-card" data-location="tripLocations동적"
 										style="padding: 18px 24px; cursor: pointer;"
 										onclick="location.href='/tripnote/board/form'">
@@ -151,7 +143,7 @@
 													</li>
 												</ol>
 											</div>
-											<!-- action button aligned to the right -->
+											action button aligned to the right
 											<a href="/tripnote/board/form" class="service-link ms-auto"
 												style="width: fit-content; transition: color 0.3s; color: inherit;"
 												onmouseover="this.style.color='#5c99ee';"
@@ -163,7 +155,7 @@
 								</div>
 							</div>
 						</div>
-					</section>
+					</section> -->
 				</div>
 			</div>
 		</div>
@@ -223,17 +215,57 @@
 			}
 			
 			//후기 쓰러가기 모달 
-			// append 해야될듯
 			$('#modalReviewSelection').on('show.bs.modal', function (e) {
 				
-/* 				  const $body = $(this).find('.modal-body');
+ 				  const $body = $(this).find('.modal-body');
 					
-				  $.get('/board/mycourse', function (list) {
+				  $.get('/tripnote/board/mycourse', function (list) {
+					  $body.html("");
 					  $.each(list,function(idx, el){
-						  $body.find('h3').text(list.title);
-					  })
+						  $body.append(`
+							<form id="mycourse-form-\${idx}" action="/tripnote/board/form" method="post" style="display:none;">
+								<input name="courseId" value=\${el.courseId} />
+								<input name="user" value="인증정보" />
+								<input type="submit" value="제출"> 
+							</form>
+							<section id="services" class="services section" style="padding: 0">
+								<div class="container">
+								<div class="row gy-4" id="tripCardsRow">
+									<div class="col-12">
+										
+										<div class="service-card" data-location="title"
+											style="padding: 18px 24px; cursor: pointer;"
+											onclick="document.getElementById('mycourse-form-\${idx}').submit()">
+											<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px">
+												<div class="service-icon" style="margin-bottom: 0">
+													<i class="bi"></i>
+												</div>
+												<div style="margin-left: 10px;">
+													<h3 style="margin: 0;">\${el.title}</h3>
+													<ol class="breadcrumb mb-0" style="display: flex;">
+														<li class="breadcrumb-item">\${el.startDate} ~ \${el.endDate}</li>
+														<li class="breadcrumb-item"><strong
+															style="color: #5c99ee">\${el.loc}</strong>
+														</li>
+													</ol>
+												</div>
+												<a href="/tripnote/board/form" class="service-link ms-auto"
+													style="width: fit-content; transition: color 0.3s; color: inherit;"
+													onmouseover="this.style.color='#5c99ee';"
+													onmouseout="this.style.color='inherit';"> 리뷰 작성하기 <i
+													class="bi bi-arrow-right"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								</div>
+							</section>
+							`	  
+						  );
+					  });
 				    
-				  }); */
+				  }); 
 				});
 
 			/*
