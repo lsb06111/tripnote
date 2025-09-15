@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NoteDTO {
-	private long id;
+	private Long id;
 	private String noteContent;
 	//private Date noteDay;
-	private int tourLocId;
+	private Long tourLocId;
 }

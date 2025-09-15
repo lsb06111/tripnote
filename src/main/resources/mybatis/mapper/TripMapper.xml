@@ -10,17 +10,12 @@
 	select tour_loc.*, note.note_content from tour_loc join note on tour_loc.id = note.tour_loc_id where course_id = #{courseId} order by tour_nth, tour_order asc
 </select>
 
-<insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="false">
-	<selectKey keyProperty="id" resultType="_int" order="AFTER">
-        SELECT ISEQ$$_85375.currval FROM dual
-    </selectKey>
+<insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+
 	insert into course (title, start_date, end_date, user_id, area_id) values(#{title}, #{startDate}, #{endDate}, #{userId}, #{areaId})
 </insert>
 
-<insert id="insertTourLoc" parameterType="TourLocDTO">
-	<selectKey keyProperty="id" resultType="_int" order="AFTER">
-        SELECT ISEQ$$_85358.currval FROM dual
-    </selectKey>
+<insert id="insertTourLoc" parameterType="TourLocDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
 
 	insert into tour_loc (code, tour_loc_name, tour_order, start_time, end_time, tour_nth, time_taken, course_id, img_src, type_name) 
 			values(#{code}, #{tourLocName}, #{tourOrder}, #{startTime}, #{endTime}, #{tourNth}, #{timeTaken}, #{courseId}, #{imgSrc}, #{typeName})
@@ -35,10 +30,8 @@
     	delete from tour_loc where id = #{id}
 </delete>
 
-<insert id="insertNote" parameterType="NoteDTO">
-	<selectKey keyProperty="id" resultType="_int" order="AFTER">
-        SELECT ISEQ$$_85381.currval FROM dual
-    </selectKey>
+<insert id="insertNote" parameterType="NoteDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+
     insert into note (note_content, tour_loc_id) values(#{noteContent}, #{tourLocId})
 </insert>
 
