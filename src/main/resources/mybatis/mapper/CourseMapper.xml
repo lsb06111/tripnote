@@ -15,4 +15,30 @@
 	WHERE
     	user_id = #{id}
 </select>
+<select id="getCourseById" parameterType="int" resultType="CourseDTO">
+	SELECT
+	    *
+	FROM
+	    course c
+	    join area a on c.area_id = a.id
+	WHERE
+	    c.id = #{id}
+	    and c.is_visible = 1  
+</select>
+
+<select id="getTourLocsByCourseId" parameterType="int" resultType="TourLocDTO">
+    SELECT
+        *
+    FROM
+        tour_loc
+        LEFT JOIN tour_type ON tour_loc.id = tour_type.tour_loc_id
+    WHERE
+        tour_loc.course_id = #{id}
+    ORDER BY
+        tour_nth,
+        tour_order ASC
+</select>
+
+
+
 </mapper>

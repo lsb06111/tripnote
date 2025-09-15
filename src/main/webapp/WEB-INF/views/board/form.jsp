@@ -17,9 +17,6 @@
 		<div class="container">
 			<h1 id="write_title"><%=writeTitle == null ? "제목 없음" : writeTitle%></h1>
 			<nav class="breadcrumbs">
-				<ol>
-					<li class="current">부산</li>
-				</ol>
 			</nav>
 		</div>
 	</div>
@@ -58,7 +55,7 @@
 
 					<div class="meta-column">
 						<div class="meta-label">여행일정</div>
-						<div class="meta-value">2025.08.12 ~ 2025.08.16</div>
+						<div class="meta-value">${locTemplate.course.startDate} ~ ${locTemplate.course.endDate}</div>
 					</div>
 
 					<div class="meta-column position-relative">
@@ -74,7 +71,7 @@
 
 					<div class="meta-column">
 						<div class="meta-label">작성일</div>
-						<div class="meta-value">2025.08.12</div>
+						<div class="meta-value"><%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %></div>
 					</div>
 				</div>
 			</div>
@@ -106,101 +103,187 @@
 					int num = 0;
 				%>
 				<div class="container">
-
 					<div class="tabs-wrapper">
 						<div class="tabs-header mb-0">
 							<ul class="nav nav-tabs">
-								<%
-									for (int i = 0; i < 4; i++) {
-								%>
-								<li class="nav-item"><a
-									class="nav-link <%=i == 0 ? "active show" : ""%>"
-									data-bs-toggle="tab" data-bs-target="#tabs-tab-<%=(i + 1)%>">
-										<div class="tab-content-preview">
-											<span class="tab-number">0<%=(i + 1)%></span>
-											<div class="tab-text">
-												<h6 style="margin-bottom: 0"><%=(i + 1) + "일차"%></h6>
+								<c:forEach var="day" items="${locTemplate.tourlocs}"
+									varStatus="outerStatus">
+									<li class="nav-item"><a
+										class="nav-link ${outerStatus.first ? 'active' : ''}"
+										data-bs-toggle="tab"
+										data-bs-target="#tabs-tab-${outerStatus.index}">
+											<div class="tab-content-preview">
+												<span class="tab-number">${outerStatus.count}</span>
+												<div class="tab-text">
+													<h6 style="margin-bottom: 0">${outerStatus.count}일차</h6>
+												</div>
 											</div>
-										</div>
-								</a></li>
-								<%
-									}
-								%>
-
+									</a></li>
+								</c:forEach>
 							</ul>
 						</div>
 
 						<div class="tab-content">
+							<!-- 각 일자별 탭 패널 -->
+							<c:forEach var="day" items="${locTemplate.tourlocs}"
+								varStatus="outerStatus">
+								<div id="tabs-tab-${outerStatus.index}"
+									class="tab-pane fade ${outerStatus.first ? 'active show' : ''}">
 
-							<%
-								int tabNumber = 4;
-								for (int ii = 0; ii < tabNumber; ii++) {
-							%>
-							<div class="tab-pane fade <%=ii == 0 ? "active show" : ""%>"
-								id="tabs-tab-<%=(ii + 1)%>">
-
-
-
-								<!-- NODES BAR -->
-								<div id="routeBar-<%=ii%>" data-group="<%=ii%>"
-									class="d-flex justify-content-center my-5">
-									<div
-										class="d-flex align-items-center justify-content-center w-75 pb-2">
-										<%
-											int nodeNumber = 5;
-												String[] spots = {"해운대", "광안리", "서면", "남포동", "송정"};
-												String[] times = {"15분", "12분", "20분", "18분"};
-
-												for (int i = 0; i < nodeNumber; i++) {
-										%>
-										<!-- Node + label -->
-										<div class="d-flex flex-column align-items-center">
-											<button type="button"
-												class="route-node btn btn-outline-primary rounded-circle fw-bold d-flex align-items-center justify-content-center p-0 <%=i == 0 ? "active" : ""%>"
-												data-target="#spot-pane-<%=ii%>-<%=i%>" data-group="<%=ii%>"
-												style="width: 60px; height: 60px; - -bs-btn-color: #5c99ee; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-bg: #5c99ee; - -bs-btn-hover-border-color: #5c99ee; - -bs-btn-hover-color: #fff; - -bs-btn-active-bg: #5c99ee; - -bs-btn-active-border-color: #5c99ee; - -bs-btn-active-color: #fff;">
-												<i class="bi bi-<%=nodeIcons[i]%>" style="font-size: 1.4em"></i>
-											</button>
-											<small class="mt-1 text-muted" style="font-size: 1.05em"><%=spots[i]%></small>
-										</div>
-
-										<%
-											if (i < nodeNumber - 1) {
-										%>
-										<!-- Connector + pill time -->
+									<!-- routeBar: 해당 일자의 loc 리스트를 사용 -->
+									<div id="routeBar-${outerStatus.index}"
+										data-group="${outerStatus.index}"
+										class="d-flex justify-content-center my-5">
 										<div
-											class="d-flex flex-column align-items-center mx-2 flex-grow-1">
-											<div class="border-top border-2 w-100"></div>
-											<span
-												class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2"
-												style="font-size: 0.85em"> <i class="bi bi-bus-front"></i>
-												<%=times[i]%>
-											</span>
+											class="d-flex align-items-center justify-content-center w-75 pb-2">
+											<!-- inner: 각 loc (노드) -->
+											<c:forEach var="loc" items="${day}" varStatus="innerStatus">
+												<div class="d-flex flex-column align-items-center">
+													<button type="button"
+														class="route-node btn btn-outline-primary rounded-circle fw-bold d-flex align-items-center justify-content-center p-0 ${innerStatus.first ? 'active' : ''}"
+														data-target="#spot-pane-${outerStatus.index}-${innerStatus.index}"
+														data-group="${outerStatus.index}"
+														style="width: 60px; height: 60px;">
+														<!-- loc.icon 은 실제 필드명으로 교체 -->
+														<i class="bi" style="font-size: 1.4em"></i>
+													</button>
+													<!-- loc.name 은 실제 필드명으로 교체 -->
+													<small class="mt-1 text-muted" style="font-size: 1.05em">${loc.tourLocName}</small>
+												</div>
+
+												<c:if test="${!innerStatus.last}">
+													<div
+														class="d-flex flex-column align-items-center mx-2 flex-grow-1">
+														<div class="border-top border-2 w-100"></div>
+														<span
+															class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2"
+															style="font-size: 0.85em"> <i
+															class="bi bi-bus-front"></i> <!-- loc.time 은 실제 필드명으로 교체 (다음 노드까지의 소요) -->
+															${loc.timeTaken}
+														</span>
+													</div>
+												</c:if>
+											</c:forEach>
 										</div>
-										<%
-											}
-										%>
-										<%
-											}
-										%>
 									</div>
+									<!-- /routeBar -->
+
+									<!-- spot panes: 각 노드별 콘텐츠 -->
+									<div id="spotPanes-${outerStatus.index}"
+										class="tab-content mt-4">
+										<c:forEach var="loc" items="${day}" varStatus="innerStatus">
+											<div id="spot-pane-${outerStatus.index}-${innerStatus.index}"
+												class="tab-pane fade ${innerStatus.first ? 'show active' : ''}"
+												style="margin-bottom: 50px;">
+
+												<div class="visual-showcase">
+													<div class="main-visual">
+														<div class="portfolio-details-slider swiper init-swiper">
+															<div class="swiper-wrapper"
+																style="text-align: center; margin-bottom: 50px;">
+																<div class="swiper-slide">
+																	<div class="content-area mb-2">
+																		<h2>리뷰 작성 (사진)</h2>
+																	</div>
+
+																	<div
+																		class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
+																		<!-- input/img: id는 유니크하게 -->
+																		<input
+																			id="postImgInput-${outerStatus.index}-${innerStatus.index}"
+																			class="postImg-input" type="file" accept="image/*"
+																			style="position: absolute; left: -9999px;" /> <img
+																			id="postImg-${outerStatus.index}-${innerStatus.index}"
+																			src="/tripnote/assets/img/alt/no_image.png"
+																			class="postImg img-fluid" alt="클릭하여 업로드"
+																			style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+																		<textarea class="form-control"
+																			style="width: 50%; resize: none;"
+																			placeholder="리뷰 내용을 입력해주세요"></textarea>
+																	</div>
+																</div>
+
+																<!-- swiper nav -->
+																<div class="swiper-button-next"
+																	style="right: 1px; z-index: 9999;"></div>
+																<div class="swiper-button-prev"
+																	style="left: 1px; z-index: 9999;"></div>
+
+															</div>
+															<!-- /swiper-wrapper -->
+
+															<!-- 태그(예: loc.tags 가 있다면) -->
+															<div class="technology-stack"
+																style="margin-bottom: 10px;">
+																<div class="row">
+																	<div class="col-lg-3">
+																		<h3>여행 태그</h3>
+																	</div>
+																	<div class="col-lg-9">
+																		<div class="tech-categories">
+																			<div class="tech-category">
+																				<div
+																					id="tag-buttons-${outerStatus.index}-${innerStatus.index}"
+																					class="tech-list">
+	<%-- 																				<c:forEach var="tag" items="${loc.tags}"
+																						varStatus="tagStatus">
+																						<input type="checkbox" class="btn-check"
+																							id="btn-${outerStatus.index}-${innerStatus.index}-${tagStatus.index}"
+																							autocomplete="off" />
+																						<label class="custom-toggle"
+																							for="btn-${outerStatus.index}-${innerStatus.index}-${tagStatus.index}">${tag}</label>
+																					</c:forEach> --%>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															<!-- 추천 버튼 -->
+															<div class="technology-stack">
+																<div class="row">
+																	<div class="col-lg-3">
+																		<h3>관광지 추천</h3>
+																	</div>
+																	<div class="col-lg-9">
+																		<div class="tech-categories">
+																			<div class="tech-category">
+																				<div class="tech-list">
+																					<i class="recommendation-btn bi bi-hand-thumbs-up"
+																						data-place-id="${loc.id}"
+																						style="font-size: 2.5rem; cursor: pointer; color: #5c99ee; position: relative; top: -10px;"></i>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															<button type="button" class="btn btn-primary float-end"
+																style="background-color: #5c99ee; margin-left: 10px;">업로드</button>
+															<button type="button" class="btn btn-primary float-end"
+																style="background-color: #5c99ee">임시저장</button>
+
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</c:forEach>
+									</div>
+									<!-- /spotPanes -->
 								</div>
+								<!-- /tab-pane -->
+							</c:forEach>
+						</div>
+						<!-- /tab-content -->
+					</div>
+				</div>
+			</section>
+			<!-- /Tabs Section -->
 
-								<!-- NODE CONTENT PANES (unique per day) -->
-
-								<div id="spotPanes-<%=ii%>" class="tab-content mt-4">
-									<%
-										for (int i = 0; i < nodeNumber; i++) {
-									%>
-									<div id="spot-pane-<%=ii%>-<%=i%>"
-										class="tab-pane fade <%=i == 0 ? "show active" : ""%>"
-										style="margin-bottom: 50px;">
-
-										<div class="visual-showcase">
-											<div class="main-visual">
-												<div class="portfolio-details-slider swiper init-swiper">
-
-													<script type="application/json" class="swiper-config">
+			<script type="application/json" class="swiper-config">
               {
                 "loop": true,
                 "speed": 600,
@@ -221,126 +304,8 @@
                   "prevEl": ".swiper-button-prev"
                 }
               }
-            </script>
-
-													<div class="swiper-wrapper"
-														style="text-align: center; margin-bottom: 50px;">
-
-														<div class="swiper-slide">
-															<div class="content-area mb-2">
-																<h2>리뷰 작성 (n번째 사진)</h2>
-															</div>
-
-															<!-- Flex container -->
-															<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
-																<!-- Image -->
-
-																<input class="postImg-input" type="file" accept="image/*"
-																	name="" style="display: none;" /> 
-																<img
-																	src="/tripnote/assets/img/alt/no_image.png"
-																	class="postImg img-fluid" alt="클릭하여 업로드"
-																	style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;">
-
-																<!-- <div class="hint">이미지를 클릭하면 파일 선택창이 열립니다. (jpg, png, gif 허용, 최대 5MB)</div> -->
-																<!-- Textarea -->
-																<textarea class="form-control"
-																	style="width: 50%; resize: none;"
-																	placeholder="리뷰 내용을 입력해주세요"></textarea>
-															</div>
-														</div>
-
-
-														<div class="swiper-button-next" style="right: 1px;"></div>
-														<div class="swiper-button-prev" style="left: 1px"></div>
-
-													</div>
-
-													<!-- tagbutton -->
-													<div class="technology-stack" style="margin-bottom: 10px;">
-														<div class="row">
-															<div class="col-lg-3">
-																<h3>여행 태그</h3>
-															</div>
-															<div class="col-lg-9">
-																<div class="tech-categories">
-																	<%
-																		String currentNode = iconMap.get(nodeIcons[i]);
-																				String[] tagDesc = tagMap.get(currentNode).split(",");
-																	%>
-
-																	<div class="tech-category">
-																		<div id="tag-buttons" class="tech-list">
-																			<%
-																				for (String td : tagDesc) {
-																			%>
-																			<input type="checkbox" class="btn-check"
-																				id="btn<%=num%>" autocomplete="off" /> <label
-																				class="custom-toggle" for="btn<%=num++%>"><%=td%></label>
-																			<%
-																				}
-																			%>
-
-																		</div>
-
-																	</div>
-
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<!-- recommendation button -->
-													<div class="technology-stack">
-														<div class="row">
-															<div class="col-lg-3">
-																<h3>관광지 추천</h3>
-															</div>
-															<div class="col-lg-9">
-																<div class="tech-categories">
-																	<div class="tech-category">
-																		<div id="tag-buttons" class="tech-list">
-																			<!-- 각 관광지/일정 아이템 내부 -->
-																			<i class="recommendation-btn bi bi-hand-thumbs-up"
-																				data-place-id="123"
-																				style="font-size: 2.5rem; cursor: pointer; color: #5c99ee; position: relative; top: -10px;"></i>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-
-													<button type="button" class="btn btn-primary float-end"
-														data-mdb-ripple-init
-														style="background-color: #5c99ee; margin-left: 10px;">업로드</button>
-													<button type="button" class="btn btn-primary float-end"
-														data-mdb-ripple-init style="background-color: #5c99ee">임시저장</button>
-
-												</div>
-											</div>
-										</div>
-
-									</div>
-									<%
-										}
-									%>
-								</div>
-
-
-							</div>
-							<%
-								}
-							%>
-						</div>
-
-					</div>
-				</div>
-			</section>
-			<!-- /Tabs Section -->
-
-
-<script>
+</script>
+			<script>
 $(function() {
 	  // 각 .post-contents 블록(또는 이미지+input 쌍)을 기준으로 처리합니다.
 	  // 구조가 다르다면 selector를 적절히 바꿔주세요.
@@ -423,7 +388,7 @@ $(function() {
 
 
 
-<script>
+			<script>
 
 const writeTitleInputDom = document.querySelector('#write_title_input');
 const writeTitleDom = document.querySelector('#write_title');
@@ -461,7 +426,7 @@ writeTitleInputDom.addEventListener('keyup', ()=> {
 </script>
 
 
-<style>
+			<style>
 .custom-toggle {
 	background-color: white;
 	color: black;
@@ -478,8 +443,6 @@ writeTitleInputDom.addEventListener('keyup', ()=> {
 	color: white;
 	border-color: #0d6efd;
 }
-
-
 </style>
 
 		</div>

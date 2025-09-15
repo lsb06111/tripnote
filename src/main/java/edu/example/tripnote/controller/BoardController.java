@@ -1,7 +1,9 @@
 package edu.example.tripnote.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.example.tripnote.dao.CourseDAO;
+import edu.example.tripnote.dao.TripDAO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardFormReqDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
+import edu.example.tripnote.domain.board.BoardTemplateDTO;
 import edu.example.tripnote.domain.board.CourseSelectResDTO;
 import edu.example.tripnote.domain.board.PageResponseDTO;
+import edu.example.tripnote.domain.trip.TourLocDTO;
 import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +52,17 @@ public class BoardController {
 	
 	@PostMapping("/form")
 	public String form(BoardFormReqDTO reqDTO, Model model) {
-		log.debug("course id : " + reqDTO.getCourseId());
+		BoardTemplateDTO locTemplate = new BoardTemplateDTO();
+		locTemplate.setCourse(courseDAO.getCourseById(reqDTO.getCourseId()));
 		
+        List<List<TourLocDTO>> tourlocs = new ArrayList<>(
+        		courseDAO.getTourLocsByCourseId(reqDTO.getCourseId()).stream()
+                     .collect(Collectors.groupingBy(TourLocDTO::getTourNth))
+                     .values()
+            );
+        
+        locTemplate.setTourlocs(tourlocs);
+        model.addAttribute("locTemplate",locTemplate);
 		return "board/form";
 	}
 	
