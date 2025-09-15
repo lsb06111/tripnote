@@ -113,7 +113,14 @@ public class TripController {
 	@ResponseBody
 	@RequestMapping("/getAllTour")
 	public List<TourLocDTO> getAllTour(int courseId){
-		return tripDao.getAllTourLoc(courseId);
+		List<TourLocDTO> tourLocDTOList = tripDao.getAllTourLoc(courseId);
+		for(TourLocDTO dto : tourLocDTOList) {
+			System.out.println(dto);
+			AttractionDTO attDTO = tripDao.getAttraction(dto.getCode());
+			dto.setMapx(attDTO.getMapx());
+			dto.setMapy(attDTO.getMapy());
+		}
+		return tourLocDTOList;
 	}
 	
 	
@@ -127,7 +134,7 @@ public class TripController {
 		tourLocDTO.setTourNth(tourLocDTO.getTourNth());
 		System.out.println(tourLocDTO.getImgSrc());
 		tripDao.insertTourLoc(tourLocDTO);
-		tripDao.insertTourType(tourLocDTO);
+		//tripDao.insertTourType(tourLocDTO);
 		
 		NoteDTO noteDTO = new NoteDTO();
 		noteDTO.setTourLocId(tourLocDTO.getId());
@@ -158,6 +165,7 @@ public class TripController {
 	@GetMapping("/deleteTour")
 	@ResponseBody
 	public String deleteTour(int id) {
+		tripDao.deleteNote(id);
 		tripDao.deleteTourLoc(id);
 		return "ok";
 	}

@@ -172,15 +172,35 @@ function toggleLocTab(btn){
 
 // 일자별 여행 코스 탭 전환
 function switchDay(btn){
+	fixMarkers.forEach(function(fmarker) {
+		console.log(fmarker);
+	    fmarker.setMap(null);
+	});
+	fixMarkers = [];
+	routePolylines.forEach(line => line.setMap(null));
+	routePolylines = [];
+	routeTimeOverlays.forEach(overlay => overlay.setMap(null));
+	routeTimeOverlays = [];
+	document.querySelectorAll('.route-time').forEach(function(element) {
+	    element.remove();
+	});
 	let idx = btn.getAttribute("data-day");
+	
 	let timelineDoms = document.querySelectorAll(".trip-timelineForDay");
 	timelineDoms.forEach((el, i) => {
 		el.style.display = (i+1 == idx ? 'block' : 'none');
+		if(i+1 == idx){
+			console.log(idx);
+			el.querySelectorAll(".trip-timeline-event")
+			.forEach(e => drawFixMarker(e.dataset.mapx, e.dataset.mapy));
+		}
 	});
 }; 
 var isInsertedToTimeline = false;
 // 장소를 타임라인에 추가
-function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId, tourType) {
+function insertToTimeline(event, btn, contentId, tourLocName, imgSrc, courseId, tourType, mapx, mapy) {
+	event.stopPropagation();
+	drawFixMarker(mapx, mapy);
 	isInsertedToTimeline = true;
 	const container = $(btn).closest(".trip-loc-card");
 	const title = container.find('.sl-name').text();
@@ -192,6 +212,7 @@ function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId, tourTyp
 	  
 	  // 표시 중인 타임라인(보이는 것) 선택
 	const $target = $('.trip-timelineForDay:visible').first();
+	console.log($target);
 	const order = $target.children().length+1;
 	
 	let tourNth = document.querySelector('#dayTabs .trip-tab.is-active').textContent.split(' ')[1].substring(0,1);
@@ -207,15 +228,15 @@ function insertToTimeline(btn, contentId, tourLocName, imgSrc, courseId, tourTyp
 				typeName : tourType
 			},
 			function(data, status){
-				$target.append(getTimelineEvent(title, type, img, order, data.id, ''));
+				$target.append(getTimelineEvent(title, type, img, order, data.id, '', mapx, mapy));
 			});
 	
 	
 };
 
-function getTimelineEvent(title, type, img, order, tourLocId, noteContent){
+function getTimelineEvent(title, type, img, order, tourLocId, noteContent, mapx, mapy){
 	let text = `
-	<div class="trip-timeline-event d-flex flex-column p-2">
+	<div class="trip-timeline-event d-flex flex-column p-2" data-mapx="${mapx}" data-mapy="${mapy}">
 		<div class="tour-loc-id" style="display:none">${tourLocId}</div>
 		<div class="d-flex w-100">
 			<div class="trip-idx m-1">${order}</div>
@@ -227,7 +248,7 @@ function getTimelineEvent(title, type, img, order, tourLocId, noteContent){
 			<img src="${img}" alt="이미지 없음" class="event-img" />
 			<div class="d-flex flex-column justify-content-around">
 			    <i class="trip-note-toggle bi bi-pencil-square ms-2" onclick="toggleNote(this)" style="font-size:1.4em"></i>
-			    <i class="bi bi-trash ms-2" style="font-size:1.4em; cursor:pointer;"  onclick="deleteNote(this)"></i>
+			    <i class="bi bi-trash ms-2" style="font-size:1.4em; cursor:pointer;"  onclick="deleteNote(this, '${mapx}', '${mapy}')"></i>
 			</div>
 			
 		</div>
@@ -247,25 +268,69 @@ function saveNote(tourLocId){
 			});
 }
 // tripnote 관광지의 순서번호 부여
-function assignLocIndex(){
-	let dataObjs = [];
-	$list = $('.trip-timelineForDay:visible');
-	$list.children().each(function(idx, el){
-		$(el).find('.trip-idx').text(idx+1);
-		let dataObj = {};
-	    dataObj.id = parseInt(el.textContent);
-	    dataObj.tourOrder = (idx+1);   // 인덱스를 tourOrder로
-	    dataObjs.push(dataObj);
-	});
-	
+function assignLocIndex() {
+    let dataObjs = [];
+    let $list = $('.trip-timelineForDay:visible');
 
-	$.ajax({
-		url: "/tripnote/trip/updateTour",
-		type: "POST",
-		contentType: "application/json",
-		data: JSON.stringify(dataObjs),
-		success: function(data, status) {console.log("done!");}
-	});
+    // 1. 새 마커 순서를 담을 임시 배열 생성
+    let newFixMarkers = [];
+    const epsilon = 0.000001;
+
+    // 2. DOM 순서대로 타임라인 카드를 순회
+    $list.children().each(function (idx, el) {
+        // 화면의 순번 업데이트 (기존 로직)
+        $(el).find('.trip-idx').text(idx + 1);
+
+        // DB 업데이트용 데이터 준비 (기존 로직)
+        let dataObj = {};
+        dataObj.id = parseInt($(el).find('.tour-loc-id').text()); // 올바른 ID 선택
+        dataObj.tourOrder = (idx + 1);
+        dataObjs.push(dataObj);
+
+        // --- ✅ fixMarkers 재정렬 로직 시작 ---
+        
+        // 3. data 속성에서 좌표 읽기
+        const cardMapx = $(el).data('mapx');
+        const cardMapy = $(el).data('mapy');
+
+        // 4. 기존 fixMarkers 배열에서 좌표가 일치하는 마커 찾기
+        const foundMarker = fixMarkers.find(fmarker => {
+            const markerPosition = fmarker.getPosition();
+            return Math.abs(markerPosition.getLng() - cardMapx) < epsilon &&
+                   Math.abs(markerPosition.getLat() - cardMapy) < epsilon;
+        });
+
+        // 5. 찾은 마커를 새 배열에 순서대로 추가
+        if (foundMarker) {
+            newFixMarkers.push(foundMarker);
+        }
+        // --- fixMarkers 재정렬 로직 종료 ---
+    });
+
+    // 6. 기존 fixMarkers 배열을 재정렬된 새 배열로 교체
+    fixMarkers = newFixMarkers;
+
+    // DB에 순서 업데이트 요청 (기존 로직)
+    $.ajax({
+        url: "/tripnote/trip/updateTour",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(dataObjs),
+        success: function (data, status) { console.log("Tour order updated!"); }
+    });
+
+    // 경로 다시 그리기 (기존 로직)
+    if (fixMarkers.length < 2) {
+        // 마커가 2개 미만이면 기존 경로 지우기
+        routePolylines.forEach(line => line.setMap(null));
+        routeTimeOverlays.forEach(overlay => overlay.setMap(null));
+        routePolylines = [];
+        routeTimeOverlays = [];
+    } else if (transportSelected == 'car') {
+        drawRoute(transportSelected);
+    } else if (transportSelected != '') {
+        drawSimplePolyline('walk');
+    }
 }
 
 function toggleNote(btn) {
@@ -278,15 +343,40 @@ function toggleNote(btn) {
 	}
 }
 
-function deleteNote(btn){
+function deleteNote(btn, mapx, mapy){
+	console.log(fixMarkers);
+	//
+	const epsilon = 0.000001;
+
+	for (var i = fixMarkers.length - 1; i >= 0; i--) {
+		var fmarker = fixMarkers[i];
+		var markerPosition = fmarker.getPosition();
+
+		// ✅ '==' 대신 두 좌표의 차이가 허용 오차보다 작은지 확인
+		if (Math.abs(markerPosition.getLng() - mapx) < epsilon &&
+			Math.abs(markerPosition.getLat() - mapy) < epsilon) {
+
+			// 1. 지도에서 마커를 보이지 않게 합니다.
+			fmarker.setMap(null);
+
+			// 2. fixMarkers 배열에서 해당 마커를 제거합니다.
+			fixMarkers.splice(i, 1);
+		}
+	}
+	
+	//
 	$card = $(btn).closest('.trip-timeline-event');
 	let tourLocId = $card.find(".tour-loc-id").text().trim();
+	console.log(tourLocId);
 	$card.remove();
 	$.ajax({
 		url: '/tripnote/trip/deleteTour?id='+tourLocId,
 		type: "GET"
 	});
-	
+	if(transportSelected == 'car')
+		drawRoute(transportSelected);
+	else if(transportSelected != '')
+		drawSimplePolyline('walk');
 	
 	assignLocIndex();
 }

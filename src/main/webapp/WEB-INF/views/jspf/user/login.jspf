@@ -1,38 +1,33 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<form id="loginForm" method="post"
-      action="${pageContext.request.contextPath}/login"
-      class="needs-validation" novalidate>
+<c:set var="cxt" value="${pageContext.request.contextPath}"/>
+
+<form id="loginForm" method="post" action="${pageContext.request.contextPath}/login" class="needs-validation" novalidate>
 
   <div class="mb-3 login-component">
     <label for="loginUsername" class="form-label">아이디</label>
-    <input type="text" class="form-control" id="loginUsername"
-           name="login_username" placeholder="아이디" required>
+    <input type="text" class="form-control" id="loginUsername" name="login_username" placeholder="아이디">
     <div class="invalid-feedback">아이디를 입력해주세요.</div>
   </div>
 
   <div class="mb-3 login-component">
     <label for="loginPassword" class="form-label">비밀번호</label>
-    <input type="password" class="form-control" id="loginPassword"
-           name="login_password" required placeholder="비밀번호" style="font-weight: 400;">
+    <input type="password" class="form-control" id="loginPassword" name="login_password" placeholder="비밀번호" style="font-weight: 400;">
     <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
   </div>
 
   <!-- find-* 입력은 처음에 숨기고 disabled로 시작 (검증 제외) -->
   <div class="mb-3 find-component" style="display:none">
     <label for="findUsername" class="form-label">아이디</label>
-    <input type="text" class="form-control" id="findUsername"
-           name="find_username" required placeholder="아이디" disabled>
+    <input type="text" class="form-control" id="findUsername" name="find_username" placeholder="아이디" disabled>
     <div class="invalid-feedback">아이디를 입력해주세요.</div>
   </div>
 
   <div class="mb-3 find-component find-id" style="display:none">
     <label for="findEmail" class="form-label">이메일</label>
-    <input type="email" class="form-control" id="findEmail"
-           name="find_email" required placeholder="you@example.com" disabled>
-    <div id="msgArea" class="invalid-feedback"></div>
+    <input type="email" class="form-control" id="findEmail" name="find_email" placeholder="you@example.com" disabled>
+    <div id="msgArea" class="invalid-feedback">이메일을 입력해주세요.</div>
   </div>
 
   <div class="d-flex justify-content-between align-items-center mb-3 login-component">
@@ -42,9 +37,9 @@
     </div>
     <div>
       <!-- return false로 링크 기본 동작 방지 -->
-      <a href="#" class="small text-decoration-none" onclick="return findAction('id')">아이디 찾기</a>
+      <a href="" id="btnFindUsername" class="small text-decoration-none" onclick="return findAction('id')">아이디 찾기</a>
       <span>/</span>
-      <a href="#" class="small text-decoration-none" onclick="return findAction('password')">비밀번호 찾기</a>
+      <a href="" class="small text-decoration-none" onclick="return findAction('password')">비밀번호 찾기</a>
     </div>
   </div>
 
@@ -53,9 +48,6 @@
     로그인
   </button>
 
-  <c:if test="${not empty msg}">
-    <div class="invalid-feedback d-block">${msg}</div>
-  </c:if>
 </form>
 
 <script>
@@ -70,8 +62,11 @@
   const loginDomAll    = form.querySelectorAll('.login-component');
   const submitBtn      = form.querySelector('.login-submit-button');
 
-  const loginInputs = form.querySelectorAll('.login-component input');
+  const loginInputs = form.querySelectorAll('.login-component input:not([type="checkbox"])');
   const findInputs  = form.querySelectorAll('.find-component input');
+
+  // 현재 모드 추적
+  let currentMode = 'login'; // 'login' | 'findId' | 'findPw'
 
   function toggleInputsRequiredDisabled(nodeList, enable) {
     nodeList.forEach(el => {
@@ -85,6 +80,8 @@
   function hide(el) { el.style.display = 'none'; }
 
   function setLoginMode() {
+    currentMode = 'login';
+    form.action = '<c:out value="${cxt}"/>/login';
     loginDomAll.forEach(show);
     findPassDomAll.forEach(hide);
     toggleInputsRequiredDisabled(loginInputs, true);
@@ -93,17 +90,21 @@
   }
 
   function setFindIdMode() {
+    currentMode = 'findId';
+    form.action = '<c:out value="${cxt}"/>/searchusername'; // ★ 컨트롤러 매핑으로 변경
     loginDomAll.forEach(el => el.style.setProperty('display', 'none', 'important'));
-    findPassDomAll.forEach(hide);
-    show(findIdDom);
+    findPassDomAll.forEach(hide); // 모두 숨기고
+    show(findIdDom);              // 이메일만 보이게
     toggleInputsRequiredDisabled(loginInputs, false);
-    toggleInputsRequiredDisabled(findInputs,  true);
+    toggleInputsRequiredDisabled(findInputs,  true); // 이메일 input 활성화
     submitBtn.textContent = '아이디 찾기';
   }
 
   function setFindPasswordMode() {
+    currentMode = 'findPw';
+    form.action = '<c:out value="${cxt}"/>/searchpassword'; // 비번 찾기 엔드포인트(구현 시)
     loginDomAll.forEach(el => el.style.setProperty('display', 'none', 'important'));
-    findPassDomAll.forEach(show);
+    findPassDomAll.forEach(show); // 아이디/이메일 모두 보이게(요구사항에 맞게 조절)
     toggleInputsRequiredDisabled(loginInputs, false);
     toggleInputsRequiredDisabled(findInputs,  true);
     submitBtn.textContent = '비밀번호 찾기';
@@ -113,15 +114,27 @@
   window.findAction = function (action) {
     if (action === 'id') setFindIdMode();
     else setFindPasswordMode();
-    return false; // a href="#" 기본 동작 막기
+    return false; // a href 기본 동작 막기
   };
 
   // 초기 상태: 로그인 모드
   setLoginMode();
 
-  // Bootstrap 예제: 유효하지 않으면만 제출 막기
+  // 제출 시 검증
   form.addEventListener('submit', (event) => {
-    if (!form.checkValidity()) {
+    // 현재 모드에 맞춰 필수값 최소화(특히 findId 모드에서 이메일만 검사)
+    if (currentMode === 'findId') {
+      const email = form.querySelector('#findEmail');
+      const msgArea = document.getElementById('msgArea');
+      if (!email || !email.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (msgArea) {
+          msgArea.textContent = '유효한 이메일을 입력해주세요.';
+          msgArea.classList.add('d-block');
+        }
+      }
+    } else if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -130,9 +143,11 @@
 })();
 </script>
 
+<!-- 로그인 성공/실패 알림 -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var loginStatus = '<c:out value="${loginStatus}" default=""/>'; // FlashAttr
+  loginStatus = (loginStatus || '').trim();
 
   if (loginStatus === 'success') {
     alert('로그인이 완료되었습니다.');
@@ -142,34 +157,40 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<!-- 아이디 찾기 -->
+<!-- 아이디 찾기 결과 알림 -->
 <script>
-	$("btnCheck").on("click", function () {
-		const $input = $("#findUsername");
-		const username = $input.val().trim();
-		cont $msg = $("#msgArea");
-		
-		$input.removeClass("is-invalid is-valid");
-		$msg.removeClass("invalid-feedback valid-feedback d-block").hide().text("");
-		
-		if (!email) {
-			$msg
-				.addClass("invalid-feedback d-block");
-				.text("이메일을 입력해주세요.");
-				.show();
-			$input.addClass("is-invalid");
-			return;
-		}
-	})
-	
-	$.getJSON("<c:url value='/SearchUsername'/>", {email})
-		.don (function (res) {
-			if (res.invalid) {
-				$msg
-					.removeClass("valid-feedback")
-					.addClass("invalid-feedback d-block")
-					.text(res.msg || "")
-			}
-		})	
+document.addEventListener('DOMContentLoaded', function () {
+  // FlashAttr
+  var searchUsername = '<c:out value="${searchUsername}" default=""/>';
+  var username = '<c:out value="${username}" default=""/>';
+ 
+  searchUsername = (searchUsername || '').trim();
+
+  if (searchUsername === 'success') {
+    alert('아이디를 찾았습니다. -> ' + username);
+  } else if (searchUsername === 'fail') {
+    alert('이메일 정보가 불일치합니다.');
+  }
+});
 </script>
 
+
+
+<!-- 비밀번호 찾기 결과 알림  -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // FlashAttr / 쿼리스트링 모두 지원
+  var pwStatusFA  = '<c:out value="${searchPassword}" default=""/>';
+  var pwStatusQP  = '<c:out value="${param.searchPassword}" default=""/>';
+  var pwStatus    = (pwStatusFA || pwStatusQP || '').trim();
+
+  // 상태별 알림
+  if (pwStatus === 'success') {
+    alert('임시 비밀번호를 이메일로 전송했습니다.');
+  } else if (pwStatus === 'not_found') {
+    alert('아이디/이메일이 일치하지 않습니다.');
+  } else if (pwStatus === 'error') {
+    alert('처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  }
+});
+</script>

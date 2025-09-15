@@ -54,6 +54,25 @@
 			<span id = "trip-dest" class="fs-3"><%= destination %></span>
 			 <small id = "trip-dates" class="d-flex align-items-end" style="font-weight: normal; color: #999;">${ tripInfoDTO.startDate } - ${ tripInfoDTO.endDate }</small>
 		</div>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+
+  <div id="transport-buttons">
+    <button type="button" class="transport-btn ms-2" onclick="setTransport('car')">자동차</button>
+    <button type="button" class="transport-btn ms-2" onclick="setTransport('transit')">대중교통</button>
+    <button type="button" class="transport-btn ms-2" onclick="setTransport('walk')">도보</button>
+  </div>
+</div>
+
+
+<script>
+  const btns = document.querySelectorAll('#transport-buttons .transport-btn')
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+    })
+  })
+</script>
 		<div class="trip-timeline">
 			<div class="trip-timeline-day">
 				<div class="trip-timeline-day-header mb-3">

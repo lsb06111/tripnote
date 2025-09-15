@@ -2,11 +2,13 @@ package edu.example.tripnote.domain.trip;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class TourLocDTO {
-	private int id;
+	private Long id;
 	private String code;
 	private String tourLocName;
 	private int tourOrder;
@@ -15,8 +17,10 @@ public class TourLocDTO {
 	private int tourNth;
 	private int timeTaken;
 	private String imgSrc;
-	private int courseId;
+	private Long courseId;
 	private String typeName;
 	private String noteContent;
+	private String mapx;
+	private String mapy;
 
 }

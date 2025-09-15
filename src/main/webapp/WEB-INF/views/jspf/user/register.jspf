@@ -29,23 +29,22 @@
       중복체크
     </button>
   </div>
-  <div id="msgArea" class="invalid-feedback" style="display:none"></div>
+  <div id="msgArea1" class="invalid-feedback" style="display:none"></div>
 
 </div>
  <div class="mb-2">
   <label for="regEmail" class="form-label">이메일</label>
   <div class="input-group">
     <input type="email" class="form-control" id="regEmail" name="email" required placeholder="you@example.com">
-    <button type="button" class="btn text-white"
+    <button type="button" id="emailBtn" class="btn text-white"
       style="--bs-btn-bg:#5c99ee; 
              --bs-btn-hover-bg:#447fcc; 
              --bs-btn-border-color:#5c99ee; 
-             --bs-btn-hover-border-color:#447fcc;"
-      onclick="showCert();">
+             --bs-btn-hover-border-color:#447fcc;">
       인증요청
     </button>
   </div>
-  <div class="invalid-feedback"></div>
+  <div id="msgArea2" class="invalid-feedback" style="display:none"></div>
 </div>
 
  <div class="mb-2 cert-number" style="display:none;">
@@ -67,12 +66,12 @@
 <div class="row g-3 mb-2">
     <div class="col-md-6">
       <label for="regPassword" class="form-label">비밀번호</label>
-      <input type="password" class="form-control" id="regPassword" name="password" required placeholder="최소 8자">
-      <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+      <input type="password" class="form-control" id="regPassword"  name="password" required minlength="8" placeholder="최소 8자">
+      <div id = "msgArea3" class="invalid-feedback"></div>
     </div>
     <div class="col-md-6">
       <label for="regPassword2" class="form-label">비밀번호 확인</label>
-      <input type="password" class="form-control" id="regPassword2" name="passwordConfirm" required placeholder="다시 입력">
+      <input type="password" class="form-control" id="regPassword2" name="passwordConfirm" required minlength="8" placeholder="다시 입력">
       <div class="invalid-feedback">비밀번호가 일치하지 않습니다.</div>
     </div>
 </div>
@@ -84,74 +83,238 @@
     <div class="invalid-feedback">약관에 동의해주세요.</div>
   </div>
 
-  <button type="submit" class="btn w-100 mt-3 text-white"
+  <button id="regPassword3" type="submit" class="btn w-100 mt-3 text-white"
           style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;">
     회원가입
   </button>
 </form>
 
-<!-- id 중복체크 -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<!-- 비밀번호 최소 길이 검사 -->
 <script>
-  // 어디에 두어도 안전
-  $(document).on('click', '#btnCheck', function () {
-    runUsernameCheck();
-  });
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('registerForm');
+  if (!form) return;
 
-  function runUsernameCheck() {
-    const $input = $("#regUsername");
-    const username = $input.val().trim();
-    // 같은 id가 여러 개 있을 가능성도 있으니, 스코프를 좁혀 타겟팅
-    const $msg = $input.closest('.mb-2').find('#msgArea');
+  const password  = form.querySelector('#regPassword');
+  const msg = document.getElementById('msgArea3');
 
-    console.log('[중복체크] click', { username, msgFound: $msg.length });
+  function showPwInvalid(text) {
+    if (msg) {
+      msg.textContent = text || '';
+      msg.classList.remove('valid-feedback');
+      msg.classList.add('invalid-feedback', 'd-block');
+      msg.style.display = 'block';
+    }
+    if (password) {
+      password.classList.add('is-invalid');
+      password.classList.remove('is-valid');
+    }
+  }
 
-    $input.removeClass("is-invalid is-valid");
-    $msg.removeClass("invalid-feedback valid-feedback d-block").hide().text("");
+  function showPwValid(text) {
+    if (msg) {
+      msg.textContent = text || '';
+      msg.classList.remove('invalid-feedback');
+      msg.classList.add('valid-feedback', 'd-block');
+      msg.style.display = 'block';
+    }
+    if (password) {
+      password.classList.add('is-valid');
+      password.classList.remove('is-invalid');
+    }
+  }
 
-    if (!username) {
-      $msg.addClass("invalid-feedback d-block")
-          .text("아이디를 입력해주세요.")
-          .css({display:'block', visibility:'visible'})   // 강제 표시
-          .show();
-      $input.addClass("is-invalid");
-      return;
+  function clearPwMsg() {
+    if (msg) {
+      msg.textContent = '';
+      msg.classList.remove('d-block');
+      msg.style.display = 'none';
+    }
+    if (password) password.classList.remove('is-invalid', 'is-valid');
+  }
+
+  // 제출 시 검증
+  form.addEventListener('submit', function (e) {
+    let block = false;
+
+    // (A) 비밀번호 최소 길이: 프론트에서만 검사
+    if (password && password.value.length < 8 && password.value.length > 0) {
+      password.setCustomValidity('비밀번호는 최소 8자리 이상입니다.');
+      showPwInvalid('비밀번호는 최소 8자리 이상입니다.');
+      block = true;
+    } else if (password.value.length == 0) {
+    	password.setCustomValidity('비밀번호를 입력해주세요.');
+    	showPwInvalid('비밀번호를 입력해주세요.');
+    	block = true;
+    } else if (password) {
+      password.setCustomValidity('');
+      showPwValid('사용 가능한 비밀번호입니다.');
     }
 
-    $.getJSON("<c:url value='/Usernamecheck'/>", { username })
-      .done(function (res) {
-        console.log('[중복체크] 응답', res);
-        if (res.invalid) {
-          $msg.removeClass("valid-feedback")
-              .addClass("invalid-feedback d-block")
-              .text(res.msg || "이미 사용 중인 아이디입니다.")
-              .css({display:'block', visibility:'visible'})
-              .show();
-          $input.addClass("is-invalid").removeClass("is-valid");
-        } else {
-          $msg.removeClass("invalid-feedback")
-              .addClass("valid-feedback d-block")
-              .text(res.msg || "사용 가능한 아이디입니다.")
-              .css({display:'block', visibility:'visible'})
-              .show();
-          $input.addClass("is-valid").removeClass("is-invalid");
-        }
-      })
-      .fail(function (xhr) {
-        console.error('[중복체크] 실패', xhr);
-        $msg.removeClass("valid-feedback")
-            .addClass("invalid-feedback d-block")
-            .text("중복체크 실패: " + (xhr.responseText || xhr.status))
-            .css({display:'block', visibility:'visible'})
-            .show();
-        $input.addClass("is-invalid").removeClass("is-valid");
-      });
+    // (B) 기본 HTML5/Bootstrap 검증
+    if (!form.checkValidity()) block = true;
+
+    if (block) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+
+  // 입력 중 실시간 피드백 (선택)
+  if (password) {
+    password.addEventListener('input', function () {
+      if (password.value.length < 8) {
+        password.setCustomValidity('비밀번호는 최소 8자리 이상입니다.');
+        showPwInvalid('비밀번호는 최소 8자리 이상입니다.');
+      } else {
+        password.setCustomValidity('');
+        showPwValid('사용 가능한 비밀번호입니다.');
+      }
+    });
   }
+});
 </script>
 
 
 
+<!-- id 중복체크 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).on('click', '#btnCheck', function () {
+  runUsernameCheck();
+});
+
+function runUsernameCheck() {
+  const $btn   = $('#btnCheck');
+  const $input = $('#regUsername');
+  const username = ($input.val() || '').trim();
+  const $msg   = $('#msgArea1');
+
+  $input.removeClass('is-invalid is-valid');
+  $msg.removeClass('invalid-feedback valid-feedback d-block').hide().text('');
+
+  if (!username) {
+    showInvalid('아이디를 입력해주세요.');
+    return;
+  }
+
+  $btn.prop('disabled', true);
+
+  $.ajax({
+    url: '<c:url value="/Usernamecheck"/>',
+    method: 'GET',
+    data: { username: username },
+    dataType: 'json',
+    cache: false
+  })
+  .done(function (res) {
+    if (res && res.invalid === true) {
+      // 이미 사용 중
+      showInvalid(res.msg);
+    } else {
+      // 사용 가능
+      showValid(res && res.msg);
+    }
+  })
+  .fail(function (xhr) {
+    showInvalid('중복체크 실패');
+  })
+  .always(function () {
+    $btn.prop('disabled', false);
+  });
+
+  function showInvalid(text) {
+    $msg.removeClass('valid-feedback')
+        .addClass('invalid-feedback d-block')
+        .text(text)
+        .css({ display: 'block', visibility: 'visible' })
+        .show();
+    $input.addClass('is-invalid').removeClass('is-valid');
+  }
+
+  function showValid(text) {
+    $msg.removeClass('invalid-feedback')
+        .addClass('valid-feedback d-block')
+        .text(text)
+        .css({ display: 'block', visibility: 'visible' })
+        .show();
+    $input.addClass('is-valid').removeClass('is-invalid');
+  }
+}
+</script>
+
+
+<!-- 이메일 중복 체크 -->
+<script>
+$(document).on('click', '#emailBtn', function (e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  runEmailCheck().then(function (success) {
+    if (success) {           // 사용 가능일 때만
+      showCert();       // 인증 메일 요청
+    }
+  });
+});
+
+function runEmailCheck() {
+  const $btn   = $('#emailBtn');
+  const $input = $('#regEmail');
+  const email  = ($input.val() || '').trim();
+  const $msg   = $('#msgArea2');
+
+  // 초기화
+  $input.removeClass('is-invalid is-valid');
+  $msg.removeClass('invalid-feedback valid-feedback d-block').hide().text('');
+
+  if (!email) { showInvalid('이메일을 입력해주세요.'); return Promise.resolve(false); }
+  if ($input[0] && !$input[0].checkValidity()) {
+    showInvalid('유효한 이메일 형식을 입력해주세요.'); return Promise.resolve(false);
+  }
+
+  $btn.prop('disabled', true);
+
+  return new Promise(function (resolve) {
+    $.ajax({
+      url: '<c:url value="/Emailcheck"/>',
+      method: 'GET',
+      data: { email: email },
+      dataType: 'json',
+      cache: false
+    })
+    .done(function (res) {
+      if (res && res.invalid === true) {
+        showInvalid(res.msg);
+        resolve(false);
+      } else {
+        showValid(res.msg);
+        resolve(true);
+      }
+    })
+    .fail(function (xhr) {
+      showInvalid('중복체크 실패');
+      resolve(false);
+    })
+    .always(function () {
+      $btn.prop('disabled', false);
+    });
+  });
+
+  function showInvalid(text) {
+    $msg.removeClass('valid-feedback')
+        .addClass('invalid-feedback d-block')
+        .text(text).css({display:'block', visibility:'visible'}).show();
+    $input.addClass('is-invalid').removeClass('is-valid');
+  }
+  function showValid(text) {
+    $msg.removeClass('invalid-feedback')
+        .addClass('valid-feedback d-block')
+        .text(text).css({display:'block', visibility:'visible'}).show();
+    $input.addClass('is-valid').removeClass('is-invalid');
+  }
+}
+</script>
 
 
 <!-- 이메일 인증 요청 or 인증 -->
@@ -275,6 +438,7 @@
 })();
 </script>
 
+<!-- 회원가입 버튼 -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	var registerStatus = '<c:out value="${registerStatus}" default=""/>';
@@ -288,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-
+<!-- 비밀번호 확인 -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('registerForm');

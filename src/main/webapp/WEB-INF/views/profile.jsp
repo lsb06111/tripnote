@@ -110,7 +110,7 @@
                <div class="service-card"
 			     data-location="<%= tripLocations[i] %>"
 			     style="padding: 18px 24px; cursor:pointer;"
-			     onclick="location.href='/oti_team3/<%= isMe? "details.jsp" : "board/view.jsp" %>?title=<%= titles[i] %>'">
+			     onclick="location.href='/tripnote/<%= isMe? "details.jsp" : "board/view.jsp" %>?title=<%= titles[i] %>'">
                   <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px">
                     <div class="service-icon" style="margin-bottom:0">
                       <i class="bi bi-<%= transport[i] %>"></i>
@@ -127,7 +127,7 @@
                     <!-- action button aligned to the right -->
                     
                     <%if(isMe){ %>
-                    <a href="/oti_team3/trip/"
+                    <a href="/tripnote/trip/"
                        class="service-link ms-auto"
                        onclick="event.stopPropagation();"
                        style="width:fit-content; transition:color 0.3s; color:inherit;"
@@ -136,7 +136,7 @@
                       일정 편집하기
                     </a> / 
                     <div>
-                    <a href="/oti_team3/board/write.jsp?title=<%= titles[i] %>"
+                    <a href="/tripnote/board/write.jsp?title=<%= titles[i] %>"
                        class="service-link ms-auto"
                        onclick="event.stopPropagation();"
                        style="width:fit-content; transition:color 0.3s; color:inherit;"
@@ -185,9 +185,9 @@
 
  
 <%
-	toastTitle = "알림";
-	toastMsg = "정보 변경에 성공하였습니다!";
-	toastSuccess = true;
+	String toastTitle = "알림";
+	String toastMsg = "정보 변경에 성공하였습니다!";
+	Boolean toastSuccess = true;
 %>
 
 <%@ include file="/WEB-INF/views/jspf/toasts/toast.jspf" %>

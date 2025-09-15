@@ -9,6 +9,19 @@
   line-height: 1;
 }
 
+.transport-btn {
+  padding: 5px 12px;
+  border:1px solid #5c99ee;
+  border-radius:6px;
+  background:transparent;
+  color:#5c99ee;
+  cursor:pointer;
+}
+.transport-btn.active {
+  background:#5c99ee;
+  color:white;
+}
+
 .trip-body{
 	box-sizing: border-box;
 	margin: 0;
@@ -527,4 +540,19 @@
 /* 눌렀을 때 (토글 상태) */
 .trip-note-toggle.active {
   color: #0d6efd; /* 파란색 */
+}
+
+
+/* 경로 시간 표시를 위한 CSS */
+.route-time {
+    position: relative;
+    bottom: 10px;
+    background-color: white;
+    border: 1px solid #888;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 }
