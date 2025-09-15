@@ -18,7 +18,6 @@ import edu.example.tripnote.domain.board.CourseSelectResDTO;
 import edu.example.tripnote.domain.board.PageResponseDTO;
 import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
-import jdk.internal.org.jline.utils.Log;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
