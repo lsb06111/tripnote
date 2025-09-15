@@ -1,13 +1,10 @@
 package edu.example.tripnote.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.example.tripnote.dao.UserDAO;
 
@@ -16,19 +13,18 @@ public class SearchUsernameController {
 	@Autowired
 	UserDAO dao;
 	
-	@ResponseBody
-	@RequestMapping("/SearchUsername")
-	public Map<String, Object> search1(@RequestParam("find_email") String email) {
-		Map<String, Object> result = new HashMap<>();
-		String username = dao.searchUsername(email);
-		if(username == null || username == "") {
-			result.put("msg", "이메일을 다시 확인해주세요.");
-			result.put("invalid",  true);
+	@PostMapping("/searchusername")
+	public String searchusername(@RequestParam("find_email") String email,
+								RedirectAttributes ra) {
+		
+		String result = dao.searchUsername(email);
+		
+		if(result == null) {
+			ra.addFlashAttribute("searchUsername", "fail");
+			return "redirect:/";
 		}
-		else {
-			result.put("msg", "아이디 -> "+ username);
-			result.put("invalid", false);
-		}
-		return result;
+		ra.addFlashAttribute("username", result);
+		ra.addFlashAttribute("searchUsername", "success");
+		return "redirect:/";
 	}
 }

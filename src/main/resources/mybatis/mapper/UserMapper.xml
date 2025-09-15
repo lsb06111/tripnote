@@ -18,12 +18,18 @@ where email = #{email}
 </select>
 
 <!-- 비밀번호찾기 -->
-<select id="searchPassword" resultType="string">
-	select password
+<select id="searchPassword" resultType="UserDTO">
+	select id, username, email
 	from users
 	where username = #{username}
 	AND email = #{email}
 </select>
+
+<update id="updatePassword">
+    update users
+    set password = #{password}
+    where id = #{id}
+</update>
 
 <!-- 회원가입 -->
 <insert id="insertUser" parameterType="UserDTO" useGeneratedKeys="true" keyProperty = "id" keyColumn="id">
@@ -36,6 +42,13 @@ where email = #{email}
 	select COUNT(*)
 	from users
 	where username = #{username}
+</select>
+
+<!-- 이메일 중복 확인 -->
+<select id="countByEmail" parameterType="string" resultType = "int">
+	select COUNT(*)
+	from users
+	where email = #{email}
 </select>
 
   
