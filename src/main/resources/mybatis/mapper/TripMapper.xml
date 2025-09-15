@@ -7,7 +7,7 @@
 </select>
 
 <select id="getAllTourLoc"  parameterType="_int" resultType="TourLocDTO">
-	select tour_loc.*, tour_type.type_name, note.note_content from tour_loc join tour_type on tour_loc.id = tour_type.tour_loc_id join note on tour_loc.id = note.tour_loc_id where course_id = #{courseId} order by tour_nth, tour_order asc
+	select tour_loc.*, note.note_content from tour_loc join note on tour_loc.id = note.tour_loc_id where course_id = #{courseId} order by tour_nth, tour_order asc
 </select>
 
 <insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="false">
@@ -22,8 +22,8 @@
         SELECT ISEQ$$_85358.currval FROM dual
     </selectKey>
 
-	insert into tour_loc (code, tour_loc_name, tour_order, start_time, end_time, tour_nth, time_taken, course_id, img_src) 
-			values(#{code}, #{tourLocName}, #{tourOrder}, #{startTime}, #{endTime}, #{tourNth}, #{timeTaken}, #{courseId}, #{imgSrc})
+	insert into tour_loc (code, tour_loc_name, tour_order, start_time, end_time, tour_nth, time_taken, course_id, img_src, type_name) 
+			values(#{code}, #{tourLocName}, #{tourOrder}, #{startTime}, #{endTime}, #{tourNth}, #{timeTaken}, #{courseId}, #{imgSrc}, #{typeName})
 </insert>
 
 <update id="updateTourLoc" parameterType="TourLocDTO">
@@ -53,5 +53,13 @@
 <insert id="insertTourType" parameterType="TourLocDTO">
 	insert into tour_type values(#{id}, #{typeName})
 </insert>
+
+<delete id="deleteNote"  parameterType="_int"  >
+    	delete from note where tour_loc_id = #{tourLocId}
+</delete>
+
+<select id="getAttraction" parameterType="string">
+	select mapx, mapy from attractions where contentId = #{code}
+</select>
 
 </mapper>
