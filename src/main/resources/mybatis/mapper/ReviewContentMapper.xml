@@ -2,25 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.example.tripnote.dao.ReviewContentDAO">
 
-<insert id="save" parameterType="list">
-    INSERT ALL
-        <foreach collection="list" item="item" index="idx">
-            into review_content (
-                      review_content
-                    , img
-                    ,tour_loc_id
-                   ) 
-            VALUES (
-                      #{item.content}
-                    , #{item.img}
-                    ,#{item.tourLocId}
-                   )
-        </foreach>
-    SELECT 1 FROM DUAL
-</insert>
-
-<insert id="saveTest" parameterType="ReviewContentDTO">
-	insert into review_content (review_content, img, tour_loc_id) values(#{content}, #{img}, #{tourLocId})
+<insert id="save" parameterType="list" >
+	INSERT INTO review_content (review_content, img, tour_loc_id)
+        <foreach collection="list" item="item" separator="UNION ALL">
+            SELECT #{item.content}, #{item.img}, #{item.tourLocId} 
+            FROM DUAL
+		</foreach>
 </insert>
 
 </mapper>

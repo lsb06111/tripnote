@@ -25,6 +25,7 @@ import edu.example.tripnote.domain.board.CourseSelectResDTO;
 import edu.example.tripnote.domain.board.NewBoardDTO;
 import edu.example.tripnote.domain.board.PageResponseDTO;
 import edu.example.tripnote.domain.board.ReviewContentDTO;
+import edu.example.tripnote.domain.trip.CourseDTO;
 import edu.example.tripnote.domain.trip.TourLocDTO;
 import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
@@ -58,7 +59,10 @@ public class BoardController {
 	@PostMapping("/form")
 	public String form(BoardFormReqDTO reqDTO, Model model) {
 		BoardTemplateDTO locTemplate = new BoardTemplateDTO();
-		locTemplate.setCourse(courseDAO.getCourseById(reqDTO.getCourseId()));
+		CourseDTO courseDTO = courseDAO.getCourseById(reqDTO.getCourseId());
+		courseDTO.setStartDate(courseDTO.getStartDate().substring(0, 10));
+		courseDTO.setEndDate(courseDTO.getEndDate().substring(0, 10));
+		locTemplate.setCourse(courseDTO);
 		
         List<List<TourLocDTO>> tourlocs = new ArrayList<>(
         		courseDAO.getTourLocsByCourseId(reqDTO.getCourseId()).stream()
@@ -74,8 +78,7 @@ public class BoardController {
 	@ResponseBody
 	@PostMapping("/form/save")
 	public ResponseEntity<String> save(@RequestBody BoardSaveReqDTO req) {
-		//boardService.save(req);
-		boardService.saveTest(req);
+		boardService.save(req);
 		return ResponseEntity.ok("success");
 	}
 	

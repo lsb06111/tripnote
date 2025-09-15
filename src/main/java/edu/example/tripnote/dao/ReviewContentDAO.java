@@ -9,6 +9,4 @@ import edu.example.tripnote.domain.board.ReviewContentDTO;
 @Mapper
 public interface ReviewContentDAO {
 	public void save(List<ReviewContentDTO> contentDTO);
-
-	public int saveTest(ReviewContentDTO reviewContentDTO);
 }

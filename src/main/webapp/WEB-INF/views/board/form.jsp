@@ -3,32 +3,28 @@
 <%@ include file="/WEB-INF/views/jspf/head.jspf"%>
 <!-- 헤드 부분 고정 -->
 <!-- 커스텀 CSS import 존 -->
-
+<style>
+	.custom-toggle {
+		background-color: white;
+		color: black;
+		border: 1px solid #ccc;
+		border-radius: 30px;
+		padding: 6px 16px;
+		display: inline-block;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	
+	.btn-check:checked+.custom-toggle {
+		background-color: #5c99ee;
+		color: white;
+		border-color: #0d6efd;
+	}
+</style>
 </head>
 <body class="portfolio-details-page">
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
-	<script type="application/json" class="swiper-config">
-              {
-                "loop": true,
-                "speed": 600,
-                "effect": "creative",
-                "creativeEffect": {
-                  "prev": {
-                    "shadow": false,
-                    "translate": ["-120%", 0, -500]
-                  },
-                  "next": {
-                    "shadow": false,
-                    "translate": ["120%", 0, -500]
-                  }
-                },
-                "slidesPerView": 1,
-                "navigation": {
-                  "nextEl": ".swiper-button-next",
-                  "prevEl": ".swiper-button-prev"
-                }
-              }
-	</script>
+
 	<!-- 헤더부분 고정 -->
 
 	<main class="main board-form" data-id="${locTemplate.course.id}"> <!-- Page Title --> <%
@@ -198,6 +194,28 @@
 												<div class="visual-showcase">
 													<div class="main-visual">
 														<div class="portfolio-details-slider swiper init-swiper">
+<script type="application/json" class="swiper-config">
+              {
+                "loop": true,
+                "speed": 600,
+                "effect": "creative",
+                "creativeEffect": {
+                  "prev": {
+                    "shadow": false,
+                    "translate": ["-120%", 0, -500]
+                  },
+                  "next": {
+                    "shadow": false,
+                    "translate": ["120%", 0, -500]
+                  }
+                },
+                "slidesPerView": 1,
+                "navigation": {
+                  "nextEl": ".swiper-button-next",
+                  "prevEl": ".swiper-button-prev"
+                }
+              }
+</script>
 															<div class="swiper-wrapper"
 																style="text-align: center; margin-bottom: 50px;">
 																<div class="swiper-slide">
@@ -205,17 +223,15 @@
 																		<h2>리뷰 작성 (사진)</h2>
 																	</div>
 
-																	<div
-																		class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
+																	<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
 																		<!-- input/img: id는 유니크하게 -->
-																		<input
-																			id="postImgInput-${outerStatus.index}-${innerStatus.index}"
+																		<input id="postImgInput-${outerStatus.index}-${innerStatus.index}"
 																			class="postImg-input" type="file" accept="image/*"
-																			style="position: absolute; left: -9999px;" /> <img
-																			id="postImg-${outerStatus.index}-${innerStatus.index}"
-																			src="/tripnote/assets/img/alt/no_image.png"
-																			class="postImg img-fluid" alt="클릭하여 업로드"
-																			style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+																			style="position: absolute; left: -9999px; display:none" /> 
+																			<img id="postImg-${outerStatus.index}-${innerStatus.index}"
+																				src="/assets/img/alt/no_image.png"
+																				class="postImg img-fluid" alt="클릭하여 업로드"
+																				style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
 																		<textarea class="form-control loc-textera"
 																			style="width: 50%; resize: none;"
 																			placeholder="리뷰 내용을 입력해주세요"></textarea>
@@ -224,9 +240,9 @@
 
 																<!-- swiper nav -->
 																<div class="swiper-button-next"
-																	style="right: 1px; z-index: 9999;"></div>
+																	style="right: 1px;"></div>
 																<div class="swiper-button-prev"
-																	style="left: 1px; z-index: 9999;"></div>
+																	style="left: 1px;"></div>
 
 															</div>
 															<!-- /swiper-wrapper -->
@@ -328,15 +344,13 @@ function savePost() {
         url: "/tripnote/board/form/save",
         type: "POST",
         contentType: "application/json", 
-        data: JSON.stringify(postData),
-        dataType: "json", 
+        data: JSON.stringify(postData), // JSON 형식의 문자열을 만들어 반환
+        dataType: "text", // 응답 데이터 타입
         success: function(response) {
-            console.log("게시물 저장");
             alert("저장 성공!");
         },
         error: function(xhr, status, err) {
             console.error(xhr.responseText);
-            console.log(err);
             alert("저장 실패: " + status);
         }
     });
@@ -460,24 +474,7 @@ writeTitleInputDom.addEventListener('keyup', ()=> {
 </script>
 
 
-<style>
-.custom-toggle {
-	background-color: white;
-	color: black;
-	border: 1px solid #ccc;
-	border-radius: 30px;
-	padding: 6px 16px;
-	display: inline-block;
-	cursor: pointer;
-	transition: all 0.3s ease;
-}
 
-.btn-check:checked+.custom-toggle {
-	background-color: #5c99ee;
-	color: white;
-	border-color: #0d6efd;
-}
-</style>
 
 		</div>
 	</section>

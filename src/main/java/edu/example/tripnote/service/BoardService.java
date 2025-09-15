@@ -56,12 +56,6 @@ public class BoardService {
 	
 	public void save(BoardSaveReqDTO req) {
 		boardDAO.save(req.getBoardDTO());
-		System.out.println("dfdd :" + req.getContents().toString());
 		reviewContentDAO.save(req.getContents());
-	}
-	
-	public void saveTest(BoardSaveReqDTO req) {
-		for(ReviewContentDTO rcd : req.getContents())
-			reviewContentDAO.saveTest(rcd);
 	}
 }
