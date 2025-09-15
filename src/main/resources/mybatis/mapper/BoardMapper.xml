@@ -100,4 +100,9 @@
     </where>
 </select>
 
+<insert id="save" parameterType="NewBoardDTO">
+	insert into board (title, board_content, user_id, course_id)
+	values (#{title}, #{intro}, #{userId}, #{courseId})
+</insert>
+
 </mapper>

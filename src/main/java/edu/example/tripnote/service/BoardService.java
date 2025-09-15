@@ -1,24 +1,28 @@
 package edu.example.tripnote.service;
 
+import static edu.example.tripnote.Constants.BOARD_BlOCK_SIZE;
+import static edu.example.tripnote.Constants.BOARD_PAGE_SIZE;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import edu.example.tripnote.dao.BoardDAO;
+import edu.example.tripnote.dao.ReviewContentDAO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
+import edu.example.tripnote.domain.board.BoardSaveReqDTO;
 import edu.example.tripnote.domain.board.PageResponseDTO;
+import edu.example.tripnote.domain.board.ReviewContentDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import static edu.example.tripnote.Constants.BOARD_BlOCK_SIZE;
-import static edu.example.tripnote.Constants.BOARD_PAGE_SIZE;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 	private final BoardDAO boardDAO;
+	private final ReviewContentDAO reviewContentDAO;
 	
 	public PageResponseDTO<BoardDTO> listAll(BoardParamDTO boardParam) {
 		int page = boardParam.getPage();
@@ -48,5 +52,16 @@ public class BoardService {
 		log.debug("BoardService listAll- hasPrev : " + hasPrev);
 		log.debug("BoardService listAll- hasNext : " + hasNext);
 		return response;
+	}
+	
+	public void save(BoardSaveReqDTO req) {
+		boardDAO.save(req.getBoardDTO());
+		System.out.println("dfdd :" + req.getContents().toString());
+		reviewContentDAO.save(req.getContents());
+	}
+	
+	public void saveTest(BoardSaveReqDTO req) {
+		for(ReviewContentDTO rcd : req.getContents())
+			reviewContentDAO.saveTest(rcd);
 	}
 }

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,9 +19,12 @@ import edu.example.tripnote.dao.TripDAO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardFormReqDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
+import edu.example.tripnote.domain.board.BoardSaveReqDTO;
 import edu.example.tripnote.domain.board.BoardTemplateDTO;
 import edu.example.tripnote.domain.board.CourseSelectResDTO;
+import edu.example.tripnote.domain.board.NewBoardDTO;
 import edu.example.tripnote.domain.board.PageResponseDTO;
+import edu.example.tripnote.domain.board.ReviewContentDTO;
 import edu.example.tripnote.domain.trip.TourLocDTO;
 import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
@@ -64,6 +69,14 @@ public class BoardController {
         locTemplate.setTourlocs(tourlocs);
         model.addAttribute("locTemplate",locTemplate);
 		return "board/form";
+	}
+	
+	@ResponseBody
+	@PostMapping("/form/save")
+	public ResponseEntity<String> save(@RequestBody BoardSaveReqDTO req) {
+		//boardService.save(req);
+		boardService.saveTest(req);
+		return ResponseEntity.ok("success");
 	}
 	
 	@GetMapping("/detail")

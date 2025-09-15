@@ -7,9 +7,31 @@
 </head>
 <body class="portfolio-details-page">
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
+	<script type="application/json" class="swiper-config">
+              {
+                "loop": true,
+                "speed": 600,
+                "effect": "creative",
+                "creativeEffect": {
+                  "prev": {
+                    "shadow": false,
+                    "translate": ["-120%", 0, -500]
+                  },
+                  "next": {
+                    "shadow": false,
+                    "translate": ["120%", 0, -500]
+                  }
+                },
+                "slidesPerView": 1,
+                "navigation": {
+                  "nextEl": ".swiper-button-next",
+                  "prevEl": ".swiper-button-prev"
+                }
+              }
+	</script>
 	<!-- 헤더부분 고정 -->
 
-	<main class="main"> <!-- Page Title --> <%
+	<main class="main board-form" data-id="${locTemplate.course.id}"> <!-- Page Title --> <%
  	String writeTitle = request.getParameter("title");
  %>
 
@@ -60,7 +82,7 @@
 
 					<div class="meta-column position-relative">
 						<div class="meta-label">
-							<strong>리뷰제목</strong>
+							<strong>후기 제목</strong>
 						</div>
 						<input type="text" id="write_title_input"
 							class="form-control fs-5" placeholder="제목을 입력해주세요."
@@ -77,12 +99,10 @@
 			</div>
 			<div>
 				<!-- Textarea -->
-				<textarea class="form-control mt-5"
+				<textarea id="post_intro" class="form-control mt-5"
 					style="width: 50%; resize: none; margin: 0 auto; min-height: 10rem;"
 					placeholder="이번 여행을 소개해주세요"></textarea>
 			</div>
-
-
 
 			<%
 				String reqTitle = request.getParameter("title");
@@ -125,10 +145,9 @@
 
 						<div class="tab-content">
 							<!-- 각 일자별 탭 패널 -->
-							<c:forEach var="day" items="${locTemplate.tourlocs}"
-								varStatus="outerStatus">
-								<div id="tabs-tab-${outerStatus.index}"
-									class="tab-pane fade ${outerStatus.first ? 'active show' : ''}">
+							<c:forEach var="day" items="${locTemplate.tourlocs}" varStatus="outerStatus">
+								<div id="tabs-tab-${outerStatus.index}" data-index="${outerStatus.count}"
+									class="tab-per-day tab-pane fade ${outerStatus.first ? 'active show' : ''}">
 
 									<!-- routeBar: 해당 일자의 loc 리스트를 사용 -->
 									<div id="routeBar-${outerStatus.index}"
@@ -158,7 +177,7 @@
 														<span
 															class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2"
 															style="font-size: 0.85em"> <i
-															class="bi bi-bus-front"></i> <!-- loc.time 은 실제 필드명으로 교체 (다음 노드까지의 소요) -->
+															class="bi bi-bus-front"></i>
 															${loc.timeTaken}
 														</span>
 													</div>
@@ -197,7 +216,7 @@
 																			src="/tripnote/assets/img/alt/no_image.png"
 																			class="postImg img-fluid" alt="클릭하여 업로드"
 																			style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
-																		<textarea class="form-control"
+																		<textarea class="form-control loc-textera"
 																			style="width: 50%; resize: none;"
 																			placeholder="리뷰 내용을 입력해주세요"></textarea>
 																	</div>
@@ -260,7 +279,7 @@
 																</div>
 															</div>
 
-															<button type="button" class="btn btn-primary float-end"
+															<button class="btn btn-primary float-end" onclick="savePost()"
 																style="background-color: #5c99ee; margin-left: 10px;">업로드</button>
 															<button type="button" class="btn btn-primary float-end"
 																style="background-color: #5c99ee">임시저장</button>
@@ -283,29 +302,46 @@
 			</section>
 			<!-- /Tabs Section -->
 
-			<script type="application/json" class="swiper-config">
-              {
-                "loop": true,
-                "speed": 600,
-                "effect": "creative",
-                "creativeEffect": {
-                  "prev": {
-                    "shadow": false,
-                    "translate": ["-120%", 0, -500]
-                  },
-                  "next": {
-                    "shadow": false,
-                    "translate": ["120%", 0, -500]
-                  }
-                },
-                "slidesPerView": 1,
-                "navigation": {
-                  "nextEl": ".swiper-button-next",
-                  "prevEl": ".swiper-button-prev"
-                }
-              }
-</script>
-			<script>
+<script>
+// 게시물 저장
+function savePost() {
+    let postData = {
+        boardDTO: {
+            title: $('#write_title_input').val(),
+            intro: $('#post_intro').val(),
+            userId: 1,
+            courseId: $('.board-form').attr('data-id')
+        },
+        contents: []
+    };
+
+    $('.tab-per-day').each(function(index, elem) {
+        let $el = $(elem);
+        let data = {
+            content: $el.find('.loc-textera').val(),
+            tourLocId: $('.board-form').attr('data-id'),
+            img: $el.find('.postImg').attr('src')
+        };
+        postData.contents.push(data);
+    });
+    $.ajax({
+        url: "/tripnote/board/form/save",
+        type: "POST",
+        contentType: "application/json", 
+        data: JSON.stringify(postData),
+        dataType: "json", 
+        success: function(response) {
+            console.log("게시물 저장");
+            alert("저장 성공!");
+        },
+        error: function(xhr, status, err) {
+            console.error(xhr.responseText);
+            console.log(err);
+            alert("저장 실패: " + status);
+        }
+    });
+}
+
 $(function() {
 	  // 각 .post-contents 블록(또는 이미지+input 쌍)을 기준으로 처리합니다.
 	  // 구조가 다르다면 selector를 적절히 바꿔주세요.
@@ -386,9 +422,7 @@ $(function() {
   });
 </script>
 
-
-
-			<script>
+<script>
 
 const writeTitleInputDom = document.querySelector('#write_title_input');
 const writeTitleDom = document.querySelector('#write_title');
@@ -426,7 +460,7 @@ writeTitleInputDom.addEventListener('keyup', ()=> {
 </script>
 
 
-			<style>
+<style>
 .custom-toggle {
 	background-color: white;
 	color: black;
