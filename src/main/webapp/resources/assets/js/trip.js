@@ -192,67 +192,72 @@ function switchDay(btn){
 		if(i+1 == idx){
 			console.log(idx);
 			el.querySelectorAll(".trip-timeline-event")
-			.forEach(e => drawFixMarker(e.dataset.mapx, e.dataset.mapy));
+			.forEach(e => drawFixMarker(e.dataset.mapx, e.dataset.mapy, e.dataset.title));
 		}
 	});
 }; 
 var isInsertedToTimeline = false;
 // 장소를 타임라인에 추가
 function insertToTimeline(event, btn, contentId, tourLocName, imgSrc, courseId, tourType, mapx, mapy) {
-	event.stopPropagation();
-	drawFixMarker(mapx, mapy);
-	isInsertedToTimeline = true;
-	const container = $(btn).closest(".trip-loc-card");
-	const title = container.find('.sl-name').text();
-	const type = container.find('.sl-type').text();
-	let img = container.find('img');
-	if (img){
-		img =  img.attr('src')
-	}
-	  
-	  // 표시 중인 타임라인(보이는 것) 선택
-	const $target = $('.trip-timelineForDay:visible').first();
-	console.log($target);
-	const order = $target.children().length+1;
-	
-	let tourNth = document.querySelector('#dayTabs .trip-tab.is-active').textContent.split(' ')[1].substring(0,1);
-	let tourLocId = -1;
-	$.post("/tripnote/trip/saveTour",
-			{
-				code : contentId,
-				tourLocName : tourLocName,
-				imgSrc : imgSrc,
-				courseId : courseId,
-				tourOrder : order,
-				tourNth : tourNth,
-				typeName : tourType
-			},
-			function(data, status){
-				$target.append(getTimelineEvent(title, type, img, order, data.id, '', mapx, mapy));
-			});
-	
-	
+    event.stopPropagation();
+    isInsertedToTimeline = true;
+
+    const container = $(btn).closest(".trip-loc-card");
+    const title = container.find('.sl-name').text();
+    const type = container.find('.sl-type').text();
+    const $target = $('.trip-timelineForDay:visible').first();
+    const order = $target.children().length + 1;
+    const tourNth = document.querySelector('#dayTabs .trip-tab.is-active').textContent.split(' ')[1].substring(0, 1);
+
+    // Make an AJAX call to the server to save the data first
+    $.post("/tripnote/trip/saveTour", {
+        code: contentId,
+        tourLocName: tourLocName,
+        imgSrc: imgSrc,
+        courseId: courseId,
+        tourOrder: order,
+        tourNth: tourNth,
+        typeName: tourType,
+        mapx: mapx,
+        mapy: mapy
+    },
+    function(savedData, status) {
+        // AFTER the data is successfully saved to the DB, broadcast it via WebSocket
+        if (status === 'success' && socket) {
+            const message = {
+                action: "ADD_LOCATION", // Define an action type
+                payload: savedData // Send the saved data (which includes the new ID)
+            };
+            socket.send(JSON.stringify(message));
+        }
+    });
 };
 
-function getTimelineEvent(title, type, img, order, tourLocId, noteContent, mapx, mapy){
+function getTimelineEvent(title, type, img, order, tourLocId, noteContent, mapx, mapy, startTime, endTime){
 	let text = `
-	<div class="trip-timeline-event d-flex flex-column p-2" data-mapx="${mapx}" data-mapy="${mapy}">
+	<div class="trip-timeline-event tourLocId-${tourLocId} d-flex flex-column p-2" data-mapx="${mapx}" data-mapy="${mapy}" data-title="${title}">
 		<div class="tour-loc-id" style="display:none">${tourLocId}</div>
 		<div class="d-flex w-100">
 			<div class="trip-idx m-1">${order}</div>
 			<div class="event-info mx-2">
-				<div class="time">12:55-12:55</div>
-				<div style="color: #ff7a7a;">${type}</div>
+				<div class="duration-time-${tourLocId}">${startTime ? startTime : '09:00'} ~ ${endTime ? endTime : '10:00'}</div>
+				<div style="color: #ff7a7a;">${type ? type : '명소'}</div>
 				<div style="white-space: nowrap">${title}</div>
 			</div>
-			<img src="${img}" alt="이미지 없음" class="event-img" />
+			<img src="${img ? img : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg'}" alt="이미지 없음" class="event-img" />
 			<div class="d-flex flex-column justify-content-around">
 			    <i class="trip-note-toggle bi bi-pencil-square ms-2" onclick="toggleNote(this)" style="font-size:1.4em"></i>
 			    <i class="bi bi-trash ms-2" style="font-size:1.4em; cursor:pointer;"  onclick="deleteNote(this, '${mapx}', '${mapy}')"></i>
 			</div>
 			
 		</div>
+		
 		<div class="trip-note-area">
+			<div class="mb-2" style="width:100%; text-align:center;">
+				<input type="time" id="start_time_${tourLocId}" placeholder="시간 범위를 선택하세요" style="border-radius:3px;border:1px solid #333; padding:3px;"> - 
+				<input type="time" id="end_time_${tourLocId}" placeholder="시간 범위를 선택하세요" style="border-radius:3px;border:1px solid #333; padding:3px;">
+			</div>
+				
 			<textarea id="content_${tourLocId}" class="pe-5" placeholder="메모를 입력하세요...">${noteContent}</textarea>
 			<button class="btn btn-light save-note-btn"onclick="saveNote(${tourLocId})">저장</button>
 		</div>
@@ -261,32 +266,64 @@ function getTimelineEvent(title, type, img, order, tourLocId, noteContent, mapx,
 }
 function saveNote(tourLocId){
 	const noteContent = document.querySelector('#content_'+tourLocId).value;
+	const startTime = document.querySelector('#start_time_'+tourLocId).value;
+	const endTime = document.querySelector('#end_time_'+tourLocId).value;
+	document.querySelector('.duration-time-'+tourLocId).textContent = startTime + ' ~ ' + endTime;
+	let saveNoteData = {
+			tourLocId : tourLocId,
+			noteContent : noteContent,
+		};
+	let saveDurationData = {
+			id : tourLocId,
+			startTime : startTime,
+			endTime : endTime
+		};
+	
 	$.post('/tripnote/trip/saveNote',
-			{
-				tourLocId : tourLocId,
-				noteContent : noteContent
-			});
+			saveNoteData,
+			function(data, status){
+				if (status === 'success' && socket) {
+					const message = {
+			                action: "SAVE_NOTE", // Define an action type
+			                payload: saveNoteData // Send the saved data (which includes the new ID)
+		            };
+		            socket.send(JSON.stringify(message));
+				}
+	});
+	
+	$.post('/tripnote/trip/saveDuration', // controller 만들기
+			saveDurationData
+			,function(data, status) {
+		        // AFTER the data is successfully saved to the DB, broadcast it via WebSocket
+		        if (status === 'success' && socket) {
+		            const message = {
+		                action: "SAVE_DURATION", // Define an action type
+		                payload: saveDurationData // Send the saved data (which includes the new ID)
+		            };
+		            socket.send(JSON.stringify(message));
+		        }
+		    });
 }
 // tripnote 관광지의 순서번호 부여
-function assignLocIndex() {
+function assignLocIndex(isSwap = false) {
     let dataObjs = [];
     let $list = $('.trip-timelineForDay:visible');
 
     // 1. 새 마커 순서를 담을 임시 배열 생성
     let newFixMarkers = [];
     const epsilon = 0.000001;
-
+    let orderedTourLocIds = [];
     // 2. DOM 순서대로 타임라인 카드를 순회
     $list.children().each(function (idx, el) {
         // 화면의 순번 업데이트 (기존 로직)
         $(el).find('.trip-idx').text(idx + 1);
-
+        const tourLocId = parseInt($(el).find('.tour-loc-id').text());
         // DB 업데이트용 데이터 준비 (기존 로직)
         let dataObj = {};
         dataObj.id = parseInt($(el).find('.tour-loc-id').text()); // 올바른 ID 선택
         dataObj.tourOrder = (idx + 1);
         dataObjs.push(dataObj);
-
+        orderedTourLocIds.push(tourLocId);
         // --- ✅ fixMarkers 재정렬 로직 시작 ---
         
         // 3. data 속성에서 좌표 읽기
@@ -311,13 +348,24 @@ function assignLocIndex() {
     fixMarkers = newFixMarkers;
 
     // DB에 순서 업데이트 요청 (기존 로직)
-    $.ajax({
-        url: "/tripnote/trip/updateTour",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(dataObjs),
-        success: function (data, status) { console.log("Tour order updated!"); }
-    });
+    if(isSwap){
+    	$.ajax({
+            url: "/tripnote/trip/updateTour",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(dataObjs),
+            success: function (data, status) { 
+            	if(socket){
+            		const message = {
+    		                action: "UPDATE_TOUR", // Define an action type
+    		                payload: {orderedIds: orderedTourLocIds} // Send the saved data (which includes the new ID)
+    		            };
+    		            socket.send(JSON.stringify(message));
+            	}
+            }
+        });
+    }
+    
 
     // 경로 다시 그리기 (기존 로직)
     if (fixMarkers.length < 2) {
@@ -336,16 +384,26 @@ function assignLocIndex() {
 function toggleNote(btn) {
 	btn.classList.toggle("active");
 	const note = btn.parentElement.parentElement.nextElementSibling;
+	
+	const header = btn.parentElement.parentElement; 
+	const durationTime = header.querySelector('.duration-time');
+	const durationTimeEditable = header.querySelector('.duration-time-editable');
+
+	
 	if (note.style.display === "block") {
 		note.style.display = "none";
 	} else {
+		const timeDur = note.parentElement.querySelector('.event-info').querySelectorAll('div')[0].textContent.split(' ~ ');
+		
+		note.querySelectorAll('input')[0].value = timeDur[0];
+		note.querySelectorAll('input')[1].value = timeDur[1];
 		note.style.display = "block";
 	}
 }
 
 function deleteNote(btn, mapx, mapy){
 	console.log(fixMarkers);
-	//
+	/*
 	const epsilon = 0.000001;
 
 	for (var i = fixMarkers.length - 1; i >= 0; i--) {
@@ -362,23 +420,38 @@ function deleteNote(btn, mapx, mapy){
 			// 2. fixMarkers 배열에서 해당 마커를 제거합니다.
 			fixMarkers.splice(i, 1);
 		}
-	}
+	}*/
 	
-	//
+	/*
 	$card = $(btn).closest('.trip-timeline-event');
 	let tourLocId = $card.find(".tour-loc-id").text().trim();
 	console.log(tourLocId);
 	$card.remove();
+	*/
+	$card = $(btn).closest('.trip-timeline-event');
+	let tourLocId = $card.find(".tour-loc-id").text().trim();
 	$.ajax({
 		url: '/tripnote/trip/deleteTour?id='+tourLocId,
-		type: "GET"
+		type: "GET",
+        success: function (data, status){
+        	if(socket){
+        		const message = {
+		                action: "DELETE_TOUR", // Define an action type
+		                payload: {tourLocId: tourLocId} // Send the saved data (which includes the new ID)
+		            };
+		            socket.send(JSON.stringify(message));
+        	}
+        }
+		
 	});
+	/*
 	if(transportSelected == 'car')
 		drawRoute(transportSelected);
 	else if(transportSelected != '')
 		drawSimplePolyline('walk');
 	
 	assignLocIndex();
+	*/
 }
 
 
@@ -387,7 +460,8 @@ $( function() {
 	$tripNote = $( ".trip-timelineForDay" );
   	$tripNote.sortable({
 		update: function() { // sorting 되었을 때
-			assignLocIndex();
+			console.log("움직이는중~");
+			assignLocIndex(true);
 		}
 	});
 } );

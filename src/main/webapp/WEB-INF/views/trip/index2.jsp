@@ -23,7 +23,7 @@
       <div class = "p-2">
        	<div class="fs-6 mb-1">공동 편집을 위한 초대링크</div>
         <div class="input-group mb-4">
-		    <input readonly type="text" class="form-control" value ="http://localhost:8088/oti_team3/trip">
+		    <input readonly type="text" class="form-control" value ="http://localhost:8088/tripnote/trip/plan/result?tripDest=${ param.tripDest }&startDate=${ courseDTO.startDate }&endDate=${ courseDTO.endDate }&inviteMode=true&createdUserId=${ not empty param.createdUserId ? param.createdUserId : loginUser.id }&courseId=${courseDTO.id}">
 		    <button id = "trip-copy-btn" type="button" class="btn text-white" onclick="copy(this)" data-bs-dismiss="modal" style="--bs-btn-bg:#5c99ee; 
 		             --bs-btn-hover-bg:#447fcc; 
 		             --bs-btn-border-color:#5c99ee; 
@@ -48,6 +48,8 @@
 <body class="trip-body">
 	<main class="trip-main">              
 		<!-- 왼쪽 네비 -->
+		<div class="courseId" style="display:none;">${courseDTO.id}</div>
+		<input type="hidden" id="course-id-for-ws" value="${not empty courseDTO.id ? courseDTO.id : param.courseId}">
 		<nav class="nav my-4 mx-3 d-flex flex-column justify-content-between" role="tablist" style="flex:1;">
 			<div class="step-nav">  
 	      		<a href="/tripnote/" class="trip-sitename">TripNote</a>

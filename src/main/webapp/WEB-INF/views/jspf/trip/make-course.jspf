@@ -13,7 +13,7 @@
 			<span class="trip-tab-indicator"></span>
 		</div>
 		<form onsubmit="searchPlaces(); return false;" id="trip-search-form" style="display:none; " class="mt-1">
-			<div style="position: relative; width: 300px;">
+			<div style="position: relative;">
 			  <input type="text" name="query" class="form-control"
 			  		 id = "trip-search-input"
 			         placeholder="장소명을 입력하세요"
@@ -36,13 +36,14 @@
             </div>
 		</div>
 		<div id="trip-search-result" class="w-100" style="display:none">
+			<div class="courseId">${ courseDTO.id }</div>
         	<ul id="placesList" style="padding-left:2px"></ul>
         	<div id="pagination"></div>
 		</div>
 		
 	</section>
 	<!-- 중간 일정 타임라인 -->
-	<section class="trip-schedule" id="trip-loc" style="flex:1; overflow: hidden;">
+	<section class="trip-schedule" id="trip-loc" style="flex:1.4; overflow: hidden;">
 		<div class="trip-schedule-header mb-3 d-flex justify-content-between">
 			<%
 				String destination = ((TripInfoDTO)request.getAttribute("tripInfoDTO")).getTripDest();
@@ -109,7 +110,7 @@
 				</div>
 			</div>
 		    <!-- 콘텐츠 영역: 하루당 패널 1개 -->
-		    <div style="max-height:calc(100vh - 150px); overflow-y:auto;">
+		    <div style="max-height:calc(100vh - 150px); overflow-y:auto;padding:10px">
 		      <c:forEach var="day" begin="1" end="${tripLen}" varStatus="st">
 		        <div class="trip-timelineForDay" id="tab_${day}"
 		             data-day="${day}"
@@ -127,7 +128,7 @@
 	</section>
 
 	<!-- 오른쪽: 지도 -->
-	<section class="map-container p-0 ms-3" aria-label="지도" style="flex:2.5; height:100vh;">
+	<section class="map-container p-0" aria-label="지도" style="flex:2.5; height:100vh;">
 		<div id="rcmd-map" style="width:100%;height:100%;">
 
 		</div>

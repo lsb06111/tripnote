@@ -7,7 +7,7 @@
 </select>
 
 <select id="getAllTourLoc"  parameterType="_int" resultType="TourLocDTO">
-	select tour_loc.*, note.note_content from tour_loc join note on tour_loc.id = note.tour_loc_id where course_id = #{courseId} order by tour_nth, tour_order asc
+	select tour_loc.*, note.note_content, tour_loc_xy.mapx, tour_loc_xy.mapy from tour_loc join tour_loc_xy on tour_loc.id = tour_loc_xy.tour_loc_id join note on tour_loc.id = note.tour_loc_id where course_id = #{courseId} order by tour_nth, tour_order asc
 </select>
 
 <insert id="insertCourse" parameterType="CourseDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
@@ -21,11 +21,26 @@
 			values(#{code}, #{tourLocName}, #{tourOrder}, #{startTime}, #{endTime}, #{tourNth}, #{timeTaken}, #{courseId}, #{imgSrc}, #{typeName})
 </insert>
 
+<insert id="insertTourLocXY" parameterType="TourLocDTO">
+	insert into tour_loc_xy values(#{id}, #{mapx}, #{mapy})
+</insert>
+
+<select id="getCourseById" parameterType="int" resultType="CourseDTO">
+    SELECT * FROM COURSE WHERE ID = #{courseId}
+</select>
+
 <update id="updateTourLoc" parameterType="TourLocDTO">
 	update tour_loc set
 		tour_order = #{tourOrder}
 	where id = #{id}
 </update>
+
+<update id="updateDuration" parameterType="TourLocDTO">
+	update tour_loc set
+		start_time = #{startTime}, end_time = #{endTime}
+	where id = #{id}
+</update>
+
 <delete id="deleteTourLoc"  parameterType="_int"  >
     	delete from tour_loc where id = #{id}
 </delete>
@@ -54,5 +69,15 @@
 <select id="getAttraction" parameterType="string">
 	select mapx, mapy from attractions where contentId = #{code}
 </select>
+
+<select id="getMembersCount" parameterType="MembersDTO" resultType="_int">
+	select count(*) from members where from_user_id = #{fromUserId} and to_user_id = #{toUserId}
+</select>
+
+<insert id="insertMember" parameterType="MembersDTO">
+	insert into members values(#{fromUserId}, #{toUserId}, #{courseId}, #{invitationUrl})
+</insert>
+
+
 
 </mapper>
