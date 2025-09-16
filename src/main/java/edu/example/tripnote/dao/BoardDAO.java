@@ -14,5 +14,5 @@ import edu.example.tripnote.domain.board.NewBoardDTO;
 public interface BoardDAO {
 	public List<BoardDTO> listAll(BoardParamDTO boardParam);
 	public int countListAll(BoardParamDTO boardParam);
-	public void save(NewBoardDTO boardDTO);
+	public boolean save(NewBoardDTO boardDTO);
 }

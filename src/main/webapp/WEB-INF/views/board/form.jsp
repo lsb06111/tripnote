@@ -348,6 +348,7 @@ function savePost() {
         dataType: "text", // 응답 데이터 타입
         success: function(response) {
             alert("저장 성공!");
+            window.location.href = "/tripnote/board";
         },
         error: function(xhr, status, err) {
             console.error(xhr.responseText);

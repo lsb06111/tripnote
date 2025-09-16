@@ -54,8 +54,7 @@ public class BoardService {
 		return response;
 	}
 	
-	public void save(BoardSaveReqDTO req) {
-		boardDAO.save(req.getBoardDTO());
-		reviewContentDAO.save(req.getContents());
+	public boolean save(BoardSaveReqDTO req) {
+		return boardDAO.save(req.getBoardDTO()) & reviewContentDAO.save(req.getContents()); 
 	}
 }
