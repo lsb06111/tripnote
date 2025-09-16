@@ -64,6 +64,7 @@ public class BoardController {
 		courseDTO.setEndDate(courseDTO.getEndDate().substring(0, 10));
 		locTemplate.setCourse(courseDTO);
 		
+		// 날짜별 여행지 리스트
         List<List<TourLocDTO>> tourlocs = new ArrayList<>(
         		courseDAO.getTourLocsByCourseId(reqDTO.getCourseId()).stream()
                      .collect(Collectors.groupingBy(TourLocDTO::getTourNth))

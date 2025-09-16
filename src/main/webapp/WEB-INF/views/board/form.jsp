@@ -24,10 +24,9 @@
 </head>
 <body class="portfolio-details-page">
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
-
 	<!-- 헤더부분 고정 -->
 
-	<main class="main board-form" data-id="${locTemplate.course.id}"> <!-- Page Title --> <%
+	<main class="main board-form" data-id="${locTemplate.course.id}"> <%
  	String writeTitle = request.getParameter("title");
  %>
 
@@ -224,7 +223,7 @@
 	</script>
 															<div class="swiper-wrapper" style="text-align: center; margin-bottom: 50px;">
 																<c:forEach var="idx" begin="1" end="3">
-																	<div class="swiper-slide">
+																	<div class="swiper-slide"  data-tourloc-id="${loc.id}">
 																		<div class="content-area mb-2">
 																			<h2>${loc.tourLocName}-${idx}</h2>
 																		</div>

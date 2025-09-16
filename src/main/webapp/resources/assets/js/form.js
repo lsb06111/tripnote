@@ -15,7 +15,7 @@ function savePost() {
     $('.swiper-slide').each(function(index, elem) {
         const $el = $(elem);
         formData.append(`contents[${index}].content`, $el.find('.loc-textera').val());
-        formData.append(`contents[${index}].tourLocId`, $('.board-form').attr('data-id'));
+        formData.append(`contents[${index}].tourLocId`, $el.attr('data-tourloc-id'));
 
         // input[type=file]에서 파일 가져오기
         const files = $el.find('.postImg-input')[0].files; 

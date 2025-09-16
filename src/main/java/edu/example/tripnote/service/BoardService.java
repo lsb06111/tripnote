@@ -34,7 +34,7 @@ public class BoardService {
 		offset = page > 0 ? (page-1) * BOARD_PAGE_SIZE : 0;
 		boardParam.setOffset(offset);
 		int totalCount = boardDAO.countListAll(boardParam);
-		log.info("totalCount : " + totalCount);
+		log.debug("totalCount : " + totalCount);
 
 		List<BoardDTO> list = boardDAO.listAll(boardParam);
 		
@@ -74,7 +74,7 @@ public class BoardService {
 			}
 		}
 		boolean result2 = reviewContentDAO.save(reviewContents);
-		log.info("result2 : " + result2);
+		log.debug("result2 : " + result2);
 		return result1 & result2;
 	}
 	
