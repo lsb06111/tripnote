@@ -75,8 +75,7 @@
 										<div
 											style="display: flex; flex-direction: column; margin-right: 20px; cursor: pointer"
 											onclick="event.stopPropagation();location.href='/oti_team3/profile.jsp?identify=9uiopa@gmail.com&name=김성배'">
-											<h6 style="margin: 0; font-size: 12px;">${item.nickname}@
-												${item.username}</h6>
+											<h6 style="margin: 0; font-size: 12px;">${item.nickname} @${item.username}</h6>
 											<h6 style="margin: 0; font-size: 10px;">${item.createdAt}</h6>
 										</div>
 
@@ -121,42 +120,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="닫기"></button>
 				</div>
-				<div class="modal-body p-4">
-					<!-- <section id="services" class="services section" style="padding: 0">
-						<div class="container">
-							<div class="row gy-4" id="tripCardsRow">
-								<div class="col-12">
-									tag this card with its location
-									<div class="service-card" data-location="tripLocations동적"
-										style="padding: 18px 24px; cursor: pointer;"
-										onclick="location.href='/tripnote/board/form'">
-										<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px">
-											<div class="service-icon" style="margin-bottom: 0">
-												<i class="bi bi-transport동적"></i>
-											</div>
-											<div style="margin-left: 10px;">
-												<h3 style="margin: 0;">titles동적</h3>
-												<ol class="breadcrumb mb-0" style="display: flex;">
-													<li class="breadcrumb-item">3박 4일</li>
-													<li class="breadcrumb-item">지역 : <strong
-														style="color: #5c99ee">tripLocations동적</strong>
-													</li>
-												</ol>
-											</div>
-											action button aligned to the right
-											<a href="/tripnote/board/form" class="service-link ms-auto"
-												style="width: fit-content; transition: color 0.3s; color: inherit;"
-												onmouseover="this.style.color='#5c99ee';"
-												onmouseout="this.style.color='inherit';"> 리뷰 작성하기 <i
-												class="bi bi-arrow-right"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section> -->
-				</div>
+				<div class="modal-body p-4"></div>
 			</div>
 		</div>
 	</div>
@@ -267,12 +231,6 @@
 				    
 				  }); 
 				});
-
-			/*
-			$('#modalReviewSelection').on('hidden.bs.modal', function () {
-			  $(this).find('.modal-body').empty();
-			});
-			 */
 		});
 		
 		function setBoardParam(key, value) {

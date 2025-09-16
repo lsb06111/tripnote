@@ -15,4 +15,5 @@ public interface BoardDAO {
 	public List<BoardDTO> listAll(BoardParamDTO boardParam);
 	public int countListAll(BoardParamDTO boardParam);
 	public boolean save(NewBoardDTO boardDTO);
+	public boolean saveDraft(NewBoardDTO boardDTO);
 }

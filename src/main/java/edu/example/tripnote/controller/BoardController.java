@@ -84,6 +84,17 @@ public class BoardController {
 		}
 	}
 	
+	@ResponseBody
+	@PostMapping("/form/draft")
+	public ResponseEntity<String> saveDraft(@RequestBody BoardSaveReqDTO req) {
+		boolean result = boardService.saveDraft(req);
+		if (result) {
+			return ResponseEntity.ok("success");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+		}
+	}
+	
 	@GetMapping("/detail")
 	public String detail(Model model) {
 		return "board/view";

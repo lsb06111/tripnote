@@ -52,6 +52,7 @@
     	</if>
     	and b.is_visible = 1
     	and b.is_private = 0
+    	and b.is_draft = 0
     </where>
     <choose>
 	    <when test="order == 'latest'">
@@ -97,12 +98,18 @@
     	</if>
  	    and b.is_visible = 1
     	and b.is_private = 0
+    	and b.is_draft = 0
     </where>
 </select>
 
 <insert id="save" parameterType="NewBoardDTO">
 	insert into board (title, board_content, user_id, course_id)
 	values (#{title}, #{intro}, #{userId}, #{courseId})
+</insert>
+
+<insert id="saveDraft" parameterType="NewBoardDTO">
+	insert into board (title, board_content, user_id, course_id, is_draft)
+	values (#{title}, #{intro}, #{userId}, #{courseId}, 1)
 </insert>
 
 </mapper>
