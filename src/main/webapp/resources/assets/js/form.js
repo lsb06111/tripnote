@@ -1,32 +1,36 @@
 // 게시물 저장
 function savePost() {
-	$btn = $('#board-save-btn');
-	$btn.prop("disabled", true);
-    let postData = {
-        boardDTO: {
-            title: $('#write_title_input').val(),
-            intro: $('#post_intro').val(),
-            userId: 1,
-            courseId: $('.board-form').attr('data-id')
-        },
-        contents: []
-    };
+    const $btn = $('#board-save-btn');
+    $btn.prop("disabled", true);
 
-    $('.tab-per-day').each(function(index, elem) {
-        let $el = $(elem);
-        let data = {
-            content: $el.find('.loc-textera').val(),
-            tourLocId: $('.board-form').attr('data-id'),
-            img: $el.find('.postImg').attr('src')
-        };
-        postData.contents.push(data);
+    const formData = new FormData();
+
+    // 1. 게시물 기본 정보
+    formData.append("boardDTO.title", $('#write_title_input').val());
+    formData.append("boardDTO.intro", $('#post_intro').val());
+    formData.append("boardDTO.userId", 1);
+    formData.append("boardDTO.courseId", $('.board-form').attr('data-id'));
+
+    // 2. 각 탭(날짜) 별 컨텐츠와 이미지
+    $('.swiper-slide').each(function(index, elem) {
+        const $el = $(elem);
+        formData.append(`contents[${index}].content`, $el.find('.loc-textera').val());
+        formData.append(`contents[${index}].tourLocId`, $('.board-form').attr('data-id'));
+
+        // input[type=file]에서 파일 가져오기
+        const files = $el.find('.postImg-input')[0].files; 
+        for (let i = 0; i < files.length; i++) {
+            formData.append(`contents[${index}].files`, files[i]);
+        }
     });
+
+    // 3. Ajax 전송
     $.ajax({
         url: "/tripnote/board/form/save",
         type: "POST",
-        contentType: "application/json", 
-        data: JSON.stringify(postData), // JSON 형식의 문자열을 만들어 반환
-        dataType: "text", // 응답 데이터 타입
+        data: formData,
+        processData: false, // 반드시 false
+        contentType: false, // 반드시 false
         success: function(response) {
             alert("저장 성공!");
             window.location.href = "/tripnote/board";
@@ -36,7 +40,6 @@ function savePost() {
             alert("저장 실패: " + status);
         },
         complete: function() {
-            // 요청이 끝나면 다시 버튼 활성화
             $btn.prop("disabled", false);
         }
     });

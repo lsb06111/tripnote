@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,13 +77,13 @@ public class BoardController {
 	
 	@ResponseBody
 	@PostMapping("/form/save")
-	public ResponseEntity<String> save(@RequestBody BoardSaveReqDTO req) {
-		boolean result = boardService.save(req);
-		if (result) {
-		    return ResponseEntity.ok("success");
-		} else {
-		    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
-		}
+	public ResponseEntity<String> save(@ModelAttribute BoardSaveReqDTO req) {
+	    boolean result = boardService.save(req);
+	    if (result) {
+	        return ResponseEntity.ok("success");
+	    } else {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("fail");
+	    }
 	}
 	
 	@ResponseBody

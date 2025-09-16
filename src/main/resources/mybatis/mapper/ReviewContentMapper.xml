@@ -5,7 +5,7 @@
 <insert id="save" parameterType="list" >
 	INSERT INTO review_content (review_content, img, tour_loc_id)
         <foreach collection="list" item="item" separator="UNION ALL">
-            SELECT #{item.content}, #{item.img}, #{item.tourLocId} 
+            SELECT #{item.content}, #{item.imgSrc}, #{item.tourLocId} 
             FROM DUAL
 		</foreach>
 </insert>

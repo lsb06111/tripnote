@@ -90,7 +90,7 @@
 
 								<figure>
 									<img style="width: 100%; border-radius: 3px;"
-										src="/oti_team3/assets/img/busan/busan1-id.jpg" alt="cover">
+										src="/tripnote/resources/assets/img/alt/no_image.png" alt="cover">
 								</figure>
 
 								<h3 class="mb-1"

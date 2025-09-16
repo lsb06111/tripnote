@@ -142,7 +142,7 @@
 						<div class="tab-content">
 							<!-- 각 일자별 탭 패널 -->
 							<c:forEach var="day" items="${locTemplate.tourlocs}" varStatus="outerStatus">
-								<div id="tabs-tab-${outerStatus.index}" data-index="${outerStatus.count}"
+								<div id="tabs-tab-${outerStatus.index}" data-index="${outerStatus.count}" 
 									class="tab-per-day tab-pane fade ${outerStatus.first ? 'active show' : ''}">
 
 									<!-- routeBar: 해당 일자의 loc 리스트를 사용 -->
@@ -158,11 +158,18 @@
 														class="route-node btn btn-outline-primary rounded-circle fw-bold d-flex align-items-center justify-content-center p-0 ${innerStatus.first ? 'active' : ''}"
 														data-target="#spot-pane-${outerStatus.index}-${innerStatus.index}"
 														data-group="${outerStatus.index}"
-														style="width: 60px; height: 60px;">
+														style="width: 60px; height: 60px;
+														     --bs-btn-color:#5c99ee;
+									                         --bs-btn-border-color:#5c99ee;
+									                         --bs-btn-hover-bg:#5c99ee;
+									                         --bs-btn-hover-border-color:#5c99ee;
+									                         --bs-btn-hover-color:#fff;
+									                         --bs-btn-active-bg:#5c99ee;
+									                         --bs-btn-active-border-color:#5c99ee;
+									                         --bs-btn-active-color:#fff;">
 														<!-- loc.icon 은 실제 필드명으로 교체 -->
 														<i class="bi" style="font-size: 1.4em"></i>
 													</button>
-													<!-- loc.name 은 실제 필드명으로 교체 -->
 													<small class="mt-1 text-muted" style="font-size: 1.05em">${loc.tourLocName}</small>
 												</div>
 
@@ -184,8 +191,7 @@
 									<!-- /routeBar -->
 
 									<!-- spot panes: 각 노드별 콘텐츠 -->
-									<div id="spotPanes-${outerStatus.index}"
-										class="tab-content mt-4">
+									<div id="spotPanes-${outerStatus.index}" class="tab-content mt-4">
 										<c:forEach var="loc" items="${day}" varStatus="innerStatus">
 											<div id="spot-pane-${outerStatus.index}-${innerStatus.index}"
 												class="tab-pane fade ${innerStatus.first ? 'show active' : ''}"
@@ -194,7 +200,7 @@
 												<div class="visual-showcase">
 													<div class="main-visual">
 														<div class="portfolio-details-slider swiper init-swiper">
-<script type="application/json" class="swiper-config">
+	<script type="application/json" class="swiper-config">
               {
                 "loop": true,
                 "speed": 600,
@@ -215,29 +221,29 @@
                   "prevEl": ".swiper-button-prev"
                 }
               }
-</script>
-															<div class="swiper-wrapper"
-																style="text-align: center; margin-bottom: 50px;">
-																<div class="swiper-slide">
-																	<div class="content-area mb-2">
-																		<h2>리뷰 작성 (사진)</h2>
+	</script>
+															<div class="swiper-wrapper" style="text-align: center; margin-bottom: 50px;">
+																<c:forEach var="idx" begin="1" end="3">
+																	<div class="swiper-slide">
+																		<div class="content-area mb-2">
+																			<h2>${loc.tourLocName}-${idx}</h2>
+																		</div>
+																		<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
+																			<!-- input/img: id는 유니크하게 -->
+																			<input id="postImgInput-${outerStatus.index}-${innerStatus.index}"
+																				class="postImg-input" type="file" accept="image/*"
+																				style="position: absolute; left: -9999px; display:none" />
+																				
+																				<img id="postImg-${outerStatus.index}-${innerStatus.index}"
+																					src="/tripnote/resources/assets/img/alt/no_image.png"
+																					class="postImg img-fluid" alt="클릭하여 업로드"
+																					style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+																			<textarea class="form-control loc-textera"
+																				style="width: 50%; resize: none;"
+																				placeholder="리뷰 내용을 입력해주세요"></textarea>
+																		</div>
 																	</div>
-
-																	<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
-																		<!-- input/img: id는 유니크하게 -->
-																		<input id="postImgInput-${outerStatus.index}-${innerStatus.index}"
-																			class="postImg-input" type="file" accept="image/*"
-																			style="position: absolute; left: -9999px; display:none" /> 
-																			<img id="postImg-${outerStatus.index}-${innerStatus.index}"
-																				src="/assets/img/alt/no_image.png"
-																				class="postImg img-fluid" alt="클릭하여 업로드"
-																				style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
-																		<textarea class="form-control loc-textera"
-																			style="width: 50%; resize: none;"
-																			placeholder="리뷰 내용을 입력해주세요"></textarea>
-																	</div>
-																</div>
-
+																</c:forEach>
 																<div class="swiper-button-next" style="right: 1px;"></div>
 																<div class="swiper-button-prev" style="left: 1px;"></div>
 
