@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/jspf/head.jspf" %> <!-- 헤드 부분 고정 -->
 <!-- 커스텀 CSS import 존 -->
 
@@ -8,10 +9,13 @@
 <%@ include file="/WEB-INF/views/jspf/header.jspf" %> <!-- 헤더부분 고정 -->
 <%
     String identify = request.getParameter("identify");
-    String reqName = request.getParameter("name");
-    reqName = reqName == null ? "이수빈" : reqName;
     boolean isMe = identify != null && identify.equals("myself");
+    
 %>
+
+<c:set var="reqNickname"  value="${empty param.name ? loginUser.nickname : param.name}" />
+<c:set var="reqUsername" value="${empty param.username ? loginUser.username : param.username}"/>
+<c:set var="reqEmail" value="${empty param.email ? loginUser.email : param.email}"/>
 
 <section>
   <div class="container py-5">
@@ -19,7 +23,7 @@
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
           <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item active" aria-current="page"><%= reqName %>님의 프로필</li>
+            <li class="breadcrumb-item active" aria-current="page">${loginUser.nickname}님의 프로필</li>
             <% if(isMe){ %>
               <li class="breadcrumb-item">
                 <a href="#" id="modal-changeinfo" data-bs-toggle="modal" data-bs-target="#modalChangeinfo">정보 수정</a>
@@ -37,7 +41,7 @@
           <div class="card-body text-center">
             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
                  class="rounded-circle img-fluid" style="width: 150px;">
-            <h5 class="mt-3 mb-1"><%= reqName + " " + (isMe ? "@soobinlee647" : identify) %></h5>
+            <h5 class="mt-3 mb-1">${reqNickname}${' @'}${reqUsername}</h5>
             <ol class="breadcrumb mb-2" style="display:flex; justify-content:center;">
               <li class="breadcrumb-item">
                 팔로워 :
@@ -99,28 +103,24 @@
         <section id="services" class="services section" style="padding:0">
           <div class="container">
             <div class="row gy-4" id="tripCardsRow">
-              <%
-                String[] transport = {"bus-front", "car-front-fill", "person-walking", "car-front-fill"};
-                String[] titles = {reqName.substring(1,3)+"이와 떠나는 행복여행", "강원도 뿌시기 여행", "제주도 혼자 여행", "전주 맛집 탐방"};
-                String[] tripLocations = {"부산", "강원도", "제주도", "전주"};
-                for(int i=0; i<4; i++){
-              %>
+            
+              <c:forEach var="course" items="${ courses }" varStatus="status">
               <div class="col-12">
                 <!-- tag this card with its location -->
                <div class="service-card"
-			     data-location="<%= tripLocations[i] %>"
+			     data-location="${areas[status.index].areaName}"
 			     style="padding: 18px 24px; cursor:pointer;"
-			     onclick="location.href='/tripnote/<%= isMe? "details.jsp" : "board/view.jsp" %>?title=<%= titles[i] %>'">
+			     onclick="location.href='/tripnote/<%=isMe?"details":"board/view"%>?title=${courses[status.index].title}&nBaks=${nBaks[status.index]}&courseId=${ courses[status.index].id }'">
                   <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px">
                     <div class="service-icon" style="margin-bottom:0">
-                      <i class="bi bi-<%= transport[i] %>"></i>
+                      <i class="bi bi-bus-front"></i>
                     </div>
                     <div style="margin-left: 10px;">
-                      <h3 style="margin:0;"><%= titles[i] %></h3>
+                      <h3 style="margin:0;">${courses[status.index].title}</h3>
                       <ol class="breadcrumb mb-0" style="display:flex;">
-                        <li class="breadcrumb-item">3박 4일</li>
+                        <li class="breadcrumb-item">${ nBaks[status.index] }</li>
                         <li class="breadcrumb-item">지역 :
-                          <strong style="color:#5c99ee"><%= tripLocations[i] %></strong>
+                          <strong style="color:#5c99ee">${areas[status.index].areaName}</strong>
                         </li>
                       </ol>
                     </div>
@@ -136,7 +136,7 @@
                       일정 편집하기
                     </a> / 
                     <div>
-                    <a href="/tripnote/board/write.jsp?title=<%= titles[i] %>"
+                    <a href="/tripnote/board/write.jsp?"title=titles[i]
                        class="service-link ms-auto"
                        onclick="event.stopPropagation();"
                        style="width:fit-content; transition:color 0.3s; color:inherit;"
@@ -148,7 +148,7 @@
                   </div>
                 </div>
               </div>
-              <% } %>
+              </c:forEach>
             </div>
           </div>
         </section>

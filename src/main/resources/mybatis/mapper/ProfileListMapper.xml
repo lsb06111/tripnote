@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.example.tripnote.dao.ProfileListDAO">
+
+<!-- 타이틀 찾기 -->
+<select id="title" resultType="string" parameterType="CourseDTO">
+   select title
+   from course
+   where id = #{id}
+</select>
+
+<!-- 여행 기간 (endDate - startDate) -->
+<select id="day" resultType="string" parameterType="CourseDTO">
+	select startDate, endDate
+	from course
+	where id = #{id}
+</select>
+
+<!-- 관광지 명 찾기 -->
+<select id="area" resultType="string" parameterType="AreaVO">
+	select areaName
+	from area
+	where id = #{id}
+</select>
+
+<select id="getAllCourse" parameterType="_int" resultType="CourseDTO">
+	select * from course where user_id = #{userId}
+</select>
+
+<select id="getArea" resultType="AreaVO" parameterType="_int">
+	select * from area where id = #{areaId}
+</select>
+
+
+  
+</mapper>

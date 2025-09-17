@@ -1,15 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*"%>
+<%@page import="edu.example.tripnote.domain.trip.TourLocDTO" %>
   <!-- NODES BAR -->
   <div id="routeBar-<%= ii %>" data-group="<%= ii %>" class="d-flex justify-content-center my-4">
     <div class="d-flex align-items-center justify-content-center w-100 pb-2">
       <%
-        int nodeNumber = 5;
+      	List<TourLocDTO> tourloc = (List<TourLocDTO>) request.getAttribute("getAllList");
+      	
+      	int tourDay = ii +1;
+      	
+      	List<TourLocDTO> dayLocs = new ArrayList<>();
+      	if (tourloc != null) {
+      		for(TourLocDTO dto : tourloc) {
+      			if(dto != null && dto.getTourNth() == tourDay) {
+      				dayLocs.add(dto);
+      			}
+      		}
+      	}
+      	int resultcount = dayLocs.size();
+      	
+        /* int nodeNumber = 5; */
         String[] spots = {"해운대", "광안리", "서면", "남포동", "송정"};
         String[] times = {"15분", "12분", "20분", "18분"};
         String[] nodeIcons = {"house-door", "leaf-fill", "fork-knife", "leaf-fill", "house-door"};
 		String[] nodeDesc = {"숙소", "관광지", "식당", "관광지", "숙소"};
-        for (int i = 0; i < nodeNumber; i++) {
+		
+        for (int i = 0; i < resultcount; i++) {
       %>
         <!-- Node + label -->
         <div class="d-flex flex-column align-items-center">
@@ -31,7 +47,7 @@
           <small class="mt-1 text-muted" style="font-size:1.05em"><%= spots[i] %></small>
         </div>
 
-        <% if (i < nodeNumber - 1) { %>
+        <% if (i < resultcount - 1) { %>
           <!-- Connector + pill time -->
           <div class="d-flex flex-column align-items-center mx-2 flex-grow-1">
             <div class="border-top border-2 w-100"></div>

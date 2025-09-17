@@ -4,11 +4,13 @@
 <% 
 String reqTitle = request.getParameter("title"); 
 String titleIcon = "";
+String nBaks = request.getParameter("nBaks");
+int tourday = Integer.parseInt(nBaks.substring(3,4));
 %>
     <section id="tabs" class="tabs section mt-5">
 		<div class="container section-title">
 	        <h2><%= reqTitle %></h2>
-	        <p>3박 4일</p>
+    			<p><%= nBaks %></p>
       </div><!-- End Section Title -->
       
       <div class="container">
@@ -16,9 +18,9 @@ String titleIcon = "";
         <div class="tabs-wrapper">
           <div class="tabs-header">
             <ul class="nav nav-tabs">
-            <%for(int i=0; i<4; i++){ %>
+            <%for(int i=0; i<tourday; i++){ %>
 	              <li class="nav-item">
-	                <a class="nav-link <%= i==0? "active show" : "" %>" data-bs-toggle="tab" data-bs-target="#tabs-tab-<%= (i+1) %>">
+	                <a class="nav-link <%= i==0? "active show" : "" %>" data-bs-toggle="tab" data-bs-target="#tabs-tab-<%= (i+1) %>" >
 	                  <div class="tab-content-preview">
 	                    <span class="tab-number">0<%= (i+1) %></span>
 	                    <div class="tab-text">
@@ -35,7 +37,7 @@ String titleIcon = "";
           <div class="tab-content">
 
 			<%
-			int tabNumber = 4;
+			int tabNumber = 6;
 			for(int ii=0; ii < tabNumber; ii++){ %>
             <div class="tab-pane fade <%= ii==0 ? "active show" : "" %>" id="tabs-tab-<%= (ii+1) %>">
 				<%@ include file="/WEB-INF/views/jspf/details/nodebar.jspf" %>

@@ -15,7 +15,7 @@
           <li><a href="/tripnote/" class="active">Home</a></li>
           <li><a href="/tripnote//trip/">일정 만들기</a></li>
           <li><a href="/tripnote/board">리뷰 게시판</a></li>
-          <li><a href="/tripnote/profile?identify=myself">마이페이지</a></li>
+          <li><a href="/tripnote/mypage?identify=myself">마이페이지</a></li>
           
         <c:if test="${empty loginUser}">
 	    	<li>
