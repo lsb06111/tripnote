@@ -13,7 +13,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class BoardSaveReqDTO {
-	private NewBoardDTO boardDTO;
+	private Long boardId;
+	private String title;
+	private String intro;
+	private int userId;
+	private int courseId;
+	private String thumbnail;
 	private List<ReviewContentDTO> contents;
 
 }

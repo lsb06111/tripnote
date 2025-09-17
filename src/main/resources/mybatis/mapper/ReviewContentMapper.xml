@@ -3,15 +3,15 @@
 <mapper namespace="edu.example.tripnote.dao.ReviewContentDAO">
 
 <insert id="save" parameterType="list" >
-	INSERT INTO review_content (review_content, img, tour_loc_id)
+	INSERT INTO review_content (review_content,title, img, board_id)
         <foreach collection="list" item="item" separator="UNION ALL">
-            SELECT #{item.content}, #{item.imgSrc}, #{item.tourLocId} 
+            SELECT #{item.content},#{item.title}, #{item.imgSrc}, #{item.boardId} 
             FROM DUAL
 		</foreach>
 </insert>
 
 <insert id="saveDraft" parameterType="list" >
-	INSERT INTO review_content (review_content, img, tour_loc_id, is_draft)
+	INSERT INTO review_content (review_content, img, board_id, is_draft)
         <foreach collection="list" item="item" separator="UNION ALL">
             SELECT #{item.content}, #{item.img}, #{item.tourLocId} , 1
             FROM DUAL

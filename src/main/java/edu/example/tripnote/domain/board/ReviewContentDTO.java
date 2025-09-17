@@ -8,8 +8,11 @@ import lombok.Data;
 
 @Data
 public class ReviewContentDTO {
-	private int tourLocId;
+	private Long boardId;
+	private String title;
 	private String content;
-	private List<MultipartFile> files; // FormData에서 매핑될 필드
+	private int orders;
+	private boolean isDraft;
 	private String imgSrc;
+	private List<MultipartFile> files; // FormData에서 매핑될 필드
 }

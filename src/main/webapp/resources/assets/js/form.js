@@ -6,21 +6,26 @@ function savePost() {
     const formData = new FormData();
 
     // 1. 게시물 기본 정보
-    formData.append("boardDTO.title", $('#write_title_input').val());
-    formData.append("boardDTO.intro", $('#post_intro').val());
-    formData.append("boardDTO.userId", 1);
-    formData.append("boardDTO.courseId", $('.board-form').attr('data-id'));
+    formData.append("title", $('#write_title_input').val());
+    formData.append("intro", $('#post_intro').val());
+    formData.append("userId", 1);
+    formData.append("courseId", $('.board-form').attr('data-id'));
 
     // 2. 각 탭(날짜) 별 컨텐츠와 이미지
+    let content_idx = 0;
     $('.swiper-slide').each(function(index, elem) {
         const $el = $(elem);
-        formData.append(`contents[${index}].content`, $el.find('.loc-textera').val());
-        formData.append(`contents[${index}].tourLocId`, $el.attr('data-tourloc-id'));
-
+        const texterea = $el.find('.loc-textera').val();
         // input[type=file]에서 파일 가져오기
-        const files = $el.find('.postImg-input')[0].files; 
-        for (let i = 0; i < files.length; i++) {
-            formData.append(`contents[${index}].files`, files[i]);
+        const files = $el.find('.postImg-input')[0].files;
+        if (texterea !== '' || files.length >0){
+            formData.append(`contents[${content_idx}].content`, texterea);
+            formData.append(`contents[${content_idx}].title`, $el.attr('data-tourloc-name'));
+            formData.append(`contents[${content_idx}].boardId`, $el.attr('data-tourloc-id'));
+            for (let i = 0; i < files.length; i++) {
+                formData.append(`contents[${content_idx}].files`, files[i]);
+            }
+            content_idx++;
         }
     });
 

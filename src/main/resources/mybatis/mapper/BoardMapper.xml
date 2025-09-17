@@ -102,7 +102,7 @@
     </where>
 </select>
 
-<insert id="save" parameterType="NewBoardDTO">
+<insert id="save" parameterType="NewBoardDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
 	insert into board (title, board_content, user_id, course_id)
 	values (#{title}, #{intro}, #{userId}, #{courseId})
 </insert>

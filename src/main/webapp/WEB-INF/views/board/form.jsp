@@ -169,19 +169,13 @@
 														<!-- loc.icon 은 실제 필드명으로 교체 -->
 														<i class="bi" style="font-size: 1.4em"></i>
 													</button>
-													<small class="mt-1 text-muted" style="font-size: 1.05em">${loc.tourLocName}</small>
+													<small id="" class="mt-1 text-muted" style="font-size: 1.05em">${loc.tourLocName}</small>
 												</div>
 
 												<c:if test="${!innerStatus.last}">
 													<div
 														class="d-flex flex-column align-items-center mx-2 flex-grow-1">
 														<div class="border-top border-2 w-100"></div>
-														<span
-															class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2"
-															style="font-size: 0.85em"> <i
-															class="bi bi-bus-front"></i>
-															${loc.timeTaken}
-														</span>
 													</div>
 												</c:if>
 											</c:forEach>
@@ -223,7 +217,7 @@
 	</script>
 															<div class="swiper-wrapper" style="text-align: center; margin-bottom: 50px;">
 																<c:forEach var="idx" begin="1" end="3">
-																	<div class="swiper-slide"  data-tourloc-id="${loc.id}">
+																	<div class="swiper-slide"  data-tourloc-id="${loc.id}" data-tourloc-name="${loc.tourLocName}">
 																		<div class="content-area mb-2">
 																			<h2>${loc.tourLocName}-${idx}</h2>
 																		</div>

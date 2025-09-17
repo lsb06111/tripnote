@@ -59,11 +59,17 @@ public class BoardService {
 	}
 	
 	public boolean save(BoardSaveReqDTO req) {
-		NewBoardDTO boardDTO = req.getBoardDTO();
+		NewBoardDTO boardDTO = new NewBoardDTO();
+		boardDTO.setIntro(req.getIntro());
+		boardDTO.setCourseId(req.getCourseId());
+		boardDTO.setTitle(req.getTitle());
+		boardDTO.setUserId(req.getUserId());
+		
 		List<ReviewContentDTO> reviewContents = req.getContents();
-		boolean result1 = boardDAO.save(boardDTO); // board id 받아서 채워놔야함 -> filename 일부로
-		log.debug("contents size : " + reviewContents.size());
+		boolean result1 = boardDAO.save(boardDTO); 
 		for (ReviewContentDTO contentDTO : reviewContents) {
+			log.info("******************* title : "+contentDTO.getTitle());
+			contentDTO.setBoardId(boardDTO.getId());
 			if (contentDTO.getFiles() != null) {
 			    for (MultipartFile file : contentDTO.getFiles()) { // 파일은 어차피 하나씩인데 나중에 수정
 	                if (!file.isEmpty()) {
@@ -73,6 +79,7 @@ public class BoardService {
 	            }
 			}
 		}
+		
 		boolean result2 = reviewContentDAO.save(reviewContents);
 		log.debug("result2 : " + result2);
 		return result1 & result2;
@@ -85,7 +92,7 @@ public class BoardService {
 		 if (!isDir.isDirectory()) { // 폴더 없으면 생성
 			isDir.mkdirs(); 
 		 }
-	    String filename = "test" + file.getOriginalFilename();
+	    String filename = file.getOriginalFilename();
 	    File dest = new File(path + filename);
 	    try {
 	        file.transferTo(dest);
@@ -96,7 +103,7 @@ public class BoardService {
 	}
 	
 	public boolean saveDraft(BoardSaveReqDTO req) {
-		return boardDAO.saveDraft(req.getBoardDTO()) & reviewContentDAO.saveDraft(req.getContents()); 
-		
+		//return boardDAO.saveDraft(req.getBoardDTO()) & reviewContentDAO.saveDraft(req.getContents()); 
+		return true;
 	}
 }
