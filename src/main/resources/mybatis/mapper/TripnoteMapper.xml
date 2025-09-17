@@ -6,6 +6,7 @@
 	select tour_loc.*, note.note_content 
 	from tour_loc join note on tour_loc.id = note.tour_loc_id
 	where course_id=#{courseId}
+	order by tour_nth, tour_order
 </select>
 
 </mapper>

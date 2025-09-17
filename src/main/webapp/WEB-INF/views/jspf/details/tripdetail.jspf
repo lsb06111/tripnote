@@ -7,6 +7,9 @@ String titleIcon = "";
 String nBaks = request.getParameter("nBaks");
 String tourdate = request.getParameter("courses");
 
+String startdate = (Stirng) tourdate.get(0).getStartDate();
+String enddate = tourdate.get(0).getEndDate();
+
 int tourday = Integer.parseInt(nBaks.substring(3,4));
 %>
     <section id="tabs" class="tabs section mt-5">
