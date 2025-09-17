@@ -112,4 +112,10 @@
 	values (#{title}, #{intro}, #{userId}, #{courseId}, 1)
 </insert>
 
+<select id="getBoardById" parameterType="int">
+	select *
+	from board
+	where id = #{id}
+</select>
+
 </mapper>

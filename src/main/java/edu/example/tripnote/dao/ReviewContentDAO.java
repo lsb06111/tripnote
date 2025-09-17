@@ -8,6 +8,7 @@ import edu.example.tripnote.domain.board.ReviewContentDTO;
 
 @Mapper
 public interface ReviewContentDAO {
+	public List<ReviewContentDTO> getContentsByBoardId(int id);
 	public boolean save(List<ReviewContentDTO> contentDTO);
 	public boolean saveDraft(List<ReviewContentDTO> contentDTO);
 }

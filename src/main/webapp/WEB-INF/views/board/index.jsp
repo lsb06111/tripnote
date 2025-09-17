@@ -63,12 +63,12 @@
 						<div class="col-lg-3 col-md-6 portfolio-item isotope-item">
 							<div class="service-card"
 								style="padding: 15px 12px; cursor: pointer"
-								onclick="location.href='/tripnote/board/detail'">
+								onclick="location.href='/tripnote/board/detail?id=${item.id}'">
 								<figure
 									style="display: flex; align-items: center; margin: 0; width: 100%; margin: 5px">
 									<img
 										style="width: 15%; border: 1px solid black; border-radius: 50%; margin-right: 10px; cursor: pointer"
-										onclick="event.stopPropagation();location.href='/oti_team3/profile.jsp?identify=9uiopa@gmail.com&name=김성배'"
+										onclick="event.stopPropagation();"
 										src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
 										alt="avatar">
 									<div style="display: flex; align-items: center; width: 100%">

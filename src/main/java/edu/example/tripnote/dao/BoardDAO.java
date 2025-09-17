@@ -16,4 +16,5 @@ public interface BoardDAO {
 	public int countListAll(BoardParamDTO boardParam);
 	public boolean save(NewBoardDTO boardDTO);
 	public boolean saveDraft(NewBoardDTO boardDTO);
+	public BoardDTO getBoardById(int id);
 }

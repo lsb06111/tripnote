@@ -99,8 +99,11 @@ public class BoardController {
 	}
 	
 	@GetMapping("/detail")
-	public String detail(Model model) {
+	public String detail(int id, Model model) {
+		BoardDTO dto = boardService.getBoardById(id); // getBoard 동작 확인 완료
+		log.info("보드 내용 : "+dto.getBoardContent());
 		return "board/view";
 	}
+	
 
 }

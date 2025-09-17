@@ -18,4 +18,9 @@
 		</foreach>
 </insert>
 
+<select id="getContentsByBoardId" parameterType="int" resultType="ReviewContentDTO">
+	select *
+	from review_content
+	where id = 37
+</select>
 </mapper>

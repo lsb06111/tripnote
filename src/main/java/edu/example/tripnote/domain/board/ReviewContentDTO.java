@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class ReviewContentDTO {
+	private int id;	
 	private Long boardId;
 	private String title;
 	private String content;

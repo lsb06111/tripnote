@@ -316,7 +316,7 @@
 
 	</main>
 
-<script src="/tripnote/resources/assets/js/form.js"></script>
+<script src="/tripnote/resources/assets/js/board_form.js"></script>
 <%@ include file="/WEB-INF/views/jspf/footer.jspf"%>
 	<!-- 푸터 부분 고정 -->
 </body>
