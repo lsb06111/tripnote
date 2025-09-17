@@ -10,6 +10,7 @@ function savePost() {
     formData.append("intro", $('#post_intro').val());
     formData.append("userId", 1);
     formData.append("courseId", $('.board-form').attr('data-id'));
+    formData.append("thumbnail", $('.board-form').attr('data-id'));
 
     // 2. 각 탭(날짜) 별 컨텐츠와 이미지
     let content_idx = 0;
@@ -151,7 +152,7 @@ $(function() {
 	});
 
 
-<!-- recommendation button -->
+//recommendation button
   const root = document.getElementById('itineraryRoot') || document;
 
   root.addEventListener('click', (e) => {

@@ -83,7 +83,6 @@
 							class="form-control fs-5" placeholder="제목을 입력해주세요."
 							value='<%=writeTitle == null ? "제목 없음" : writeTitle%>'
 							style="text-align: center; border: 2px solid;" autofocus />
-
 					</div>
 
 					<div class="meta-column">
@@ -92,16 +91,26 @@
 					</div>
 				</div>
 			</div>
-			<div>
-				<!-- Textarea -->
-				<textarea id="post_intro" class="form-control mt-5"
-					style="width: 50%; resize: none; margin: 0 auto; min-height: 10rem;"
-					placeholder="이번 여행을 소개해주세요"></textarea>
+			<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mt-5">
+			    <input id="thumbnailImgInput"
+			           class="postImg-input" type="file" accept="image/*"
+			           style="position: absolute; left: -9999px; display:none;" />
+	
+			    <!-- 대표 이미지 미리보기 영역 -->
+			    <div class="thumbnail-preview text-center" style="width: 50%; max-width: 400px;">
+			        <img id="boardThumbnailImg"
+			             src="/tripnote/resources/assets/img/alt/no_image.png"
+			             class="postImg img-fluid border"
+			             alt="클릭하여 업로드"
+			             style="width: 100%; height: 15rem; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+			        <small class="text-muted d-block mt-1">대표 이미지 설정</small>
+			    </div>
+	
+			    <!-- 여행 소개 입력 -->
+			    <textarea id="post_intro" class="form-control"
+			              style="width: 50%; resize: none; height: 15rem;"
+			              placeholder="이번 여행을 소개해주세요"></textarea>
 			</div>
-
-			<%
-				String reqTitle = request.getParameter("title");
-			%>
 			<section id="tabs" class="tabs section">
 				<%
 					String[] nodeIcons = {"house-door", "leaf-fill", "fork-knife", "leaf-fill", "house-door"};
@@ -222,15 +231,14 @@
 																			<h2>${loc.tourLocName}-${idx}</h2>
 																		</div>
 																		<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mb-1">
-																			<!-- input/img: id는 유니크하게 -->
 																			<input id="postImgInput-${outerStatus.index}-${innerStatus.index}"
 																				class="postImg-input" type="file" accept="image/*"
 																				style="position: absolute; left: -9999px; display:none" />
 																				
-																				<img id="postImg-${outerStatus.index}-${innerStatus.index}"
-																					src="/tripnote/resources/assets/img/alt/no_image.png"
-																					class="postImg img-fluid" alt="클릭하여 업로드"
-																					style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+																			<img id="postImg-${outerStatus.index}-${innerStatus.index}"
+																				src="/tripnote/resources/assets/img/alt/no_image.png"
+																				class="postImg img-fluid" alt="클릭하여 업로드"
+																				style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
 																			<textarea class="form-control loc-textera"
 																				style="width: 50%; resize: none;"
 																				placeholder="리뷰 내용을 입력해주세요"></textarea>

@@ -20,5 +20,4 @@ public class BoardSaveReqDTO {
 	private int courseId;
 	private String thumbnail;
 	private List<ReviewContentDTO> contents;
-
 }
