@@ -149,10 +149,12 @@ public class TripController {
 	    // ... (기존 DB 조회 로직)
 	    List<AttractionDTO> list = attDao.getAttractionList(tripDest);
 	    List<AttractionDTO> list2 = attDao.getRestaurantList(tripDest);
-
+	    List<AttractionDTO> list3 = attDao.getHotelList(tripDest);
+	    
 	    model.addAttribute("tripInfoDTO", tripInfoDTO);
 	    model.addAttribute("attList", list);
 	    model.addAttribute("restaurantList", list2);
+	    model.addAttribute("hotelList", list3);
 	    model.addAttribute("friendRecList", list2);
 	    model.addAttribute("courseDTO", finalCourseDTO); 
 
@@ -239,7 +241,7 @@ public class TripController {
 		System.out.println(Attractions.getAvailableDestinations());
 		List<String> attractionList = Attractions.getAvailableDestinations();
 		//after getting list
-		String cCode = "39"; // 12 관광지 / 39 음식점
+		String cCode = "32"; // 12 관광지 / 39 음식점 / 32 숙박
 		for(String att : attractionList) {
 			List<AttractionDTO> dtos = Attractions.getAttractions(att, cCode);
 			
@@ -247,8 +249,10 @@ public class TripController {
 			for(AttractionDTO dto : dtos) {
 				if(cCode.equals("12"))
 					attDao.insert(dto);
-				else
+				else if(cCode.equals("39"))
 					attDao.insertRestaurant(dto);
+				else
+					attDao.insertHotel(dto);
 			}
 				
 		}

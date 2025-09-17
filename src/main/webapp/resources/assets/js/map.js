@@ -171,17 +171,215 @@ function drawRoute(transportType) {
 			callDirectionsAPI(origin, destination, waypoints);
 			break;
 		case 'walk':
-			drawSimplePolyline('walk');
+			callTmapWalkAPI(origin, destination);
 			break;
 		case 'transit':
-			callOdsayTransitAPI(origin, destination);
+			callTmapTransitAPI(origin, destination, waypoints);
 			break;
 		default:
 			console.error("지원하지 않는 transportType 입니다:", transportType);
 	}
 }
+function callTmapWalkAPI(origin, destination, waypoints) {
+    const TMAP_APP_KEY = 'AyK0GMDQ9v6rS3lOTlVPf6wS2F2NM2eO7eyGN8C1';
+    const url = "https://apis.openapi.sk.com/tmap/routes/pedestrian";
 
+    // --- 1. 기존 경로와 오버레이를 모두 초기화합니다. ---
+    routePolylines.forEach(line => line.setMap(null));
+    routePolylines = [];
+    routeTimeOverlays.forEach(overlay => overlay.setMap(null));
+    routeTimeOverlays = [];
+    
+    // --- 2. 모든 마커를 순회하며 각 구간별로 API를 호출합니다. ---
+    for (let i = 0; i < fixMarkers.length - 1; i++) {
+        const startPoint = fixMarkers[i];
+        const endPoint = fixMarkers[i + 1];
 
+        const requestData = {
+            "startX": startPoint.getPosition().getLng().toString(),
+            "startY": startPoint.getPosition().getLat().toString(),
+            "endX": endPoint.getPosition().getLng().toString(),
+            "endY": endPoint.getPosition().getLat().toString(),
+            "startName": "출발",
+            "endName": "도착"
+        };
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {
+                "appKey": TMAP_APP_KEY,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(requestData),
+            success: function(response) {
+                // --- 3. 각 구간의 결과를 성공할 때마다 지도에 추가로 그립니다. ---
+                const resultData = response.features;
+                let bounds = new kakao.maps.LatLngBounds();
+                let linePath = [];
+
+                resultData.forEach(feature => {
+                    if (feature.geometry.type === "LineString") {
+                        feature.geometry.coordinates.forEach(coord => {
+                            const point = new kakao.maps.LatLng(coord[1], coord[0]);
+                            linePath.push(point);
+                            bounds.extend(point);
+                        });
+                    }
+                });
+
+                let polyline = new kakao.maps.Polyline({
+                    path: linePath,
+                    strokeWeight: 6,
+                    strokeColor: '#0000FF',
+                    strokeOpacity: 0.8,
+                    strokeStyle: 'dash',
+                    map: map
+                });
+                routePolylines.push(polyline); // 그린 경로를 배열에 추가
+                
+                const totalTimeInSeconds = resultData[0].properties.totalTime;
+                if (linePath.length > 0) {
+                    const midPoint = linePath[Math.floor(linePath.length / 2)];
+                    let content = `<div class="route-time" style="background-color:white; border:1px solid black; border-radius: 5px; padding: 3px 6px; font-size:12px; color:#0000FF;">
+                                     <strong style="margin-right: 4px;">도보</strong>${formatMinutes(totalTimeInSeconds)}
+                                   </div>`;
+
+                    let timeOverlay = new kakao.maps.CustomOverlay({
+                        content: content,
+                        position: midPoint,
+                        yAnchor: 1.2
+                    });
+                    timeOverlay.setMap(map);
+                    routeTimeOverlays.push(timeOverlay); // 그린 오버레이를 배열에 추가
+                }
+
+                // 모든 경로가 보이도록 지도 범위를 재설정
+                const allBounds = new kakao.maps.LatLngBounds();
+                fixMarkers.forEach(marker => allBounds.extend(marker.getPosition()));
+                if (!allBounds.isEmpty()) {
+                    map.setBounds(allBounds);
+                }
+            },
+            error: function(request, status, error) {
+                console.error(`T-map 도보 API 오류 (구간 ${i+1}):`, request.status, request.responseText);
+                alert(`${i+1}번째 구간의 도보 길찾기 중 오류가 발생했습니다.`);
+            }
+        });
+    }
+}
+
+////// TMAP
+function callTmapTransitAPI(origin, destination, waypoints) {
+    const TMAP_APP_KEY = 'AyK0GMDQ9v6rS3lOTlVPf6wS2F2NM2eO7eyGN8C1';
+    const url = "https://apis.openapi.sk.com/transit/routes";
+    
+    // --- 1. 기존 경로와 오버레이를 모두 초기화합니다. ---
+    routePolylines.forEach(line => line.setMap(null));
+    routePolylines = [];
+    routeTimeOverlays.forEach(overlay => overlay.setMap(null));
+    routeTimeOverlays = [];
+    
+    // --- 2. 모든 마커를 순회하며 각 구간별로 API를 호출합니다. ---
+    for (let i = 0; i < fixMarkers.length - 1; i++) {
+        const startPoint = fixMarkers[i];
+        const endPoint = fixMarkers[i + 1];
+
+        const requestData = {
+            startX: startPoint.getPosition().getLng().toString(),
+            startY: startPoint.getPosition().getLat().toString(),
+            endX: endPoint.getPosition().getLng().toString(),
+            endY: endPoint.getPosition().getLat().toString(),
+            count: 1
+        };
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {
+                "appKey": TMAP_APP_KEY,
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            },
+            data: JSON.stringify(requestData),
+            success: function(response) {
+                // --- 3. 각 구간의 결과를 성공할 때마다 지도에 추가로 그립니다. ---
+                if (!response.metaData || !response.metaData.plan || !response.metaData.plan.itineraries || response.metaData.plan.itineraries.length === 0) {
+                    console.error(`T-map 대중교통 API 응답 오류 (구간 ${i+1}): 유효한 경로 데이터가 없습니다.`, response);
+                    alert(`${i+1}번째 구간의 대중교통 경로를 찾을 수 없습니다.`);
+                    return;
+                }
+
+                const legs = response.metaData.plan.itineraries[0].legs;
+                legs.forEach((leg) => {
+                    let linePath = [];
+                    if (leg.passShape && leg.passShape.linestring) {
+                        leg.passShape.linestring.split(' ').forEach(point => {
+                            const [lng, lat] = point.split(',');
+                            linePath.push(new kakao.maps.LatLng(lat, lng));
+                        });
+                    }
+                    
+                    let polylineOptions = { path: linePath, strokeWeight: 6, strokeOpacity: 0.8, map: map };
+                    let transportModeText = '';
+                    switch (leg.mode) {
+                        case 'WALK':
+                            polylineOptions.strokeStyle = 'dash';
+                            polylineOptions.strokeColor = '#0000FF';
+                            transportModeText = '도보';
+                            break;
+                        case 'BUS':
+                        case 'SUBWAY':
+                            polylineOptions.strokeStyle = 'solid';
+                            polylineOptions.strokeColor = leg.routeColor ? '#' + leg.routeColor : '#37b42d';
+                            transportModeText = (leg.mode === 'BUS') ? '버스' : '지하철';
+                            break;
+                        default:
+                            polylineOptions.strokeStyle = 'solid';
+                            polylineOptions.strokeColor = '#000000';
+                    }
+
+                    let polyline = new kakao.maps.Polyline(polylineOptions);
+                    routePolylines.push(polyline);
+                    
+                    const durationInSeconds = leg.sectionTime;
+                    if (linePath.length > 0) {
+                        const midPoint = linePath[Math.floor(linePath.length / 2)];
+                        let content = `<div class="route-time" style="background-color:white; border:1px solid black; border-radius: 5px; padding: 3px 6px; font-size:12px; color:${polylineOptions.strokeColor};"><strong style="margin-right: 4px;">${transportModeText}</strong>${formatMinutes(durationInSeconds)}</div>`;
+                        let timeOverlay = new kakao.maps.CustomOverlay({ content: content, position: midPoint, yAnchor: 1.2 });
+                        timeOverlay.setMap(map);
+                        routeTimeOverlays.push(timeOverlay);
+                    }
+                });
+
+                // 모든 경로가 보이도록 지도 범위를 재설정
+                const allBounds = new kakao.maps.LatLngBounds();
+                fixMarkers.forEach(marker => allBounds.extend(marker.getPosition()));
+                if (!allBounds.isEmpty()) {
+                    map.setBounds(allBounds);
+                }
+            },
+            error: function(request, status, error) {
+                console.error(`T-map 대중교통 API 오류 (구간 ${i+1}):`, request.status, request.responseText);
+                alert(`${i+1}번째 구간의 대중교통 길찾기 중 오류가 발생했습니다.`);
+            }
+        });
+    }
+}
+
+function formatMinutes(seconds) {
+    // 초를 분으로 변환하고 가장 가까운 정수로 반올림합니다.
+    const minutes = Math.round(seconds / 60);
+    
+    // 1분 미만은 '1분 이내'로 표시
+    if (minutes < 1) {
+        return '1분 이내';
+    }
+    
+    return `약 ${minutes}분`;
+}
+
+/////
 ////
 const colorPalette = [
 	"#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#00FFFF",

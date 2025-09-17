@@ -28,7 +28,7 @@
 		    <div class="trip-loc-tags mt-2 mb-2">
 	            <span class="trip-loc-tag tag-button-tour" onclick="showContentsByTag('tour')" style="cursor:pointer;background-color:color-mix(in srgb, var(--accent-color), transparent 72%)">명소</span>
 	            <span class="trip-loc-tag tag-button-restaurant" onclick="showContentsByTag('restaurant')" style="cursor:pointer">음식점</span>
-	            <span class="trip-loc-tag tag-button-cafe" onclick="showContentsByTag('cafe')" style="cursor:pointer">카페</span>
+	            <span class="trip-loc-tag tag-button-hotel" onclick="showContentsByTag('hotel')" style="cursor:pointer">숙소</span>
 	            <span class="trip-loc-tag" style="cursor:pointer">친구 추천</span>
             </div>
             <div class="trip-cards" style=" max-height: calc(100vh - 140px); overflow-y: auto;">
@@ -135,6 +135,7 @@
 		<button class="btn-info">이용방법</button>
 	</section>
 </div>
+
 
 <script>
 function showContentsByTag(tagName){

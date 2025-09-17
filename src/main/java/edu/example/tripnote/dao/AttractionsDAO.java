@@ -14,9 +14,14 @@ public interface AttractionsDAO {
 	
 	public boolean insertRestaurant(AttractionDTO dto);
 	
+	public boolean insertHotel(AttractionDTO dto);
+	
 	public List<AttractionDTO> getAttractionList(String tripDest);
 	
 	public List<AttractionDTO> getRestaurantList(String tripDest);
+	
+	public List<AttractionDTO> getHotelList(String tripDest);
+	
 	
 	
 }

@@ -374,11 +374,9 @@ function assignLocIndex(isSwap = false) {
         routeTimeOverlays.forEach(overlay => overlay.setMap(null));
         routePolylines = [];
         routeTimeOverlays = [];
-    } else if (transportSelected == 'car') {
+    } else {
         drawRoute(transportSelected);
-    } else if (transportSelected != '') {
-        drawSimplePolyline('walk');
-    }
+    } 
 }
 
 function toggleNote(btn) {
