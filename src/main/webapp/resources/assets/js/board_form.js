@@ -16,15 +16,14 @@ function savePost() {
     $('.swiper-slide').each(function(index, elem) {
         const $el = $(elem);
         const texterea = $el.find('.loc-textera').val();
-        // input[type=file]에서 파일 가져오기
-        const files = $el.find('.postImg-input')[0].files;
-        if (texterea !== '' || files.length >0){
+        const file = $el.find('.postImg-input')[0].files[0];
+
+        // text나 이미지 입력이 있으면 formData에 저장
+        if (texterea !== '' || file){
             formData.append(`contents[${content_idx}].content`, texterea);
             formData.append(`contents[${content_idx}].title`, $el.attr('data-tourloc-name'));
             formData.append(`contents[${content_idx}].boardId`, $el.attr('data-tourloc-id'));
-            for (let i = 0; i < files.length; i++) {
-                formData.append(`contents[${content_idx}].files`, files[i]);
-            }
+            formData.append(`contents[${content_idx}].file`, file);
             content_idx++;
         }
     });

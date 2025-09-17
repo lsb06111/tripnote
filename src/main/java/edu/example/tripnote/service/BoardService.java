@@ -76,13 +76,10 @@ public class BoardService {
 		boolean result1 = boardDAO.save(boardDTO);
 		for (ReviewContentDTO contentDTO : reviewContents) {
 			contentDTO.setBoardId(boardDTO.getId());
-			if (contentDTO.getFiles() != null) {
-				for (MultipartFile file : contentDTO.getFiles()) { // 파일은 어차피 하나씩인데 나중에 수정
-					if (!file.isEmpty()) {
-						String savedPath = saveFileToFolder(file);
-						contentDTO.setImgSrc(savedPath);
-					}
-				}
+			MultipartFile file = contentDTO.getFile();
+			if (!file.isEmpty()) {
+				String savedPath = saveFileToFolder(file);
+				contentDTO.setImgSrc(savedPath);
 			}
 		}
 

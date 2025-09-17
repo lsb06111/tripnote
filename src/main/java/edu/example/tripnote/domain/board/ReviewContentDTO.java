@@ -15,5 +15,5 @@ public class ReviewContentDTO {
 	private int orders;
 	private boolean isDraft;
 	private String imgSrc;
-	private List<MultipartFile> files; // FormData에서 매핑될 필드
+	private MultipartFile file; // FormData에서 매핑될 필드
 }
