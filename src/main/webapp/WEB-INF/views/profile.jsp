@@ -112,12 +112,45 @@
 			     data-location="${areas[status.index].areaName}"
 			     style="padding: 18px 24px; cursor:pointer;"
 			     onclick="location.href='/tripnote/<%=isMe?"details":"board/view"%>?title=${courses[status.index].title}&nBaks=${nBaks[status.index]}&courseId=${ courses[status.index].id }'">
-                  <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px">
-                    <div class="service-icon" style="margin-bottom:0">
-                      <i class="bi bi-bus-front"></i>
-                    </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                  	
+                    <div class="service-icon" style="margin-bottom:0; position:relative; ">
+					  <button type="button"
+					        class="btn btn-light btn-sm rounded-circle shadow-sm"
+					        style="position:absolute; top:-8px; right:-8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:none;"
+					        onclick="showIconList(event, ${course.id})">
+					  <i class="bi bi-pencil-square" style="font-size:1rem; color:#555;"></i>
+					</button>
+					  <!-- 버스 아이콘 -->
+					  <i class="bi ${not empty icons[status.index] ? icons[status.index] : 'bi-bus-front' }" style="font-size:2rem;"></i>
+					</div>
                     <div style="margin-left: 10px;">
-                      <h3 style="margin:0;">${courses[status.index].title}</h3>
+                      <h3 style="margin:0; display:inline-block;">${courses[status.index].title}</h3>
+
+						<!-- 제목 수정 버튼 -->
+						<button type="button" 
+						        style="margin-left:8px; padding:4px 6px; border:none; background:#f0f0f0; border-radius:6px; cursor:pointer; transition:all 0.2s;"
+						        onclick="this.nextElementSibling.style.display='block'; this.style.display='none'; event.stopPropagation();">
+						  <i class="bi bi-pencil" style="font-size:0.9rem; color:#333;"></i>
+						</button>
+						
+						<!-- 제목 수정 폼 -->
+						<div  style="display:none; margin-top:6px;">
+						  <input id="modified_title_${course.id}" type="text" name="title" value="${course.title}" 
+						         style="padding:4px 8px; border:1px solid #ccc; border-radius:4px; font-size:0.9rem;" 
+						         onclick="event.stopPropagation();">
+						  <button  
+						          style="margin-left:4px; padding:4px 10px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;"
+						          onclick="updateTitle(event, ${course.id})">
+						    저장
+						  </button>
+						  <button type="button" 
+						          style="margin-left:2px; padding:4px 10px; background:#e0e0e0; color:#333; border:none; border-radius:4px; cursor:pointer;"
+						          onclick="event.stopPropagation();this.parentElement.style.display='none'; this.parentElement.previousElementSibling.style.display='inline-block';">
+						    취소
+						  </button>
+						</div>
+                      
                       <ol class="breadcrumb mb-0" style="display:flex;">
                         <li class="breadcrumb-item">${ nBaks[status.index] }</li>
                         <li class="breadcrumb-item">지역 :
@@ -189,7 +222,41 @@
   </div>
 </div>
 
- 
+ <!-- 아이콘 선택 모달 -->
+<div class="modal fade" id="iconListModal" tabindex="-1" aria-labelledby="iconListModalLabel" aria-hidden="true" data-courseId="-1">
+  <div class="modal-dialog modal-dialog-centered"> <!-- 화면 중앙 정렬 -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="iconListModalLabel">바꾸고 싶은 아이콘을 선택해요</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+      </div>
+<%
+    String[] travelIcons = {
+        "bi-airplane", "bi-train-front", "bi-bus-front", "bi-car-front", "bi-bicycle",
+        "bi-backpack", "bi-scooter", "bi-signpost-2", "bi-suitcase", "bi-compass",
+        "bi-map", "bi-tree", "bi-house-door", "bi-building", "bi-camera"
+    };
+%>
+
+<div class="modal-body">
+  <div class="row g-3">
+    <%
+      for (int i = 0; i < travelIcons.length; i++) {
+    %>
+        <div class="col-2 d-flex align-items-center justify-content-center" onclick="saveIcon('<%= travelIcons[i] %>')">
+          <div class="d-flex"
+               style="width:64px;height:64px;background:color-mix(in srgb, var(--accent-color), transparent 85%);color:var(--accent-color);border-radius:50%;align-items:center;justify-content:center;cursor:pointer;">
+            <i class="bi <%= travelIcons[i] %> fs-2"></i>
+          </div>
+        </div>
+    <%
+      }
+    %>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
 <%
 	String toastTitle = "알림";
 	String toastMsg = "정보 변경에 성공하였습니다!";
@@ -201,6 +268,42 @@
 <%@ include file="/WEB-INF/views/jspf/footer.jspf" %> <!-- 푸터 부분 고정 -->
 
 <script>
+function updateTitle(event, courseId){
+	event.stopPropagation();
+	const courseTitle = document.querySelector('#modified_title_'+courseId).value;
+	$.get('/tripnote/updateTitle?id='+courseId+'&title='+courseTitle,
+			function(data, status){
+				if(status === 'success')
+					location.reload();
+	});
+	
+}
+
+
+function saveIcon(iconName){
+	const course_id = document.querySelector('#iconListModal').dataset.courseid;
+	$.get('/tripnote/saveIcon?courseId='+course_id+'&iconName='+iconName,
+			function(data, status){
+		if(status === 'success'){
+			location.reload();
+		}
+	});
+}
+
+function showIconList(event, courseId) {
+	event.preventDefault(); // 기본 동작 막기
+	  event.stopPropagation(); // 부모 onclick 전파 막기 (중요!)
+
+	  document.querySelector('#iconListModal').dataset.courseid = courseId;
+	  console.log("수정 아이콘 클릭됨! courseId:", courseId);
+ 
+	  // 필요하면 courseId로 서버 데이터 가져오기 (AJAX 가능)
+	  // 여기서는 그냥 모달 띄우기만 함
+	  const modal = new bootstrap.Modal(document.getElementById('iconListModal'));
+	  modal.show();
+}
+
+
   const modalTitleDom = document.querySelector('#modalFollowingLabel');
   document.querySelector('.list-group-item.active > i').style
 	.setProperty('color', 'white', 'important');

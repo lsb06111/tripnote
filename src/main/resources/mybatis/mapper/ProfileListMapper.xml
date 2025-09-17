@@ -31,6 +31,20 @@
 	select * from area where id = #{areaId}
 </select>
 
+<select id="getIcon" resultType="string" parameterType="long">
+	select icon_name from course_icon where course_id = #{courseId}
+</select>
 
+<insert id="insertIcon" parameterType="CourseIconDTO">
+	insert into course_icon values (#{courseId}, #{iconName})
+</insert>
+
+<update id="updateIcon" parameterType="CourseIconDTO">
+	update course_icon set icon_name = #{iconName} where course_id = #{courseId}
+</update>
+
+<update id="updateTitle" parameterType="CourseDTO">
+	update course set title =#{title} where id = #{id}
+</update>
   
 </mapper>
