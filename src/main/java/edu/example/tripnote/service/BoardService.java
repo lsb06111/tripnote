@@ -120,7 +120,7 @@ public class BoardService {
 		BoardDTO boardDTO = getBoardById(id);
 		List<ReviewContentDTO> contents = reviewContentDAO.getContentsByBoardId(id);
 		log.info("게시물 내용들 : " + contents.toString());
-		List<ReplyDTO> replyList = replyDAO.getReplysByBoardId(id);
+		//List<ReplyDTO> replyList = replyDAO.getReplysByBoardId(id);
 		log.info("댓글리스트");
 		return respond;
 	}

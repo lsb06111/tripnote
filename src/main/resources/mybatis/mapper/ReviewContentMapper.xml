@@ -19,8 +19,8 @@
 </insert>
 
 <select id="getContentsByBoardId" parameterType="int" resultType="ReviewContentDTO">
-	select *
+	select id, review_content as content, title, img as imgSrc, board_id, orders, is_draft
 	from review_content
-	where id = 37
+	where board_id = #{id}
 </select>
 </mapper>

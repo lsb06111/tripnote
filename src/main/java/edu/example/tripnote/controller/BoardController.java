@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.example.tripnote.dao.CourseDAO;
 import edu.example.tripnote.domain.board.BoardDTO;
+import edu.example.tripnote.domain.board.BoardDetailResDTO;
 import edu.example.tripnote.domain.board.BoardFormReqDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
 import edu.example.tripnote.domain.board.BoardSaveReqDTO;
@@ -100,8 +101,8 @@ public class BoardController {
 	
 	@GetMapping("/detail")
 	public String detail(int id, Model model) {
-		BoardDTO dto = boardService.getBoardById(id); // getBoard 동작 확인 완료
-		log.info("보드 내용 : "+dto.getBoardContent());
+		//BoardDTO dto = boardService.getBoardById(id); // getBoard 동작 확인 완료
+		BoardDetailResDTO resDTO =  boardService.getBoardDetailById(id);
 		return "board/view";
 	}
 	
