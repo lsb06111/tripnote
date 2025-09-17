@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="edu.example.tripnote.domain.trip.CourseDTO"%>
+    <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/jspf/head.jspf" %> <!-- 헤드 부분 고정 -->
 <!-- 커스텀 CSS import 존 -->
@@ -126,8 +127,13 @@
                     </div>
                     <!-- action button aligned to the right -->
                     
-                    <%if(isMe){ %>
-                    <a href="/tripnote/trip/"
+                    <%if(isMe){ 
+                    %>
+                    <%
+						String startD = ((CourseDTO)pageContext.findAttribute("course")).getStartDate().split(" ")[0].replace("-",".");
+						String endD = ((CourseDTO)pageContext.findAttribute("course")).getEndDate().split(" ")[0].replace("-",".");
+					%>
+                    <a href="/tripnote/trip/plan/result?tripDest=${areas[status.index].areaName}&startDate=<%= startD %>&endDate=<%= endD %>&inviteMode=true&createdUserId=${loginUser.id}&courseId=${course.id}"
                        class="service-link ms-auto"
                        onclick="event.stopPropagation();"
                        style="width:fit-content; transition:color 0.3s; color:inherit;"

@@ -21,6 +21,8 @@ public class TripnoteController {
 	public String tripnote(HttpSession session, Model model, Long courseId) {
 	    List<TourLocDTO> getAllList = dao.getAllTourLoc(courseId);
 	    model.addAttribute("getAllList", getAllList);
+	    
+	    
 	    return "details";
 	}
 }

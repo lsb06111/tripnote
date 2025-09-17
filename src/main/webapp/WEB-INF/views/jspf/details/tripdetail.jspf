@@ -1,16 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*"%>
 
 <% 
 String reqTitle = request.getParameter("title"); 
 String titleIcon = "";
 String nBaks = request.getParameter("nBaks");
+String tourdate = request.getParameter("courses");
+
 int tourday = Integer.parseInt(nBaks.substring(3,4));
 %>
     <section id="tabs" class="tabs section mt-5">
 		<div class="container section-title">
 	        <h2><%= reqTitle %></h2>
-    			<p><%= nBaks %></p>
+    			<p>tourdate2</p>
       </div><!-- End Section Title -->
       
       <div class="container">
@@ -38,8 +40,15 @@ int tourday = Integer.parseInt(nBaks.substring(3,4));
 
 			<%
 			int tabNumber = 6;
-			for(int ii=0; ii < tabNumber; ii++){ %>
+			HashMap<String, String> typeHashMap = new HashMap<>();
+			typeHashMap.put("명소","leaf-fill");
+			typeHashMap.put("음식점", "fork-knife");
+			typeHashMap.put("숙소", "house-door");
+			for(int ii=0; ii < tabNumber; ii++){ 
+			
+			%>
             <div class="tab-pane fade <%= ii==0 ? "active show" : "" %>" id="tabs-tab-<%= (ii+1) %>">
+				
 				<%@ include file="/WEB-INF/views/jspf/details/nodebar.jspf" %>
 	  			<%@ include file="/WEB-INF/views/jspf/details/nodecontent.jspf" %>
       		</div>

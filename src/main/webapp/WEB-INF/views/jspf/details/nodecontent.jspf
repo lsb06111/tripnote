@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*"%>
+<%@page import="edu.example.tripnote.domain.trip.NoteDTO" %>
 <!-- NODE CONTENT PANES (unique per day) -->
   <div id="spotPanes-<%= ii %>" class="tab-content mt-4">
     <% 
-    	String[] noteContents = {"비치볼 꼭 사기,닭꼬치 꼭 먹기,최소 3시간 이상 놀기,최소 3시간 이상 놀기,최소 3시간 이상 놀기,최소 3시간 이상 놀기,최소 3시간 이상 놀기,최소 3시간 이상 놀기,최소 3시간 이상 놀기", "발만 담구기,치킨 꼭 시켜먹기",
-    			"여기는 파스타 맛집임,와인은 비싸다고 하니 한잔만 꼭 먹기", "포토존에서 인생샷 꼭 건지기,주차 X", "송정엔 맛도리가 없으니 배달시켜먹기,기차시간 : 17:50 늦으면 큰일남!!!"};
-    	for (int i = 0; i < resultcount; i++) { 
-    	String[] noteContent = noteContents[i].split(",");	
+		//tourloc
+    	
+    	for (int i = 0; i < resultcount; i++) { 	
    	%>
       <div id="spot-pane-<%= ii %>-<%= i %>" class="tab-pane fade <%= i==0 ? "show active" : "" %>">
       
@@ -14,7 +14,7 @@
           <div class="col-lg-6">
             <div class="content-area">
 				<div class="content-badge">
-				  <i class="bi bi-<%= nodeIcons[i] %>"></i><span><%= nodeDesc[i] %></span>
+				  <i class="bi bi-<%=  typeHashMap.get(typeNames[i]) %>"></i><span><%= typeNames[i] %></span>
 				</div>
 				          
 				<div class="card shadow-sm text-dark position-relative mb-3"
@@ -33,9 +33,8 @@
 				
 				  <!-- body -->
 				  <div class="card-body" style="padding:14px 16px;">
-				    <% for (String noteC : noteContent) { %>
-				      <p class="card-text mb-2"><%= noteC %></p>
-				    <% } %>
+				      <p class="card-text mb-2"><%= noteContent[i] %></p>
+				    
 				  </div>
 				
 				  <!-- folded corner -->
@@ -47,7 +46,7 @@
             </div>
           </div>
           <div class="col-lg-6" style="text-align: center;">
-            <img src="/oti_team3/assets/img/busan/busan1-<%= (i+1) %>.jpg" class="img-fluid" style="width:85%">
+            <img src="<%= tourLocImgs[i]  %>" class="img-fluid" style="width:85%">
           </div>
         </div>
       </div>

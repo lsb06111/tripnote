@@ -3,8 +3,9 @@
 <mapper namespace="edu.example.tripnote.dao.TripnoteDAO">
 
 <select id="getAllTourLoc" resultType="TourLocDTO">
-	select *
-	from tour_loc
+	select tour_loc.*, note.note_content 
+	from tour_loc join note on tour_loc.id = note.tour_loc_id
 	where course_id=#{courseId}
 </select>
+
 </mapper>
