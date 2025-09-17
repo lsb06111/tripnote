@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.example.tripnote.dao.ProfileListDAO;
 import edu.example.tripnote.domain.UserDTO;
 import edu.example.tripnote.domain.trip.AreaVO;
 import edu.example.tripnote.domain.trip.CourseDTO;
+import edu.example.tripnote.domain.trip.CourseIconDTO;
 
 @Controller
 public class ProfileListController {
@@ -31,7 +33,7 @@ public class ProfileListController {
 		List<CourseDTO> courses = dao.getAllCourse(userDTO.getId());
 		List<String> nBaks = new ArrayList<>();
 		List<AreaVO> areas = new ArrayList<>();
-		
+		List<String> icons = new ArrayList<>();
 		DateTimeFormatter formatter;
 
 		for(CourseDTO c : courses) {
@@ -46,15 +48,35 @@ public class ProfileListController {
 
 	        int totalDays = (int)ChronoUnit.DAYS.between(start, end)+1;
 	        nBaks.add((totalDays-1)+"박 "+totalDays+"일");
-			
+	        icons.add(dao.getIcon(c.getId()));
 		}
 		
 		model.addAttribute("courses", courses);
 		model.addAttribute("areas", areas);
 		model.addAttribute("nBaks", nBaks);
+		model.addAttribute("icons", icons);
 		
 		return "profile";
 	}
 	
+	@ResponseBody
+	@RequestMapping("/saveIcon")
+	public CourseIconDTO saveIcon(CourseIconDTO courseIconDTO) {
+		String iconName = dao.getIcon(courseIconDTO.getCourseId());
+		
+		if(iconName == null)
+			dao.insertIcon(courseIconDTO);
+		else
+			dao.updateIcon(courseIconDTO);
+		
+		return courseIconDTO;
+	}
+	
+	@ResponseBody
+	@RequestMapping("updateTitle")
+	public String updateTitle(CourseDTO courseDTO) {
+		dao.updateTitle(courseDTO);
+		return "ok";
+	}
 
 }

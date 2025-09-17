@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import edu.example.tripnote.domain.trip.AreaVO;
 import edu.example.tripnote.domain.trip.CourseDTO;
+import edu.example.tripnote.domain.trip.CourseIconDTO;
 
 @Mapper
 public interface ProfileListDAO {
@@ -18,4 +19,13 @@ public interface ProfileListDAO {
 	public AreaVO getArea(int areaId);
 	
 	public List<CourseDTO> getAllCourse(int userId);
+	
+	public String getIcon(Long courseId);
+	
+	public int insertIcon(CourseIconDTO courseIconDTO);
+	
+	public int updateIcon(CourseIconDTO courseIconDTO);
+	
+	public int updateTitle(CourseDTO courseDTO);
+	
 }
