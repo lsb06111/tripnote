@@ -10,8 +10,10 @@ function savePost() {
     formData.append("intro", $('#post_intro').val());
     formData.append("userId", 1);
     formData.append("courseId", $('.board-form').attr('data-id'));
-    formData.append("thumbnail", $('.board-form').attr('data-id'));
-
+    const thumbnail = $('#thumbnailImgInput')[0].files[0];
+    if(thumbnail){
+    	formData.append("thumbnail", thumbnail);
+    }
     // 2. 각 탭(날짜) 별 컨텐츠와 이미지
     let content_idx = 0;
     $('.swiper-slide').each(function(index, elem) {

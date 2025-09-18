@@ -103,8 +103,8 @@
 </select>
 
 <insert id="save" parameterType="NewBoardDTO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
-	insert into board (title, board_content, user_id, course_id)
-	values (#{title}, #{intro}, #{userId}, #{courseId})
+	insert into board (title, board_content, user_id, course_id, thumbnail)
+	values (#{title}, #{intro}, #{userId}, #{courseId}, #{thumbnail})
 </insert>
 
 <insert id="saveDraft" parameterType="NewBoardDTO">

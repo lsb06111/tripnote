@@ -71,6 +71,11 @@ public class BoardService {
 		boardDTO.setCourseId(req.getCourseId());
 		boardDTO.setTitle(req.getTitle());
 		boardDTO.setUserId(req.getUserId());
+		MultipartFile thumbnail = req.getThumbnail();
+		if(thumbnail != null) {
+			String savedPath = saveThumbnailToFolder(thumbnail);
+			boardDTO.setThumbnail(savedPath);
+		}
 
 		List<ReviewContentDTO> reviewContents = req.getContents();
 		boolean result1 = boardDAO.save(boardDTO);
@@ -91,6 +96,21 @@ public class BoardService {
 	// 파일 네이밍 전략 추후 보충 , db 접근 경로 보충
 	private String saveFileToFolder(MultipartFile file) {
 		String path = "c:/tripnote_resource/board_images/";
+		File isDir = new File(path);
+		if (!isDir.isDirectory()) { // 폴더 없으면 생성
+			isDir.mkdirs();
+		}
+		String filename = file.getOriginalFilename();
+		File dest = new File(path + filename);
+		try {
+			file.transferTo(dest);
+		} catch (IOException e) {
+			throw new RuntimeException("파일 저장 실패", e);
+		}
+		return "/db접근url/" + filename; // DB에 저장할 접근 경로
+	}
+	private String saveThumbnailToFolder(MultipartFile file) {
+		String path = "c:/tripnote_resource/board_images/thumbnail/";
 		File isDir = new File(path);
 		if (!isDir.isDirectory()) { // 폴더 없으면 생성
 			isDir.mkdirs();
