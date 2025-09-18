@@ -9,4 +9,9 @@
 	order by tour_nth, tour_order
 </select>
 
+<select id="getCourse" parameterType="int" resultType="CourseDTO">
+	select *
+	from course
+	where id = #{id}
+</select>
 </mapper>

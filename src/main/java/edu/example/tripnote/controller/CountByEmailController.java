@@ -26,7 +26,7 @@ public class CountByEmailController {
 			result.put("invalid", true);
 		}
 		else {
-			result.put("msg", "사용 가능한 이메일입니다.");
+			result.put("msg", "이메일 전송 중 입니다.");
 			result.put("invalid", false);
 		}
 		

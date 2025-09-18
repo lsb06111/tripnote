@@ -1,21 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.*"%>
+<%@ page import="edu.example.tripnote.domain.trip.CourseDTO" %>
 
 <% 
+
 String reqTitle = request.getParameter("title"); 
 String titleIcon = "";
 String nBaks = request.getParameter("nBaks");
-String tourdate = request.getParameter("courses");
 
-/* String startdate = (Stirng) tourdate.get(0).getStartDate();
-String enddate = tourdate.get(0).getEndDate(); */
 
 int tourday = Integer.parseInt(nBaks.substring(3,4));
+%>
+<%
+	String startDetail = ((CourseDTO)pageContext.findAttribute("courseDTO")).getStartDate().split(" ")[0].replace("-",".");
+	String endDetail = ((CourseDTO)pageContext.findAttribute("courseDTO")).getEndDate().split(" ")[0].replace("-",".");
 %>
     <section id="tabs" class="tabs section mt-5">
 		<div class="container section-title">
 	        <h2><%= reqTitle %></h2>
-    			<p>tourdate2</p>
+    			<p><%= startDetail %> ~ <%= endDetail %></p>
       </div><!-- End Section Title -->
       
       <div class="container">
