@@ -17,6 +17,8 @@ public class BoardDTO {
 	private String createdAt;
 	private String modifiedAt;
 	private String areaName;
+	private String startDate;
+	private String endDate;
 	private int likes;
 	private String thumbnail;
 }

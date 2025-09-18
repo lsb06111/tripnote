@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +59,7 @@ public class BoardController {
 	
 	@PostMapping("/form")
 	public String form(BoardFormReqDTO reqDTO, Model model) {
+		// DAO 접근 한번으로 리팩토링 가능함.
 		BoardTemplateDTO locTemplate = new BoardTemplateDTO();
 		CourseDTO courseDTO = courseDAO.getCourseById(reqDTO.getCourseId());
 		courseDTO.setStartDate(courseDTO.getStartDate().substring(0, 10));
@@ -72,7 +72,6 @@ public class BoardController {
                      .collect(Collectors.groupingBy(TourLocDTO::getTourNth))
                      .values()
             );
-        
         locTemplate.setTourlocs(tourlocs);
         model.addAttribute("locTemplate",locTemplate);
 		return "board/form";
@@ -102,9 +101,9 @@ public class BoardController {
 	
 	@GetMapping("/detail")
 	public String detail(int id, Model model) {
-		//BoardDTO dto = boardService.getBoardById(id); // getBoard 동작 확인 완료
 		BoardDetailResDTO resDTO =  boardService.getBoardDetailById(id);
 		model.addAttribute("board",resDTO.getBoardDTO());
+		log.info("&************************ board  :" + resDTO.getBoardDTO().toString());
 		model.addAttribute("contents",resDTO.getContents());
 		return "board/view";
 	}

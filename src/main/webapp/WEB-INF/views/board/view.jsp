@@ -3,6 +3,8 @@
 <%@ include file="/WEB-INF/views/jspf/head.jspf" %> <link rel="stylesheet" 
 		      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <style>
 .custom-toggle {
     background-color: white;
@@ -64,27 +66,24 @@
     </div><section id="portfolio-details" class="portfolio-details section" style="--subtle-border: none; padding-bottom:0px;">
 
       <div class="container">
-
         <div class="project-hero" style="margin-bottom: 0;">
           <div class="project-meta-grid" style="padding-top:0">
             <div class="meta-column">
-              <div class="meta-label">작성자(닉네임)</div>
-              <div class="meta-value">
-              장태현
-              </div>
+              <div class="meta-label">작성자</div>
+              <div class="meta-value">${board.nickname}</div>
             </div>
             
             <div class="meta-column">
               <div class="meta-label">여행 지역</div>
-              <div class="meta-value">부산</div>
+              <div class="meta-value">${board.areaName}</div>
             </div>
             <div class="meta-column">
               <div class="meta-label">여행일정</div>
-              <div class="meta-value">2025.08.12 ~ 2025.08.16</div>
+              <div class="meta-value">${board.startDate} ~ ${board.endDate}</div>
             </div>
             <div class="meta-column">
               <div class="meta-label">작성일</div>
-              <div class="meta-value">2025.08.22</div>
+              <div class="meta-value">${board.createdAt}</div>
             </div>
             <div class="meta-column">
               <div class="meta-value">
@@ -96,14 +95,14 @@
           </div>
         </div>
 
-<% String reqTitle = request.getParameter("title"); %>
     <section id="tabs" class="tabs section mt-5">
       <div class="container">
         <div class="tabs-wrapper">
           <div class="tabs-header">
             <ul class="nav nav-tabs">
             <%
-            int tabNumber = 5;
+            List contents = (List) request.getAttribute("contents");
+            int tabNumber = (contents == null) ? 0 : contents.size();
             for(int i=0; i<tabNumber; i++){ %>
 	              <li class="nav-item">
 	                <a class="nav-link <%= i==0? "active show" : "" %>" data-bs-toggle="tab" data-bs-target="#tabs-tab-<%= (i+1) %>">
@@ -132,7 +131,6 @@
   <div id="routeBar-<%= ii %>" data-group="<%= ii %>" class="d-flex justify-content-center my-4">
 			    <div class="d-flex align-items-center justify-content-center w-100 pb-2">
 			      <%
-			        
 			      String[] spots = {
 			    		    "게스트하우스 감천",              // 시작 숙소
 			    		    "감천문화마을",          // 메인 관광지
@@ -368,8 +366,6 @@ function setReviewContent(tIndex, nIndex){
 heartIcon.addEventListener("click", () => {
 	  heartIcon.classList.toggle("bi-heart");
 	  heartIcon.classList.toggle("bi-heart-fill");
-
-	  
 	});
 
 </script>

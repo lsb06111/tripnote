@@ -5,8 +5,10 @@ import static edu.example.tripnote.Constants.BOARD_PAGE_SIZE;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,7 @@ import edu.example.tripnote.dao.BoardDAO;
 import edu.example.tripnote.dao.ReplyDAO;
 import edu.example.tripnote.dao.ReviewContentDAO;
 import edu.example.tripnote.domain.board.BoardDTO;
+import edu.example.tripnote.domain.board.BoardDetailDTO;
 import edu.example.tripnote.domain.board.BoardDetailResDTO;
 import edu.example.tripnote.domain.board.BoardParamDTO;
 import edu.example.tripnote.domain.board.BoardSaveReqDTO;
@@ -22,6 +25,7 @@ import edu.example.tripnote.domain.board.NewBoardDTO;
 import edu.example.tripnote.domain.board.PageResponseDTO;
 import edu.example.tripnote.domain.board.ReplyDTO;
 import edu.example.tripnote.domain.board.ReviewContentDTO;
+import edu.example.tripnote.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -133,20 +137,26 @@ public class BoardService {
 		return true;
 	}
 
-	public BoardDTO getBoardById(int id) {
-		return boardDAO.getBoardById(id);
-	}
 
 	public BoardDetailResDTO getBoardDetailById(int id) {
-		BoardDetailResDTO response = new BoardDetailResDTO();
-		BoardDTO boardDTO = getBoardById(id);
+		BoardDTO boardDTO = boardDAO.getBoardInfoById(id);
 		log.info("게시물 : " + boardDTO.toString());
-		List<ReviewContentDTO> contents = reviewContentDAO.getContentsByBoardId(id);
-		log.info("게시물 내용들 : " + contents.toString());
+		boardDTO.setStartDate(DateUtil.substr(boardDTO.getStartDate()));
+		boardDTO.setEndDate(DateUtil.substr(boardDTO.getEndDate()));
+		boardDTO.setCreatedAt(DateUtil.substr(boardDTO.getCreatedAt()));
+
+		List<BoardDetailDTO> boardDetailList = boardDAO.getBoardContentsByBoardId(id);
+		// 날짜별 여행지 리스트
+		List<List<BoardDetailDTO>> boardDetail = new ArrayList<>(boardDetailList.stream()
+							 	.collect(Collectors.groupingBy(BoardDetailDTO::getTourNth))
+								.values());
+		
 		//List<ReplyDTO> replyList = replyDAO.getReplysByBoardId(id);
-		log.info("댓글리스트");
+		//log.info("댓글리스트");
+		
+		BoardDetailResDTO response = new BoardDetailResDTO();
+		response.setContents(boardDetail);
 		response.setBoardDTO(boardDTO);
-		response.setContents(contents);
 		return response;
 	}
 }

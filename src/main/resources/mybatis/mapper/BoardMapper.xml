@@ -112,10 +112,35 @@
 	values (#{title}, #{intro}, #{userId}, #{courseId}, 1)
 </insert>
 
-<select id="getBoardById" parameterType="int">
+<select id="getBoardById" parameterType="int" resultType="boardDto">
 	select *
 	from board
 	where id = #{id}
+</select>
+
+<select id="getBoardInfoById" parameterType="int" resultType="boardDto">
+	select *
+	from board b
+	join users u on b.user_id = u.id
+	join course c on b.course_id = c.id
+	join area a on c.area_id = a.id
+	left join likes l on b.id = l.board_id
+	where b.id = #{id}
+</select>
+
+<select id="getBoardContentsByBoardId" parameterType="int" resultType="BoardDetailDTO">
+	SELECT
+	    r.id as reviewContentId, r.review_content as content, r.is_draft, r.img as imgSrc, r.orders,
+	    t.id as tourLocId, t.tour_loc_name, t.start_time, t.end_time, t.type_name, t.tour_nth,
+	    c.title as courseTitle, c.start_date, c.end_date, a.area_name
+	FROM
+	         board b
+	    JOIN course         c ON b.course_id = c.id
+	    JOIN tour_loc       t ON c.id = t.course_id
+	    JOIN review_content r ON t.id = r.tour_loc_id
+	    join area a on c.area_id = a.id 
+	WHERE
+	        b.id = #{id}
 </select>
 
 </mapper>
