@@ -20,15 +20,17 @@ function savePost() {
         const file = $el.find('.postImg-input')[0].files[0];
 
         // text나 이미지 입력이 있으면 formData에 저장
-        if (texterea !== '' || file){
+        if (texterea !== ''){
             formData.append(`contents[${content_idx}].content`, texterea);
             formData.append(`contents[${content_idx}].title`, $el.attr('data-tourloc-name'));
             formData.append(`contents[${content_idx}].boardId`, $el.attr('data-tourloc-id'));
-            formData.append(`contents[${content_idx}].file`, file);
-            content_idx++;
         }
+        if(file){
+        	formData.append(`contents[${content_idx}].file`, file);
+        }
+        content_idx++;
     });
-
+    console.log("ajax 뭐가 전달되나 : " + [...formData.entries()]);
     // 3. Ajax 전송
     $.ajax({
         url: "/tripnote/board/form/save",

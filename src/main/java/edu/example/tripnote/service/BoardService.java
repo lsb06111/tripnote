@@ -77,7 +77,7 @@ public class BoardService {
 		for (ReviewContentDTO contentDTO : reviewContents) {
 			contentDTO.setBoardId(boardDTO.getId());
 			MultipartFile file = contentDTO.getFile();
-			if (!file.isEmpty()) {
+			if (file != null) {
 				String savedPath = saveFileToFolder(file);
 				contentDTO.setImgSrc(savedPath);
 			}
