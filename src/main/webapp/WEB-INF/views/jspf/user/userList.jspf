@@ -1,0 +1,77 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.util.*"%>
+<section id="services" class="services section" style="padding:0">
+<div class="container">
+	<div class="mb-3 input-group">
+	    <input class="form-control find-search-value" type="text" class="" placeholder="아이디 또는 닉네임을 입력해주세요" onkeydown="inputEnter(event)">
+	    <button type="button" class="btn text-white"
+	      style="--bs-btn-bg:#5c99ee; 
+	             --bs-btn-hover-bg:#447fcc; 
+	             --bs-btn-border-color:#5c99ee; 
+	             --bs-btn-hover-border-color:#447fcc;"
+	             onclick="findUser(${loginUser.id});">
+	      검색
+	    </button>
+	</div>
+	<div id="noResultsForUser" style="text-align:center; color:#6c757d; padding:40px 0;">
+  검색 결과가 없습니다.
+</div>
+        <div class="row gy-4 find-result-view">
+  
+<!-- start -->
+
+<!-- end -->
+</div>
+</div>
+</section>
+<script>
+function inputEnter(event){
+	if(event.key === 'Enter')
+		findUser();
+}
+function findUser(currentUserId){
+	const findInputValue = document.querySelector('.find-search-value').value;
+	const findResultView = document.querySelector('.find-result-view');
+	
+	if(findInputValue !== ''){
+		
+		$.get('/tripnote/findUser?target='+findInputValue,
+			function(data,status){
+				if(status === 'success'){
+					findResultView.innerHTML = '';
+					const noResultsForUser = document.querySelector('#noResultsForUser');
+					if(data.length == 0){
+						noResultsForUser.style.display = 'block';
+					}else{
+						noResultsForUser.style.display = 'none';
+					}
+					data.forEach(e => {
+						const userCardHTML = `
+					        <div class="col-12 follow-cards">
+					            <div class="service-card" style="padding: 18px 24px; cursor:pointer;" onclick="location.href='/tripnote/profile?username=\${e.username}'">
+					                <div style="display:flex; align-items:center; gap:8px;">
+					                    <div class="service-icon" style="margin-bottom:0">
+					                        <i class="bi bi-person"></i>
+					                    </div>
+					                    <div style="margin-left:10px;">
+					                        <h3 class="follow-user-name" style="margin:0;">\${e.nickname} @\${e.username}</h3>
+					                    </div>
+					                    <button type="button" 
+					                            data-mdb-button-init 
+					                            data-mdb-ripple-init 
+					                            class="btn btn-outline-primary" 
+					                            style="margin-left:auto; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;"
+					                            onclick="event.stopPropagation();">
+					                        팔로우
+					                    </button>
+					                </div>
+					            </div>
+					        </div>`;
+						findResultView.innerHTML += userCardHTML;
+					});
+				}
+		});
+	}
+	
+}
+</script>

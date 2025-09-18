@@ -6,7 +6,7 @@
     <% 
 		//tourloc
     	
-    	for (int i = 0; i < resultcount; i++) { 	
+    	for (int i = 0; i < nodeCount; i++) { 	
    	%>
       <div id="spot-pane-<%= ii %>-<%= i %>" class="tab-pane fade <%= i==0 ? "show active" : "" %>">
       
