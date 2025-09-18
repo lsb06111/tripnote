@@ -11,12 +11,13 @@ public class BoardDetailDTO {
 	private String content;
 	private boolean isDraft;
 	private String imgSrc;
-	private int orders;
+	private int orders; // 
 	//tourLoc
 	private int tourLocId;
 	private String tourLocName;
 	private String startTime;
 	private String endTime;
+	private int tourOrder;
 	private String typeName;
 	private int tourNth;
 	//course
