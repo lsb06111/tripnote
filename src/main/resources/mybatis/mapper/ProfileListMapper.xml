@@ -46,5 +46,24 @@
 <update id="updateTitle" parameterType="CourseDTO">
 	update course set title =#{title} where id = #{id}
 </update>
-  
+
+<update id="updateEmail" parameterType="UserDTO">
+	update users set email= #{email} where id = #{id}
+</update>
+
+<update id="updatePassword" parameterType="UserDTO">
+	update users set password = #{password} where id = #{id}
+</update>
+
+<update id="updateNickname" parameterType="UserDTO">
+	update users set nickname= #{nickname} where id = #{id}
+</update>
+ 
+<select id="getUser" parameterType="string" resultType="UserDTO">
+	select * from users where username = #{username}
+</select>
+
+<select id="findUsers" resultType="UserDTO">
+	select * from users where (username like '%'||#{target}||'%' or nickname like '%'||#{target}||'%') and id != #{curUserId}
+</select>
 </mapper>

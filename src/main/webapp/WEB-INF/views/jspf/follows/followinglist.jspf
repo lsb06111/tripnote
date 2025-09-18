@@ -43,7 +43,7 @@ String[] info = {
 		String username = info[i].substring(4,info[i].length());
 		boolean randBoolean = rand.nextBoolean();
 %>
-         <div class="col-12">
+         <div class="col-12 follow-cards">
 			  <div class="service-card" style="padding: 18px 24px; cursor:pointer;" onclick="location.href='/oti_team3/profile.jsp?identify=<%=username%>&name=<%= name %>'">
 			    <div style="display:flex; align-items:center; gap:8px;">
   
@@ -52,7 +52,7 @@ String[] info = {
 				  </div>
 				  
 				  <div style="margin-left:10px;">
-				    <h3 style="margin:0;"><%= info[i] %></h3>
+				    <h3 class="follow-user-name" style="margin:0;"><%= info[i] %></h3>
 				  </div>
 				  
 				  <%if(randBoolean){ %>
@@ -86,11 +86,11 @@ String[] info = {
 <script>
 function filterCards() {
   var q = document.getElementById('searchUsername').value.trim().toLowerCase();
-  var cols = document.querySelectorAll('.row.gy-4 > .col-12');
+  var cols = document.querySelectorAll('.row.gy-4 > .follow-cards');
   var shown = 0;
 
   cols.forEach(function(col){
-    var h3 = col.querySelector('h3');
+    var h3 = col.querySelector('.follow-user-name');
     var text = h3 ? h3.textContent.toLowerCase() : '';
     var match = q === '' || text.includes(q);
     col.style.display = match ? '' : 'none';

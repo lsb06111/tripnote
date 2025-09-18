@@ -14,26 +14,28 @@
     
 %>
 
-<c:set var="reqNickname"  value="${empty param.name ? loginUser.nickname : param.name}" />
-<c:set var="reqUsername" value="${empty param.username ? loginUser.username : param.username}"/>
-<c:set var="reqEmail" value="${empty param.email ? loginUser.email : param.email}"/>
+<c:set var="reqNickname"  value="${empty profileUser.nickname ? loginUser.nickname : profileUser.nickname}" />
+<c:set var="reqUsername" value="${empty profileUser.username ? loginUser.username : profileUser.username}"/>
+<c:set var="reqEmail" value="${empty profileUser.email ? loginUser.email : profileUser.email}"/>
 
 <section>
   <div class="container py-5">
-    <div class="row">
-      <div class="col">
-        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
-          <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item active" aria-current="page">${loginUser.nickname}님의 프로필</li>
-            <% if(isMe){ %>
-              <li class="breadcrumb-item">
-                <a href="#" id="modal-changeinfo" data-bs-toggle="modal" data-bs-target="#modalChangeinfo">정보 수정</a>
-              </li>
-            <% } %>
-          </ol>
-        </nav>
-      </div>
-    </div>
+<div class="row">
+  <div class="col">
+    <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4 d-flex justify-content-between align-items-center">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item active" aria-current="page">${reqNickname}님의 프로필</li>
+        <% if(isMe){ %>
+          <li class="breadcrumb-item">
+            <a href="#" id="modal-changeinfo" data-bs-toggle="modal" data-bs-target="#modalChangeinfo">정보 수정</a>
+          </li>
+        <% } %>
+      </ol>
+      <a href="#" id="modal-userList" data-bs-toggle="modal" data-bs-target="#modalUserList" 
+         class="btn btn-primary" style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;"><i class="bi bi-search"></i> 유저 찾기</a>
+    </nav>
+  </div>
+</div>
 
     <div class="row">
       <!-- LEFT -->
@@ -115,12 +117,14 @@
                   <div style="display:flex; align-items:center; gap:8px;">
                   	
                     <div class="service-icon" style="margin-bottom:0; position:relative; ">
+                    <% if(isMe){ %>
 					  <button type="button"
 					        class="btn btn-light btn-sm rounded-circle shadow-sm"
 					        style="position:absolute; top:-8px; right:-8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:none;"
 					        onclick="showIconList(event, ${course.id})">
 					  <i class="bi bi-pencil-square" style="font-size:1rem; color:#555;"></i>
 					</button>
+					<%} %>
 					  <!-- 버스 아이콘 -->
 					  <i class="bi ${not empty icons[status.index] ? icons[status.index] : 'bi-bus-front' }" style="font-size:2rem;"></i>
 					</div>
@@ -128,31 +132,37 @@
                       <h3 style="margin:0; display:inline-block;">${courses[status.index].title}</h3>
 
 						<!-- 제목 수정 버튼 -->
-						<button type="button" 
-						        style="margin-left:8px; padding:4px 6px; border:none; background:#f0f0f0; border-radius:6px; cursor:pointer; transition:all 0.2s;"
-						        onclick="this.nextElementSibling.style.display='block'; this.style.display='none'; event.stopPropagation();">
-						  <i class="bi bi-pencil" style="font-size:0.9rem; color:#333;"></i>
-						</button>
-						
-						<!-- 제목 수정 폼 -->
-						<div  style="display:none; margin-top:6px;">
-						  <input id="modified_title_${course.id}" type="text" name="title" value="${course.title}" 
-						         style="padding:4px 8px; border:1px solid #ccc; border-radius:4px; font-size:0.9rem;" 
-						         onclick="event.stopPropagation();">
-						  <button  
-						          style="margin-left:4px; padding:4px 10px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;"
-						          onclick="updateTitle(event, ${course.id})">
-						    저장
-						  </button>
-						  <button type="button" 
-						          style="margin-left:2px; padding:4px 10px; background:#e0e0e0; color:#333; border:none; border-radius:4px; cursor:pointer;"
-						          onclick="event.stopPropagation();this.parentElement.style.display='none'; this.parentElement.previousElementSibling.style.display='inline-block';">
-						    취소
-						  </button>
+						<% if(isMe) {%>
+							<button type="button" 
+							        style="margin-left:8px; padding:4px 6px; border:none; background:#f0f0f0; border-radius:6px; cursor:pointer; transition:all 0.2s;"
+							        onclick="this.nextElementSibling.style.display='block'; this.style.display='none'; event.stopPropagation();">
+							  <i class="bi bi-pencil" style="font-size:0.9rem; color:#333;"></i>
+							</button>
+							
+							<!-- 제목 수정 폼 -->
+							<div  style="display:none; margin-top:6px;">
+							  <input id="modified_title_${course.id}" type="text" name="title" value="${course.title}" 
+							         style="padding:4px 8px; border:1px solid #ccc; border-radius:4px; font-size:0.9rem;" 
+							         onclick="event.stopPropagation();">
+							  <button  
+							          style="margin-left:4px; padding:4px 10px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;"
+							          onclick="updateTitle(event, ${course.id})">
+							    저장
+							  </button>
+							  <button type="button" 
+							          style="margin-left:2px; padding:4px 10px; background:#e0e0e0; color:#333; border:none; border-radius:4px; cursor:pointer;"
+							          onclick="event.stopPropagation();this.parentElement.style.display='none'; this.parentElement.previousElementSibling.style.display='inline-block';">
+							    취소
+							  </button>
+						  
 						</div>
-                      
+                      <%} %>
+                      <%
+						String startD = ((CourseDTO)pageContext.findAttribute("course")).getStartDate().split(" ")[0].replace("-",".");
+						String endD = ((CourseDTO)pageContext.findAttribute("course")).getEndDate().split(" ")[0].replace("-",".");
+					%>
                       <ol class="breadcrumb mb-0" style="display:flex;">
-                        <li class="breadcrumb-item">${ nBaks[status.index] }</li>
+                        <li class="breadcrumb-item"><%= startD %> ~ <%= endD %></li>
                         <li class="breadcrumb-item">지역 :
                           <strong style="color:#5c99ee">${areas[status.index].areaName}</strong>
                         </li>
@@ -162,10 +172,7 @@
                     
                     <%if(isMe){ 
                     %>
-                    <%
-						String startD = ((CourseDTO)pageContext.findAttribute("course")).getStartDate().split(" ")[0].replace("-",".");
-						String endD = ((CourseDTO)pageContext.findAttribute("course")).getEndDate().split(" ")[0].replace("-",".");
-					%>
+                    
                     <a href="/tripnote/trip/plan/result?tripDest=${areas[status.index].areaName}&startDate=<%= startD %>&endDate=<%= endD %>&inviteMode=true&createdUserId=${loginUser.id}&courseId=${course.id}"
                        class="service-link ms-auto"
                        onclick="event.stopPropagation();"
@@ -195,6 +202,21 @@
     </div>
   </div>
 </section>
+
+<!-- 유저 리스트 모달 -->
+<div class="modal fade" id="modalUserList" tabindex="-1" aria-labelledby="modalUserListLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalUserListLabel">유저 찾기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+      </div>
+      <div class="modal-body p-4">
+        <%@ include file="/WEB-INF/views/jspf/user/userList.jspf" %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- 팔로잉/팔로워 모달 -->
 <div class="modal fade" id="modalFollowing" tabindex="-1" aria-labelledby="modalFollowingLabel" aria-hidden="true">
