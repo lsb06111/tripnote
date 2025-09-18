@@ -89,8 +89,7 @@
 								</figure>
 
 								<figure>
-									<img style="width: 100%; border-radius: 3px;"
-										src="/tripnote/resources/assets/img/alt/no_image.png" alt="cover">
+									<img src="${item.thumbnail}" alt="cover" style=" width: 200px; height: 150px; border-radius: 3px; object-fit: contain;">
 								</figure>
 
 								<h3 class="mb-1"

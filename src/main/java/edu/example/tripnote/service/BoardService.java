@@ -6,6 +6,7 @@ import static edu.example.tripnote.Constants.BOARD_PAGE_SIZE;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -100,7 +101,7 @@ public class BoardService {
 		if (!isDir.isDirectory()) { // 폴더 없으면 생성
 			isDir.mkdirs();
 		}
-		String filename = file.getOriginalFilename();
+		String filename = UUID.randomUUID() + file.getOriginalFilename();
 		File dest = new File(path + filename);
 		try {
 			file.transferTo(dest);
@@ -109,13 +110,14 @@ public class BoardService {
 		}
 		return "/db접근url/" + filename; // DB에 저장할 접근 경로
 	}
+	
 	private String saveThumbnailToFolder(MultipartFile file) {
 		String path = "c:/tripnote_resource/board_images/thumbnail/";
 		File isDir = new File(path);
 		if (!isDir.isDirectory()) { // 폴더 없으면 생성
 			isDir.mkdirs();
 		}
-		String filename = file.getOriginalFilename();
+		String filename = UUID.randomUUID() + file.getOriginalFilename();
 		File dest = new File(path + filename);
 		try {
 			file.transferTo(dest);
@@ -136,12 +138,15 @@ public class BoardService {
 	}
 
 	public BoardDetailResDTO getBoardDetailById(int id) {
-		BoardDetailResDTO respond = new BoardDetailResDTO();
+		BoardDetailResDTO response = new BoardDetailResDTO();
 		BoardDTO boardDTO = getBoardById(id);
+		log.info("게시물 : " + boardDTO.toString());
 		List<ReviewContentDTO> contents = reviewContentDAO.getContentsByBoardId(id);
 		log.info("게시물 내용들 : " + contents.toString());
 		//List<ReplyDTO> replyList = replyDAO.getReplysByBoardId(id);
 		log.info("댓글리스트");
-		return respond;
+		response.setBoardDTO(boardDTO);
+		response.setContents(contents);
+		return response;
 	}
 }

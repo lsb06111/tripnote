@@ -55,18 +55,11 @@
 		      
 </head>
 <body class="portfolio-details-page">
-<%@ include file="/WEB-INF/views/jspf/header.jspf" %> <main class="main">
-    <%
-    	String viewTitle = request.getParameter("title");
-    %>
+<%@ include file="/WEB-INF/views/jspf/header.jspf" %> 
+<main class="main">
     <div class="page-title light-background">
       <div class="container">
-        <h1><%= viewTitle %></h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li class="current">4박 5일</li>
-          </ol>
-        </nav>
+        <h1>${board.title}</h1>
       </div>
     </div><section id="portfolio-details" class="portfolio-details section" style="--subtle-border: none; padding-bottom:0px;">
 
@@ -102,9 +95,6 @@
             </div>
           </div>
         </div>
-
-
-
 
 <% String reqTitle = request.getParameter("title"); %>
     <section id="tabs" class="tabs section mt-5">
@@ -481,7 +471,8 @@ heartIcon.addEventListener("click", () => {
         
       </div>
 
-    </section></main>
+    </section>
+    </main>
 
 <script>
 function showReReplyDiv(replyIndex){

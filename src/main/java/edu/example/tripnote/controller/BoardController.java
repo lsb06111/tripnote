@@ -49,6 +49,7 @@ public class BoardController {
 		model.addAttribute("response", response);
 		return "board/index";
 	}
+	
 	@ResponseBody
 	@GetMapping("/mycourse")
 	public List<CourseSelectResDTO> getCourse() {
@@ -103,6 +104,8 @@ public class BoardController {
 	public String detail(int id, Model model) {
 		//BoardDTO dto = boardService.getBoardById(id); // getBoard 동작 확인 완료
 		BoardDetailResDTO resDTO =  boardService.getBoardDetailById(id);
+		model.addAttribute("board",resDTO.getBoardDTO());
+		model.addAttribute("contents",resDTO.getContents());
 		return "board/view";
 	}
 	
