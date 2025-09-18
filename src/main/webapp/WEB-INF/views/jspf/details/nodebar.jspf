@@ -16,7 +16,7 @@
 		
       // 현재 탭의 '일차' = ii(0-base) + 1
       int tourDay = ii + 1;
-
+		
       List<TourLocDTO> dayLocs = new ArrayList<>();
       if (tourloc != null) {
         for (TourLocDTO dto : tourloc) {
@@ -27,6 +27,10 @@
       }
       int nodeCount = dayLocs.size();
 
+      
+   
+      
+      String[] times = new String[nodeCount];
       String[] spots = new String[nodeCount];
       String[] typeNames = new String[nodeCount];
       String[] noteContent = new String[nodeCount];
@@ -37,7 +41,28 @@
         String tourLocImg = dayLocs.get(i).getImgSrc();
         String noteCont   = dayLocs.get(i).getNoteContent();
         String spot       = dayLocs.get(i).getTourLocName();
-
+		
+		
+		if(i+1 < nodeCount) {
+			int startHour = Integer.parseInt(dayLocs.get(i+1).getStartTime().substring(0,2));
+			int startMin = Integer.parseInt(dayLocs.get(i+1).getStartTime().substring(3,5));
+			
+			int endHour = Integer.parseInt(dayLocs.get(i).getEndTime().substring(0,2));
+			int endMin = Integer.parseInt(dayLocs.get(i).getEndTime().substring(3,5));
+			
+			// 분 단위로 게산
+			int totalStartMin = startHour*60 + startMin;
+			int totalEndMin = endHour*60 + endMin;
+			
+			int diff = totalStartMin - totalEndMin;
+			
+			int hour = diff/60;
+			int minute = diff%60;
+			
+			String result = (hour == 0 ? "" : hour + "시간") + (minute == 0 ? "" : minute + "분");
+			times[i] = result;
+		}
+        
         if (spot != null && spot.length() > 6) {
           spotMap.put(spot, spot.substring(0, 6) + "..");
         }
@@ -49,9 +74,8 @@
                          ? "/tripnote/resources/assets/img/trip/sampleTourImg.jpg"
                          : tourLocImg;
       }
-
-      // 구간 시간(마지막 노드 뒤에는 없음)
-      String[] times = {"15분", "12분", "20분", "18분"};
+        
+      
     %>
 
     <%
@@ -86,7 +110,7 @@
           <div class="border-top border-2 w-100"></div>
           <span class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2" style="font-size:0.85em;">
             <i class="bi bi-bus-front"></i>
-            <%= times[Math.min(i, times.length - 1)] %>
+            <%= times[i]%>
           </span>
         </div>
       <% } %>
