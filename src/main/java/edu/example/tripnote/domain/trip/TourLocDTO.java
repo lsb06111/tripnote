@@ -22,5 +22,6 @@ public class TourLocDTO {
 	private String noteContent;
 	private String mapx;
 	private String mapy;
+	private boolean isRecommend;
 
 }

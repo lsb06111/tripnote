@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="edu.example.tripnote.domain.trip.CourseDTO"%>
+<%@ page import="java.time.format.*" %>
+<%@ page import="java.time.*" %>
     <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/jspf/head.jspf" %> <!-- 헤드 부분 고정 -->
@@ -35,8 +37,13 @@
          class="btn btn-primary" style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;"><i class="bi bi-search"></i> 유저 찾기</a>
     </nav>
   </div>
+  
 </div>
-
+<% if(isMe){ %>
+<div style="position: relative; z-index: 999;text-align:right;padding-right:15px;">
+  <a class="modify-toggle" href="#" onclick="showAllButtons()">편집 하기</a>
+</div>
+<%} %>
     <div class="row">
       <!-- LEFT -->
       <div class="col-lg-4">
@@ -111,16 +118,24 @@
               <div class="col-12">
                 <!-- tag this card with its location -->
                <div class="service-card"
-			     data-location="${areas[status.index].areaName}"
-			     style="padding: 18px 24px; cursor:pointer;"
-			     onclick="location.href='/tripnote/<%=isMe?"details":"board/view"%>?title=${courses[status.index].title}&nBaks=${nBaks[status.index]}&courseId=${ courses[status.index].id }'">
-                  <div style="display:flex; align-items:center; gap:8px;">
+     data-location="${areas[status.index].areaName}"
+     style="padding: 18px 24px; cursor:pointer; position: relative;"
+     onclick="location.href='/tripnote/<%=isMe?"details":"board/view"%>?title=${courses[status.index].title}&nBaks=${nBaks[status.index]}&courseId=${ courses[status.index].id }'">
+
+		  <!-- 휴지통 버튼 -->
+		  <button type="button" class="button-modify"
+		          onclick="event.stopPropagation(); deleteCourse(${courses[status.index].id});" 
+		          style="display:none;position:absolute; top:10px; right:10px; background:none; border:none; color:#dc3545; cursor:pointer;">
+		    <i class="bi bi-trash fs-5"></i>
+		  </button>
+		
+		  <div style="display:flex; align-items:center; gap:8px;">
                   	
                     <div class="service-icon" style="margin-bottom:0; position:relative; ">
                     <% if(isMe){ %>
 					  <button type="button"
-					        class="btn btn-light btn-sm rounded-circle shadow-sm"
-					        style="position:absolute; top:-8px; right:-8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border:none;"
+					        class="btn btn-light btn-sm rounded-circle shadow-sm button-modify"
+					        style="position:absolute; top:-8px; right:-8px; width:32px; height:32px; display:none; align-items:center; justify-content:center; border:none;"
 					        onclick="showIconList(event, ${course.id})">
 					  <i class="bi bi-pencil-square" style="font-size:1rem; color:#555;"></i>
 					</button>
@@ -133,8 +148,8 @@
 
 						<!-- 제목 수정 버튼 -->
 						<% if(isMe) {%>
-							<button type="button" 
-							        style="margin-left:8px; padding:4px 6px; border:none; background:#f0f0f0; border-radius:6px; cursor:pointer; transition:all 0.2s;"
+							<button type="button" class="button-modify-inline"
+							        style="display:none;margin-left:8px; padding:4px 6px; border:none; background:#f0f0f0; border-radius:6px; cursor:pointer; transition:all 0.2s;"
 							        onclick="this.nextElementSibling.style.display='block'; this.style.display='none'; event.stopPropagation();">
 							  <i class="bi bi-pencil" style="font-size:0.9rem; color:#333;"></i>
 							</button>
@@ -160,6 +175,13 @@
                       <%
 						String startD = ((CourseDTO)pageContext.findAttribute("course")).getStartDate().split(" ")[0].replace("-",".");
 						String endD = ((CourseDTO)pageContext.findAttribute("course")).getEndDate().split(" ")[0].replace("-",".");
+						String todayStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+
+				        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+				        LocalDate endDate = LocalDate.parse(endD, formatter);
+				        LocalDate today = LocalDate.parse(todayStr, formatter);
+
+				        boolean isPast = today.isAfter(endDate);
 					%>
                       <ol class="breadcrumb mb-0" style="display:flex;">
                         <li class="breadcrumb-item"><%= startD %> ~ <%= endD %></li>
@@ -172,15 +194,28 @@
                     
                     <%if(isMe){ 
                     %>
-                    
-                    <a href="/tripnote/trip/plan/result?tripDest=${areas[status.index].areaName}&startDate=<%= startD %>&endDate=<%= endD %>&inviteMode=true&createdUserId=${loginUser.id}&courseId=${course.id}"
-                       class="service-link ms-auto"
-                       onclick="event.stopPropagation();"
-                       style="width:fit-content; transition:color 0.3s; color:inherit;"
-                       onmouseover="this.style.color='#5c99ee';"
-                       onmouseout="this.style.color='inherit';">
-                      일정 편집하기
-                    </a> / 
+                    	<% if(isPast){ // isPast%>
+                    	
+                    	
+		                    <a href="#" id="modal-recommend" data-bs-toggle="modal" data-bs-target="#modalRecommend"
+		                       class="service-link ms-auto"
+		                       onclick="event.stopPropagation();addRecommendList(${course.id});"
+		                       style="width:fit-content; transition:color 0.3s; color:#8A231C;"
+		                       onmouseover="this.style.color='#5c99ee';"
+		                       onmouseout="this.style.color='#8A231C';">
+		                    	관광지 추천하기
+		                    </a>
+                    	<%} else{ %>
+                    	<a href="/tripnote/trip/plan/result?tripDest=${areas[status.index].areaName}&startDate=<%= startD %>&endDate=<%= endD %>&inviteMode=true&createdUserId=${loginUser.id}&courseId=${course.id}"
+		                       class="service-link ms-auto"
+		                       onclick="event.stopPropagation();"
+		                       style="width:fit-content; transition:color 0.3s; color:inherit;"
+		                       onmouseover="this.style.color='#5c99ee';"
+		                       onmouseout="this.style.color='inherit';">
+		                    	일정 편집하기
+		                    </a>
+                    	<%} %>
+                     / 
                     <div>
                     <a href="/tripnote/board/write.jsp?"title=titles[i]
                        class="service-link ms-auto"
@@ -244,6 +279,29 @@
   </div>
 </div>
 
+
+<!-- 관광지 추천하기 모달 -->
+<div class="modal fade" id="modalRecommend" tabindex="-1" aria-labelledby="iconListModalLabel" aria-hidden="true" data-courseId="-1">
+  <div class="modal-dialog modal-dialog-centered"> <!-- 화면 중앙 정렬 -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="iconListModalLabel">관광지 추천하기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+      </div>
+
+
+		<div class="modal-body recommend-list">
+		  <!-- 여기에 추천할 관광지 리스트 -->
+		  
+		  
+		  <!--  -->
+		  
+		</div>
+    </div>
+  </div>
+</div>
+
+
  <!-- 아이콘 선택 모달 -->
 <div class="modal fade" id="iconListModal" tabindex="-1" aria-labelledby="iconListModalLabel" aria-hidden="true" data-courseId="-1">
   <div class="modal-dialog modal-dialog-centered"> <!-- 화면 중앙 정렬 -->
@@ -290,6 +348,121 @@
 <%@ include file="/WEB-INF/views/jspf/footer.jspf" %> <!-- 푸터 부분 고정 -->
 
 <script>
+function deleteCourse(id){
+	if(confirm('한번 삭제하면 다시는 복구할 수 없습니다. 그래도 삭제하시겠습니까?')){
+		$.get('/tripnote/deleteCourse?id='+id,
+				function(data,status){
+					if(status === 'success')
+						alert('삭제가 완료되었습니다.');
+						location.reload();
+				})
+	}
+}
+
+function showAllButtons(){
+	const modifyToggle = document.querySelector('.modify-toggle');
+	modifyToggle.innerText = modifyToggle.innerText == '편집 하기' ? '편집 숨기기' : '편집 하기';
+	document.querySelectorAll('.button-modify').forEach(e => {
+		e.style.display = e.style.display == 'block'? 'none' : 'block';
+	});
+	document.querySelectorAll('.button-modify-inline').forEach(e => {
+		e.style.display = e.style.display == 'inline-block'? 'none' : 'inline-block';
+	});
+	//document.querySelector()
+}
+
+function addRecommendList(courseId){
+	const modalBody = document.querySelector('.recommend-list');
+	$.get('/tripnote/getAllTourList?id='+courseId,
+			function(data, status){
+				if(status === 'success'){
+					//관광지 전체 리스트 가져오는거 하기
+					modalBody.innerHTML = '';
+					if(data.length >0){
+						let tourListsByDay = new Array();
+						let childArray = new Array();
+						let currentDay = data[0].tourNth;
+						for(let i in data){
+							let da = data[i];
+							if(da.tourNth != currentDay){
+								currentDay = da.tourNth;
+								tourListsByDay.push(childArray);
+								childArray = new Array();
+							}
+							childArray.push(da);
+							if(i == data.length-1)
+								tourListsByDay.push(childArray);
+						}
+						for(let tourLocs of tourListsByDay){
+							const recLists1 = `<div class="accordion" id="dayAccordion">
+								  
+								  <div class="accordion-item">
+								    <h2 class="accordion-header" id="headingDay\${tourLocs[0].tourNth}">
+								      <button class="accordion-button collapsed" type="button" 
+								              data-bs-toggle="collapse" data-bs-target="#collapseDay\${tourLocs[0].tourNth}" 
+								              aria-expanded="false" aria-controls="collapseDay\${tourLocs[0].tourNth}">
+								        \${tourLocs[0].tourNth}일차
+								      </button>
+								    </h2>
+								    <div id="collapseDay\${tourLocs[0].tourNth}" class="accordion-collapse collapse" 
+								         aria-labelledby="headingDay\${tourLocs[0].tourNth}" data-bs-parent="#dayAccordion">
+								      <div class="accordion-body p-0">
+								        
+								        <!-- 관광지 리스트 -->
+								        <ul class="list-group list-group-flush">`;
+							let middle = '';	        
+					        for(let tourL of tourLocs){
+					        	const recListInner =`
+							          <li class="list-group-item d-flex justify-content-between align-items-center">
+							            <span>\${tourL.tourLocName}</span>
+							            <button class="btn btn-sm btn-outline-primary rec-button-\${tourL.id}"
+							            onclick="doRecommend(\${tourL.id})" style="border:solid 1px #5c99ee;background:\${tourL.recommend ? '#5c99ee' : 'white' }; color:\${tourL.recommend ? 'white' : '#5c99ee'}">
+							              	\${tourL.recommend ? '추천취소' : '👍 추천하기'}
+							            </button>
+							          </li>`;
+							          
+						          middle += recListInner;
+					        }
+					        const recLists2 = `
+							        </ul>
+							      </div>
+							    </div>
+							  </div>
+							</div>`;
+							modalBody.innerHTML += recLists1 + middle + recLists2;
+					        
+						}
+					}else{
+						modalBody.innerHTML = '<p>추천할 관광지가 없습니다.</p>';
+					}
+					
+					
+				
+					
+				}
+			})
+}
+
+function doRecommend(tourLocId){
+	const recButton = document.querySelector('.rec-button-'+tourLocId);
+	
+	$.get('/tripnote/updateRecommend?id='+tourLocId,
+			function(data,status){
+				if(status === 'success'){
+					if(recButton.innerText.includes('추천하기')){
+						recButton.innerText = '추천취소';
+						recButton.style.background = '#5c99ee';
+				          recButton.style.color = 'white';
+					}else{
+						recButton.innerText = '👍 추천하기';
+						recButton.style.background = 'white';
+				          recButton.style.color = '#5c99ee';
+					}
+				}
+			});
+}
+
+
 function updateTitle(event, courseId){
 	event.stopPropagation();
 	const courseTitle = document.querySelector('#modified_title_'+courseId).value;
@@ -297,7 +470,7 @@ function updateTitle(event, courseId){
 			function(data, status){
 				if(status === 'success')
 					location.reload();
-	});
+			});
 	
 }
 
