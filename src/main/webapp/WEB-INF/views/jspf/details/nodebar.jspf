@@ -109,7 +109,7 @@
              style="flex:0 0 120px;">
           <div class="border-top border-2 w-100"></div>
           <span class="badge rounded-pill text-primary bg-primary-subtle fw-semibold mt-1 px-3 py-2" style="font-size:0.85em;">
-            <i class="bi bi-bus-front"></i>
+            <!-- <i class="bi bi-bus-front"></i> -->
             <%= times[i]%>
           </span>
         </div>

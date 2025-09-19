@@ -97,11 +97,11 @@
                 </div>
                 <div class="col-lg-6">
                   <div class="visual-content">
-                    <img src="assets/img/illustration/feature1.png" alt="" class="img-fluid">
+                    <img src="resources/assets/img/illustration/feature1.png" alt="" class="img-fluid">
                     <div class="floating-element">
                       <div class="floating-card">
                       <i class="bi bi-lightning-charge"></i>
-                      <a href="/oti_team3/board/">
+                      <a href="/tripnote/board/">
                         <div class="card-info">
                           <strong>리뷰 보러가기</strong>
                         </div>
@@ -150,11 +150,11 @@
                 </div>
                 <div class="col-lg-6">
                   <div class="visual-content">
-                    <img src="assets/img/illustration/feature2.png" alt="" class="img-fluid" style="width:85%">
+                    <img src="resources/assets/img/illustration/feature2.png" alt="" class="img-fluid" style="width:85%">
                     <div class="floating-element">
                       <div class="floating-card">
                         <i class="bi bi-graph-up-arrow"></i>
-                        <a href="/oti_team3/trip/">
+                        <a href="/tripnote/trip/">
                         <div class="card-info">
                           <strong>일정 만들기</strong>
                         </div>
@@ -190,7 +190,7 @@
                 </div>
                 <div class="col-lg-6">
                   <div class="visual-content">
-                    <img src="assets/img/illustration/feature4.png" alt="" class="img-fluid" style="width:85%">
+                    <img src="resources/assets/img/illustration/feature4.png" alt="" class="img-fluid" style="width:85%">
                     
                   </div>
                 </div>
@@ -227,11 +227,11 @@
                 </div>
                 <div class="col-lg-6">
                   <div class="visual-content">
-                    <img src="assets/img/illustration/feature3.png" alt="" class="img-fluid" style="width:85%">
+                    <img src="resources/assets/img/illustration/feature3.png" alt="" class="img-fluid" style="width:85%">
                     <div class="floating-element">
                       <div class="floating-card">
                         <i class="bi bi-link-45deg"></i>
-                        <a href="/oti_team3/board/write.jsp">
+                        <a href="/tripnote/board/write.jsp">
 	                        <div class="card-info">
 	                          <strong>리뷰 작성하기</strong>
 	                        </div>

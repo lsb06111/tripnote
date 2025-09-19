@@ -15,11 +15,10 @@
           <li><a href="/tripnote/" class="active">Home</a></li>
           <li><a href="/tripnote//trip/">일정 만들기</a></li>
           <li><a href="/tripnote/board">리뷰 게시판</a></li>
-          <li><a href="/tripnote/mypage?identify=myself">마이페이지</a></li>
           
         <c:if test="${empty loginUser}">
 	    	<li>
-	          <a href="#" class="text-decoration-none" id="modal-login"
+	          <a href="/tripnote/login" class="text-decoration-none" id="modal-login"
 	             data-bs-toggle="modal" data-bs-target="#modalLogin">로그인</a>
 	        </li>
 	        <li>
@@ -28,7 +27,8 @@
 	        </li>
         </c:if>
         <c:if test="${!empty loginUser}">
-        	<li><a href="/tripnote/logout">로그아웃</a></li>
+          	<li><a href="/tripnote/mypage?identify=myself">마이페이지</a></li>
+          	<li><a href="/tripnote/logout">로그아웃</a></li>
         </c:if>
         
 

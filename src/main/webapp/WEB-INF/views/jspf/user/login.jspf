@@ -1,6 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<style>
+  /* 로그인 영역에만 적용 */
+  .login-component .form-control::placeholder {
+    color: #9aa0a6;   /* 연한 회색 */
+    opacity: 1;       /* 일부 브라우저는 opacity로 더 진하게 보이기도 하니 고정 */
+  }
+
+  /* 만약 더 강한 규칙이 덮어쓴다면 특이성을 올려 비밀번호 칸을 한 번 더 지정 */
+  .login-component input[type="password"]::placeholder {
+    color: #9aa0a6 !important;
+    opacity: 1;
+  }
+</style>
+
+
 <c:set var="cxt" value="${pageContext.request.contextPath}"/>
 
 <form id="loginForm" method="post" action="${pageContext.request.contextPath}/login" class="needs-validation" novalidate>
@@ -31,10 +46,6 @@
   </div>
 
   <div class="d-flex justify-content-between align-items-center mb-3 login-component">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="true" id="rememberMe" name="remember">
-      <label class="form-check-label" for="rememberMe">로그인 상태 유지</label>
-    </div>
     <div>
       <!-- return false로 링크 기본 동작 방지 -->
       <a href="" id="btnFindUsername" class="small text-decoration-none" onclick="return findAction('id')">아이디 찾기</a>
@@ -102,9 +113,9 @@
 
   function setFindPasswordMode() {
     currentMode = 'findPw';
-    form.action = '<c:out value="${cxt}"/>/searchpassword'; // 비번 찾기 엔드포인트(구현 시)
+    form.action = '<c:out value="${cxt}"/>/searchpassword'; // 비번 찾기 엔드포인트
     loginDomAll.forEach(el => el.style.setProperty('display', 'none', 'important'));
-    findPassDomAll.forEach(show); // 아이디/이메일 모두 보이게(요구사항에 맞게 조절)
+    findPassDomAll.forEach(show); // 아이디/이메일 모두 보이게
     toggleInputsRequiredDisabled(loginInputs, false);
     toggleInputsRequiredDisabled(findInputs,  true);
     submitBtn.textContent = '비밀번호 찾기';
