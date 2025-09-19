@@ -3,9 +3,9 @@
 <mapper namespace="edu.example.tripnote.dao.ReviewContentDAO">
 
 <insert id="save" parameterType="list" >
-	INSERT INTO review_content (review_content,title, img, board_id)
+	INSERT INTO review_content (review_content, img, tour_loc_id)
         <foreach collection="list" item="item" separator="UNION ALL">
-            SELECT #{item.content},#{item.title}, #{item.imgSrc}, #{item.boardId} 
+            SELECT #{item.content}, #{item.imgSrc}, #{item.tourlocId} 
             FROM DUAL
 		</foreach>
 </insert>

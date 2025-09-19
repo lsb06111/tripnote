@@ -14,12 +14,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class BoardSaveReqDTO {
+	//board
 	private Long boardId;
-	private String title;
+	private String boardTitle;
 	private String intro;
+	private int tourlocId;
 	private int userId;
 	private int courseId;
-	private String thumbnailSrc;
 	private MultipartFile thumbnail;
+	private String thumbnailSrc;
+	//review_content
 	private List<ReviewContentDTO> contents;
 }

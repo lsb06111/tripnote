@@ -6,7 +6,7 @@ function savePost() {
     const formData = new FormData();
 
     // 1. 게시물 기본 정보
-    formData.append("title", $('#write_title_input').val());
+    formData.append("boardTitle", $('#write_title_input').val());
     formData.append("intro", $('#post_intro').val());
     formData.append("userId", 1);
     formData.append("courseId", $('.board-form').attr('data-id'));
@@ -22,15 +22,16 @@ function savePost() {
         const file = $el.find('.postImg-input')[0].files[0];
 
         // text나 이미지 입력이 있으면 formData에 저장
-        if (texterea !== ''){
+        console.log("texterea : "+ texterea);
+      
+        if ((texterea && texterea.trim() !== '')||file){
             formData.append(`contents[${content_idx}].content`, texterea);
-            formData.append(`contents[${content_idx}].title`, $el.attr('data-tourloc-name'));
-            formData.append(`contents[${content_idx}].boardId`, $el.attr('data-tourloc-id'));
+            formData.append(`contents[${content_idx}].tourlocId`, $el.attr('data-tourloc-id'));
+            if(file){
+            	formData.append(`contents[${content_idx}].file`, file);
+            }
+            content_idx++;
         }
-        if(file){
-        	formData.append(`contents[${content_idx}].file`, file);
-        }
-        content_idx++;
     });
     console.log("ajax 뭐가 전달되나 : " + [...formData.entries()]);
     // 3. Ajax 전송

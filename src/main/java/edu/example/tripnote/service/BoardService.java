@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import static edu.example.tripnote.Constants.RESOURCE_PATH;
 import edu.example.tripnote.dao.BoardDAO;
 import edu.example.tripnote.dao.ReplyDAO;
 import edu.example.tripnote.dao.ReviewContentDAO;
@@ -71,24 +72,25 @@ public class BoardService {
 	}
 
 	public boolean save(BoardSaveReqDTO req) {
+		//board 저장
 		NewBoardDTO boardDTO = new NewBoardDTO();
 		boardDTO.setIntro(req.getIntro());
 		boardDTO.setCourseId(req.getCourseId());
-		boardDTO.setTitle(req.getTitle());
+		boardDTO.setTitle(req.getBoardTitle());
 		boardDTO.setUserId(req.getUserId());
 		MultipartFile thumbnail = req.getThumbnail();
 		if(thumbnail != null) {
-			String savedPath = saveThumbnailToFolder(thumbnail);
+			String savedPath = RESOURCE_PATH +"/board_images/thumbnail/" + saveThumbnailToFolder(thumbnail);
 			boardDTO.setThumbnail(savedPath);
 		}
-
 		List<ReviewContentDTO> reviewContents = req.getContents();
 		boolean result1 = boardDAO.save(boardDTO);
+		
+		//reviewContent 저장
 		for (ReviewContentDTO contentDTO : reviewContents) {
-			contentDTO.setBoardId(boardDTO.getId());
 			MultipartFile file = contentDTO.getFile();
 			if (file != null) {
-				String savedPath = saveFileToFolder(file);
+				String savedPath = RESOURCE_PATH + "/board_images/" + saveFileToFolder(file);
 				contentDTO.setImgSrc(savedPath);
 			}
 		}
@@ -112,7 +114,7 @@ public class BoardService {
 		} catch (IOException e) {
 			throw new RuntimeException("파일 저장 실패", e);
 		}
-		return "/db접근url/" + filename; // DB에 저장할 접근 경로
+		return filename; // DB에 저장할 접근 경로
 	}
 	
 	private String saveThumbnailToFolder(MultipartFile file) {
@@ -128,7 +130,7 @@ public class BoardService {
 		} catch (IOException e) {
 			throw new RuntimeException("파일 저장 실패", e);
 		}
-		return "/db접근url/" + filename; // DB에 저장할 접근 경로
+		return filename; // DB에 저장할 접근 경로
 	}
 
 	public boolean saveDraft(BoardSaveReqDTO req) {

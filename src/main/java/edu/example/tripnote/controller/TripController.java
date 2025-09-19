@@ -241,7 +241,7 @@ public class TripController {
 		System.out.println(Attractions.getAvailableDestinations());
 		List<String> attractionList = Attractions.getAvailableDestinations();
 		//after getting list
-		String cCode = "32"; // 12 관광지 / 39 음식점 / 32 숙박
+		String cCode = "12"; // 12 관광지 / 39 음식점 / 32 숙박
 		for(String att : attractionList) {
 			List<AttractionDTO> dtos = Attractions.getAttractions(att, cCode);
 			

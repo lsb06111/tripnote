@@ -278,26 +278,6 @@
 																</div>
 															</div>
 
-															<!-- 추천 버튼 -->
-															<div class="technology-stack">
-																<div class="row">
-																	<div class="col-lg-3">
-																		<h3>관광지 추천</h3>
-																	</div>
-																	<div class="col-lg-9">
-																		<div class="tech-categories">
-																			<div class="tech-category">
-																				<div class="tech-list">
-																					<i class="recommendation-btn bi bi-hand-thumbs-up"
-																						data-place-id="${loc.id}"
-																						style="font-size: 2.5rem; cursor: pointer; color: #5c99ee; position: relative; top: -10px;"></i>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-
 															<button id="board-save-btn" class="btn btn-primary float-end" onclick="savePost()"
 																style="background-color: #5c99ee; margin-left: 10px;">완료</button>
 															<button id="board-draft-btn" type="button" class="btn btn-primary float-end" onclick="saveDraft()"

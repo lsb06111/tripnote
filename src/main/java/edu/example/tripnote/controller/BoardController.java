@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.example.tripnote.dao.CourseDAO;
+import edu.example.tripnote.domain.UserDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardDetailResDTO;
 import edu.example.tripnote.domain.board.BoardFormReqDTO;
@@ -51,10 +54,16 @@ public class BoardController {
 	
 	@ResponseBody
 	@GetMapping("/mycourse")
-	public List<CourseSelectResDTO> getCourse() {
-		int id = 1;
-		List<CourseSelectResDTO> myCourses = courseDAO.getCourses(id);
-		return myCourses;
+	public List<CourseSelectResDTO> getCourse(HttpSession httpSession) {
+		UserDTO user = (UserDTO)httpSession.getAttribute("loginUser");
+		int id;
+		if(user != null) {
+			id = user.getId();
+			List<CourseSelectResDTO> myCourses = courseDAO.getCourses(id);
+			return myCourses;
+		}else {
+			return null;
+		}
 	}
 	
 	@PostMapping("/form")

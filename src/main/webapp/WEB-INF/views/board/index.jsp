@@ -7,12 +7,19 @@
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
 
 	<section id="portfolio" class="portfolio services section mt-5">
-
 		<div class="container section-title" style="padding-bottom: 60px;">
-			<h2 onclick="location.href='/tripnote/board'">여행 후기</h2>
-			<a href="" id="modal-reviewSelection" data-bs-toggle="modal"
-				data-bs-target="#modalReviewSelection">후기 쓰러가기<i
-				class="bi bi-arrow-right"></i></a>
+			<h2 onclick="location.href='/tripnote/board'" style="cursor:pointer;">여행 후기</h2>
+			<c:choose>
+			  <c:when test="${not empty sessionScope.loginUser}">
+			    <!-- 로그인 된 사용자: 후기 작성 모달을 연다 -->
+	   			<span id="modal-reviewSelection" data-bs-toggle="modal" style="color:#5c99ee; cursor:pointer;" 
+	   			   data-bs-target="#modalReviewSelection">후기 쓰러가기<i class="bi bi-arrow-right"></i></span>
+			  </c:when>
+			  <c:otherwise>
+			    <!-- 비로그인 : 로그인 모달 사용 -->
+			    <span data-bs-toggle="modal" data-bs-target="#modalLogin" style="color:#5c99ee; cursor:pointer;" >후기 쓰러가기</span>
+			  </c:otherwise>
+			</c:choose>
 		</div>
 		<div class="container">
 			<div class="isotope-layout" data-default-filter="*"

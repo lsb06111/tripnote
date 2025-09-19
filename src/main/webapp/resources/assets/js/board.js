@@ -80,10 +80,8 @@ function setBoardParam(key, value) {
 	  const url = new URL(window.location.href);
 	  url.searchParams.delete('page');
 	  if (value != null){
-		  console.log("value not null : " + value);
 		  url.searchParams.set(key, value);  // 기존 query 유지하면서 order만 세팅
 	  }else{
-		  console.log("value null : " + value);
 		  url.searchParams.delete(key);
 	  }
 	  window.location.href = url.toString(); // url로 이동
