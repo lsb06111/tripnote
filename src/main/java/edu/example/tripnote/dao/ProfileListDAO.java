@@ -9,6 +9,7 @@ import edu.example.tripnote.domain.UserDTO;
 import edu.example.tripnote.domain.trip.AreaVO;
 import edu.example.tripnote.domain.trip.CourseDTO;
 import edu.example.tripnote.domain.trip.CourseIconDTO;
+import edu.example.tripnote.domain.trip.TourLocDTO;
 
 @Mapper
 public interface ProfileListDAO {
@@ -41,5 +42,16 @@ public interface ProfileListDAO {
 	
 	public List<UserDTO> findUsers(@Param("target") String target,
 								   @Param("curUserId") int curUserId);
+	
+	public int updateProfileImg(@Param("id") int id,
+								@Param("profileImage") String profileImage);
+	
+	public List<TourLocDTO> getAllTourLoc(int id);
+	
+	public TourLocDTO getTourLoc(int id);
+	
+	public int updateRecommend(TourLocDTO tourLocDTO);
+	
+	public int deleteCourse(int id);
 	
 }
