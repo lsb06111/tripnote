@@ -2,6 +2,7 @@ package edu.example.tripnote.controller;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,10 +113,30 @@ public class BoardController {
 	public String detail(int id, Model model) {
 		BoardDetailResDTO resDTO =  boardService.getBoardDetailById(id);
 		model.addAttribute("board",resDTO.getBoardDTO());
-		log.info("&************************ board  :" + resDTO.getBoardDTO().toString());
+		log.debug("************************ board  :" + resDTO.getBoardDTO().toString());
 		model.addAttribute("contents",resDTO.getContents());
+		log.debug("************************ contents  :" + resDTO.getContents().toString());
+		
+		
+		/*
+		List<TourLocDTO> tours;
+		HashMap<Integer, List<ReivewContentDTO>> map = new HashMap<>();
+		
+		for(TourLocDTO tour : tours) {
+			List<ReivewContentDTO> lll = dao.getAllReviewContentByTourLocId(tour.getId());
+			
+			map.put(tour.getId(), lll);
+			
+		}*/
+		//System.out.println(resDTO.getContents());
 		return "board/view";
 	}
+	
+	@GetMapping("/viewtest")
+	public String viewtest() {
+		return "board/old_view";
+	}
+	
 	
 
 }
