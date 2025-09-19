@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="image-container">
-              <img src="assets/img/illustration/feature1.png" alt="Streamlined Workflow" class="img-fluid">
+              <img src="resources/assets/img/illustration/feature1.png" alt="Streamlined Workflow" class="img-fluid">
             </div>
           </div>
 
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class="image-container">
-              <img src="assets/img/illustration/feature2.png" alt="Performance Analytics" class="img-fluid">
+              <img src="resources/assets/img/illustration/feature2.png" alt="Performance Analytics" class="img-fluid">
             </div>
           </div>
 
@@ -70,7 +70,7 @@
               </div>
             </div>
             <div class="image-container">
-              <img src="assets/img/illustration/feature3.png" alt="Security Framework" class="img-fluid">
+              <img src="resources/assets/img/illustration/feature3.png" alt="Security Framework" class="img-fluid">
             </div>
           </div>
 
@@ -93,7 +93,7 @@
               </div>
             </div>
             <div class="image-container">
-              <img src="assets/img/illustration/feature4.png" alt="Team Environment" class="img-fluid">
+              <img src="resources/assets/img/illustration/feature4.png" alt="Team Environment" class="img-fluid">
             </div>
           </div>
         </div>
