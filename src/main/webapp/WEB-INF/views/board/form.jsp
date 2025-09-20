@@ -102,7 +102,7 @@
 			             src="/tripnote/resources/assets/img/alt/no_image.png"
 			             class="postImg img-fluid border"
 			             alt="클릭하여 업로드"
-			             style="width: 100%; height: 15rem; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+			             style="width: 20rem; height: 15rem; object-fit: contain; border-radius: 10px; cursor: pointer;" />
 			        <small class="text-muted d-block mt-1">대표 이미지 설정</small>
 			    </div>
 	

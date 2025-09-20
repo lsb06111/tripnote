@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import static edu.example.tripnote.Constants.RESOURCE_PATH;
+import static edu.example.tripnote.Constants.MAPPING_PATH;
+import static edu.example.tripnote.Constants.SERVER_RESOURCE_PATH;
 import edu.example.tripnote.dao.BoardDAO;
 import edu.example.tripnote.dao.ReplyDAO;
 import edu.example.tripnote.dao.ReviewContentDAO;
@@ -80,7 +81,7 @@ public class BoardService {
 		boardDTO.setUserId(req.getUserId());
 		MultipartFile thumbnail = req.getThumbnail();
 		if(thumbnail != null) {
-			String savedPath = RESOURCE_PATH +"/board_images/thumbnail/" + saveThumbnailToFolder(thumbnail);
+			String savedPath = MAPPING_PATH +"/board_images/thumbnail/" + saveThumbnailToFolder(thumbnail);
 			boardDTO.setThumbnail(savedPath);
 		}
 		List<ReviewContentDTO> reviewContents = req.getContents();
@@ -90,7 +91,7 @@ public class BoardService {
 		for (ReviewContentDTO contentDTO : reviewContents) {
 			MultipartFile file = contentDTO.getFile();
 			if (file != null) {
-				String savedPath = RESOURCE_PATH + "/board_images/" + saveFileToFolder(file);
+				String savedPath = MAPPING_PATH + "/board_images/" + saveFileToFolder(file);
 				contentDTO.setImgSrc(savedPath);
 			}
 		}
@@ -102,12 +103,12 @@ public class BoardService {
 
 	// 파일 네이밍 전략 추후 보충 , db 접근 경로 보충
 	private String saveFileToFolder(MultipartFile file) {
-		String path = "c:/tripnote_resource/board_images/";
+		String path = SERVER_RESOURCE_PATH + "/board_images/";
 		File isDir = new File(path);
 		if (!isDir.isDirectory()) { // 폴더 없으면 생성
 			isDir.mkdirs();
 		}
-		String filename = UUID.randomUUID() + file.getOriginalFilename();
+		String filename = UUID.randomUUID() + file.getOriginalFilename(); // UUID.toString : 36바이트
 		File dest = new File(path + filename);
 		try {
 			file.transferTo(dest);
@@ -118,7 +119,7 @@ public class BoardService {
 	}
 	
 	private String saveThumbnailToFolder(MultipartFile file) {
-		String path = "c:/tripnote_resource/board_images/thumbnail/";
+		String path = SERVER_RESOURCE_PATH + "/board_images/thumbnail/";
 		File isDir = new File(path);
 		if (!isDir.isDirectory()) { // 폴더 없으면 생성
 			isDir.mkdirs();
