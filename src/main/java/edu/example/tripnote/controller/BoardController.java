@@ -116,27 +116,7 @@ public class BoardController {
 		log.debug("************************ board  :" + resDTO.getBoardDTO().toString());
 		model.addAttribute("contents",resDTO.getContents());
 		log.debug("************************ contents  :" + resDTO.getContents().toString());
-		
-		
-		/*
-		List<TourLocDTO> tours;
-		HashMap<Integer, List<ReivewContentDTO>> map = new HashMap<>();
-		
-		for(TourLocDTO tour : tours) {
-			List<ReivewContentDTO> lll = dao.getAllReviewContentByTourLocId(tour.getId());
-			
-			map.put(tour.getId(), lll);
-			
-		}*/
-		//System.out.println(resDTO.getContents());
 		return "board/view";
 	}
-	
-	@GetMapping("/viewtest")
-	public String viewtest() {
-		return "board/old_view";
-	}
-	
-	
 
 }

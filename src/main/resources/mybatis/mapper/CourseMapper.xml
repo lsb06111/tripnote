@@ -3,6 +3,7 @@
 <mapper namespace="edu.example.tripnote.dao.CourseDAO">
 <select id="getCourses" parameterType="int" resultType="CourseSelectResDTO">
 	SELECT
+		b.id,
 		c.id courseId,
 	    c.title,
 	    to_char(c.start_date, 'YYYY"."MM"."dd') startDate,
@@ -10,10 +11,12 @@
 	    ( end_date - start_date ) AS days,
 	    a.area_name AS loc
 	FROM
-         course c
-	     JOIN area a ON c.area_id = a.id
+        course c
+		    JOIN area  a ON c.area_id = a.id
+		    LEFT JOIN board b ON c.id = b.course_id
 	WHERE
-    	user_id = #{id}
+        c.user_id = #{id}
+	    AND b.id IS NULL
 </select>
 <select id="getCourseById" parameterType="int" resultType="CourseDTO">
 	SELECT
