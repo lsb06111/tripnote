@@ -128,6 +128,7 @@
 	where b.id = #{id}
 </select>
 
+<!--board 상세 내용 -->
 <select id="getBoardContentsByBoardId" parameterType="int" resultType="BoardDetailDTO">
 	SELECT
 	    r.id as reviewContentId, r.review_content as content, r.is_draft, r.img as imgSrc,

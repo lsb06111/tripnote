@@ -10,10 +10,11 @@
 <%@ page import="java.util.stream.Collectors"%>
 <style>
 .custom-toggle {
-	background-color: white;
-	color: black;
+	background-color: #5c99ee;
+	color: white;
 	border: 1px solid #ccc;
 	border-radius: 30px;
+	border-color: #0d6efd;
 	padding: 6px 16px;
 	display: inline-block;
 	cursor: pointer;
@@ -21,9 +22,9 @@
 }
 
 .btn-check:checked+.custom-toggle {
-	background-color: #5c99ee;
-	color: white;
-	border-color: #0d6efd;
+	background-color: lightgray;
+	border-color: gray;
+	color: black;
 }
 /* 댓글 기본 숨김 */
 .default-hide-comment {
@@ -77,6 +78,7 @@
 					<div class="meta-column">
 						<div class="meta-label">작성자</div>
 						<div class="meta-value">${board.nickname}</div>
+						<div id="writer" style="display:none;'">${board.userId}</div>
 					</div>
 
 					<div class="meta-column">
@@ -92,20 +94,27 @@
 						<div class="meta-value">${board.createdAt}</div>
 					</div>
 					<div class="meta-column">
-						<div class="meta-value">
-							<input type="checkbox" class="btn-check" id="btn1"
-								autocomplete="off" /> <label class="custom-toggle" for="btn1">팔로우
-								신청</label>
-
-						</div>
+						<c:choose>
+							<c:when test="${not empty sessionScope.loginUser}">
+								<span id="user_id" style="display:none;">${sessionScope.loginUser.id}</span>
+								<c:if test="${sessionScope.loginUser.username != board.username}">
+									<div class="meta-value">
+										<input type="checkbox" class="btn-check" autocomplete="off" id="follow-btn-2" ${isFollowing ? 'checked' : ''} /> 
+										<label class="custom-toggle" for="follow-btn-2" onclick="sendFollow()">팔로우</label>
+									</div>
+								</c:if>
+							</c:when>
+							<c:otherwise>
+								<div class="meta-value">
+									<input type="checkbox" id="follow-btn-1" class="btn-check" autocomplete="off" /> 
+								    <label class="custom-toggle" for="follow-btn-1" data-bs-toggle="modal" data-bs-target="#modalLogin">팔로우</label>
+								</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 			</div>
 
-
-			<%
-				String reqTitle = request.getParameter("title");
-			%>
 			<section id="tabs" class="tabs section mt-5">
 				<div class="container">
 					<div class="tabs-wrapper">
@@ -476,7 +485,17 @@ heartIcon.addEventListener("click", () => {
 	</section>
 	</main>
 
-	<script>
+<script>
+function sendFollow(){
+	const followerId = $('#user_id').text();
+	const followeeId = $('#writer').text();
+	let request = `/tripnote/follow?follower=1&followee=\${followeeId}`
+	$.get(request, function(){
+		console.log("succeed follow request");
+	});
+}
+
+
 function showReReplyDiv(replyIndex){
    document.querySelector('#re_reply-'+replyIndex).style.display = 'block';
 }

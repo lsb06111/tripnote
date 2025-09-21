@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.example.tripnote.dao.FollowDAO">
+
+<select id="isFollowing" resultType="int">
+	select count(*)
+	from follow
+	where follow_id=#{follower} and user_id=#{followee}
+</select>
+
+<insert id="follow">
+	insert into follow (follow_id, user_id)
+	values (#{follower},#{followee})
+</insert>
+
+<delete id="unFollow">
+	delete from follow where follow_id = #{follower} and user_id = #{followee}
+</delete>
+</mapper>

@@ -69,10 +69,8 @@
 						<!-- 여행 후기 item -->
 						<div class="col-lg-3 col-md-6 portfolio-item isotope-item">
 							<div class="service-card"
-								style="padding: 15px 12px; cursor: pointer"
-								onclick="location.href='/tripnote/board/detail?id=${item.id}'">
-								<figure
-									style="display: flex; align-items: center; margin: 0; width: 100%; margin: 5px">
+								style="padding: 15px 12px;">
+								<figure style="display: flex; align-items: center; margin: 0; width: 100%; margin: 5px">
 									<img
 										style="width: 15%; border: 1px solid black; border-radius: 50%; margin-right: 10px; cursor: pointer"
 										onclick="event.stopPropagation();"
@@ -81,7 +79,7 @@
 									<div style="display: flex; align-items: center; width: 100%">
 										<div
 											style="display: flex; flex-direction: column; margin-right: 20px; cursor: pointer"
-											onclick="event.stopPropagation();location.href='/oti_team3/profile.jsp?identify=9uiopa@gmail.com&name=김성배'">
+											onclick="event.stopPropagation(); location.href='/tripnote/profile?username=${item.username}'">
 											<h6 style="margin: 0; font-size: 12px;">${item.nickname} @${item.username}</h6>
 											<h6 style="margin: 0; font-size: 10px;">${item.createdAt}</h6>
 										</div>
@@ -94,20 +92,22 @@
 										</div>
 									</div>
 								</figure>
-
-								<figure>
-									<img src="${item.thumbnail}" alt="cover" style=" width: 200px; height: 150px; border-radius: 3px; object-fit: contain;">
-								</figure>
-
-								<h3 class="mb-1"
-									style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${item.title}
-								</h3>
-								<small style="color: #5c99ee;">${item.areaName}</small>
-								<p
-									style="min-height: 5rem; max-height: 5rem; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">${item.boardContent}</p>
-								<a href="view.jsp" class="service-link"> 자세히보기 <i
-									class="bi bi-arrow-right"></i>
-								</a>
+								<div class="mt-2" style="cursor:pointer;" onclick="location.href='/tripnote/board/detail?id=${item.id}'">
+									<figure>
+										<img src="${item.thumbnail}" alt="cover" style=" width: 200px; height: 150px; border-radius: 3px; object-fit: contain;">
+									</figure>
+	
+									<h3 class="mb-1"
+										style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${item.title}
+									</h3>
+									<small style="color: #5c99ee;">${item.areaName}</small>
+									<p
+										style="min-height: 5rem; max-height: 5rem; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">${item.boardContent}</p>
+									<a href="/tripnote/board/detail?id=${item.id}" class="service-link"> 자세히보기 <i
+										class="bi bi-arrow-right"></i>
+									</a>
+								
+								</div>
 							</div>
 						</div>
 					</c:forEach>

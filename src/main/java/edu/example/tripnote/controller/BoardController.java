@@ -33,6 +33,7 @@ import edu.example.tripnote.domain.trip.CourseDTO;
 import edu.example.tripnote.domain.trip.TourLocDTO;
 import edu.example.tripnote.service.AreaService;
 import edu.example.tripnote.service.BoardService;
+import edu.example.tripnote.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 	private final BoardService boardService;
 	private final AreaService areaService;
+	private final FollowService followService;
 	private final CourseDAO courseDAO;
 	
 	@GetMapping
@@ -110,12 +112,20 @@ public class BoardController {
 	}
 	
 	@GetMapping("/detail")
-	public String detail(int id, Model model) {
+	public String detail(HttpSession httpSession, int id, Model model) {
 		BoardDetailResDTO resDTO =  boardService.getBoardDetailById(id);
-		model.addAttribute("board",resDTO.getBoardDTO());
-		log.debug("************************ board  :" + resDTO.getBoardDTO().toString());
+		BoardDTO boardDTO = resDTO.getBoardDTO();
+		model.addAttribute("board", boardDTO);
 		model.addAttribute("contents",resDTO.getContents());
-		log.debug("************************ contents  :" + resDTO.getContents().toString());
+		log.debug("************** board  :" + resDTO.getBoardDTO().toString());
+		log.debug("************** contents  :" + resDTO.getContents().toString());
+		
+		UserDTO currentUser = (UserDTO)httpSession.getAttribute("loginUser");
+		if (currentUser != null) {
+			int userId = currentUser.getId();
+			boolean isFollowing = followService.isFollowing(userId, boardDTO.getUserId());
+			model.addAttribute("isFollowing", isFollowing);
+		}
 		return "board/view";
 	}
 
