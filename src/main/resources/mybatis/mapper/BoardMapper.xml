@@ -27,8 +27,13 @@
             GROUP BY
                 board_id
         )   l ON b.id = l.board_id
-    
+    	<if test="filter != null and filter != ''">
+    		left join follow f on b.user_id = f.user_id 
+    	</if>
     <where>
+       	<if test="filter != null and filter != ''">
+		    and f.follow_id = #{userId}
+    	</if>
     	<if test="loc != null and loc != '' and loc != 'undefined'">
     		and c.area_id in 
     		 (	SELECT
@@ -50,6 +55,7 @@
     			or b.board_content like '%' || #{keyword} || '%'
     			or a.area_name like '%' || #{keyword} || '%')
     	</if>
+
     	and b.is_visible = 1
     	and b.is_private = 0
     	and b.is_draft = 0
@@ -86,8 +92,13 @@
             GROUP BY
                 board_id
         )   l ON b.id = l.board_id
-    
+       	<if test="filter != null and filter != ''">
+    		left join follow f on b.user_id = f.user_id 
+    	</if>
     <where>
+         <if test="filter != null and filter != ''">
+		    and f.follow_id = #{userId}
+    	</if>
     	<if test="loc != null and loc != '' and loc != 'undefined'">
     		and area_name = #{loc}
     	</if>

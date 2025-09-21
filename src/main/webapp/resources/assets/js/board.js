@@ -21,6 +21,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	}else{
 		$(".isotope-filters li").first().addClass('filter-active');
 	}
+    
+	//팔로우만 보기 관련
+	const followCheckbox = $('#followOnlySwitch');
+    followCheckbox.on('change', function() {
+        setBoardParam('filter', $(this).prop('checked') ? 'follow' : null);
+    });
+    
+	// 팔로우만 조회 쿼리스트링에서 읽어오기
+	const urlParams = new URLSearchParams(window.location.search);
+	if (urlParams.get('filter') === 'follow') {
+	    followCheckbox.prop('checked', true);
+	}
 	
 	//후기 쓰러가기 모달 
 	$('#modalReviewSelection').on('show.bs.modal', function (e) {
@@ -74,6 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		    
 		  }); 
 		});
+
+	
 });
 
 function setBoardParam(key, value) {
@@ -86,3 +100,4 @@ function setBoardParam(key, value) {
 	  }
 	  window.location.href = url.toString(); // url로 이동
 }
+

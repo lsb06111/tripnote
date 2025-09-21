@@ -39,10 +39,16 @@
 								style="cursor: pointer;">최신순</a></li>
 							<li><a class="dropdown-item"
 								onclick="setBoardParam('order','like')" style="cursor: pointer;">추천순</a></li>
-							<li><a class="dropdown-item" href=""
-								style="cursor: pointer;">팔로워만</a></li>
 						</ul>
 					</div>
+					<c:if test="${not empty sessionScope.loginUser}">
+						<div class="d-flex align-items-center ms-4">
+						    <span class="me-2 small">팔로우</span>
+						    <div class="form-check form-switch m-0">
+						        <input class="form-check-input" type="checkbox" id="followOnlySwitch">
+						    </div>
+						</div>
+					</c:if>
 
 					<ul
 						class="portfolio-filters isotope-filters mb-0 position-absolute start-50 translate-middle-x d-flex gap-3">

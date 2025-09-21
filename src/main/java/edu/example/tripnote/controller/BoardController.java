@@ -48,7 +48,12 @@ public class BoardController {
 	private final CourseDAO courseDAO;
 	
 	@GetMapping
-	public String index(Model model,  BoardParamDTO boardParam) {
+	public String index(HttpSession httpSession,Model model,  BoardParamDTO boardParam) {
+		UserDTO currentUser = (UserDTO)httpSession.getAttribute("loginUser");
+		if (currentUser != null) {
+			int userId = currentUser.getId();
+			boardParam.setUserId(userId);
+		}
 		model.addAttribute("locList" ,areaService.listParentLoc());
 		PageResponseDTO<BoardDTO> response =  boardService.listAll(boardParam);
 		model.addAttribute("response", response);

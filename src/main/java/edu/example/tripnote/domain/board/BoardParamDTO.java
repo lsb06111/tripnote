@@ -19,5 +19,7 @@ public class BoardParamDTO {
 	private String loc;
 	private String order;
 	private String keyword;
+	private String filter;
+	private int userId;
 	
 }
