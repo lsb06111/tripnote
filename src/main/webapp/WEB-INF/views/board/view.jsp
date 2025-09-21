@@ -64,6 +64,10 @@
 <body class="portfolio-details-page">
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
 
+		<c:if test="${not empty sessionScope.loginUser}">
+			<span id="user_id" style="display:none;">${sessionScope.loginUser.id}</span>
+		</c:if>
+
 	<main class="main">
 	<div class="page-title light-background">
 		<div class="container">
@@ -96,7 +100,6 @@
 					<div class="meta-column">
 						<c:choose>
 							<c:when test="${not empty sessionScope.loginUser}">
-								<span id="user_id" style="display:none;">${sessionScope.loginUser.id}</span>
 								<c:if test="${sessionScope.loginUser.username != board.username}">
 									<div class="meta-value">
 										<input type="checkbox" class="btn-check" autocomplete="off" id="follow-btn-2" ${isFollowing ? 'checked' : ''} /> 
@@ -106,7 +109,6 @@
 							</c:when>
 							<c:otherwise>
 								<div class="meta-value">
-									<input type="checkbox" id="follow-btn-1" class="btn-check" autocomplete="off" /> 
 								    <label class="custom-toggle" for="follow-btn-1" data-bs-toggle="modal" data-bs-target="#modalLogin">팔로우</label>
 								</div>
 							</c:otherwise>
@@ -256,10 +258,7 @@
   }
 }
                   </script>
-
-
-															<div class="swiper-wrapper" style="text-align: center;">
-
+															<div class="swiper-wrapper" style="text-align:center;">
 																<%
 																	for (int imgIndex = 0; imgIndex < totalReviewNumber; imgIndex++) {
 																%>
@@ -343,9 +342,6 @@ function setReviewContent(tIndex, nIndex){
    let reviewI = sliderImageIndices[tIndex][nIndex];
    const reviewDoms = document.querySelectorAll('#tabs-tab-' + (parseInt(tIndex)+1) + ' .review-contents-filter.review-content-'+nIndex); // NodeList
    reviewDoms.forEach((el, i) => {
-	   console.log("***************sliderImageIndices :" + sliderImageIndices);
-	   console.log("***************reviewI :" + reviewI);
-	   console.log("***************i :" + i);
        el.style.display = (i === reviewI ? 'block' : 'none');
      });
 }
@@ -373,7 +369,6 @@ function setReviewContent(tIndex, nIndex){
   });
 })();
 </script>
-
 			<div style="text-align: center;">
 				<i id="heartIcon" class="bi bi-heart"
 					style="font-size: 2.5rem; cursor: pointer; color: #5c99ee"></i>
@@ -386,25 +381,13 @@ function setReviewContent(tIndex, nIndex){
 heartIcon.addEventListener("click", () => {
      heartIcon.classList.toggle("bi-heart");
      heartIcon.classList.toggle("bi-heart-fill");
-
-     
    });
 
 </script>
-
 			<div class="features-intro">
 				<h3>댓글</h3>
 
 				<section>
-					<%
-						int totalReply = 6;
-						String[] replyIdentify = {"jdy19823", "lsb112323", "ksb234", "jdy19823", "lsb112323", "ksb234"};
-						String[] replyName = {"정동윤", "이수빈", "김성배", "박지원", "오상민", "최은영"};
-						String[] replyContents = {"사진 보니까 당장이라도 가고 싶네요 ㅎㅎ", "감천문화마을 진짜 알록달록해서 사진 맛집이죠!",
-								"여기 가면 꼭 벽화 앞에서 사진 찍어야 합니다 👍", "저도 지난달에 다녀왔는데 분위기가 너무 좋았어요", "부산 가면 무조건 들르는 코스 중 하나에요 ^^",
-								"와 설명이 자세해서 참고 많이 됐습니다~ 감사합니다!"};
-					%>
-
 					<div class="d-flex mb-3">
 						<a href=""> <img
 							src="https://mdbcdn.b-cdn.net/img/new/avatars/18.webp"
@@ -421,47 +404,7 @@ heartIcon.addEventListener("click", () => {
 						</div>
 					</div>
 
-					<div id="replyContainer">
-						<%
-							for (int i = 0; i < totalReply; i++) {
-						%>
-						<div class="d-flex mb-3" id="replies-<%=i%>">
-							<a
-								href="/oti_team3/profile.jsp?identify=<%=replyIdentify[i]%>&name=<%=replyName[i]%>">
-								<img
-								src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
-								class="border rounded-circle me-2" alt="Avatar"
-								style="height: 40px; border: 1px solid black; border-radius: 50%;" />
-							</a>
-							<div>
-								<div class="bg-body-tertiary rounded-3 px-3 py-1"
-									style="width: 400px;">
-									<strong class="text-dark mb-0"><%=replyName[i]%></strong> <small
-										class="text-muted d-block"><%=replyContents[i]%></small>
-								</div>
-								<button type="button" class="text-muted small me-2"
-									style="border: none; background: none;"
-									onclick="showReReplyDiv(<%=i%>)">
-									<strong>댓글달기</strong>
-								</button>
-								<div id="re_reply-<%=i%>" class="replyBox" style="display: none;">
-									<textarea class="form-control" rows="2" style="width: 400px;"></textarea>
-									<div class="d-flex my-2" style="justify-content: right">
-										<button type="button" class="btn btn-primary" onclick="saveChildReply(this)"
-											style="-bs-btn-bg: #5c99ee; - -bs-btn-hover-bg: #447fcc; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-border-color: #447fcc;">
-											등록</button>
-										<button type="button" class="btn btn-outline-primary ms-1"
-											style="-bs-btn-hover-bg: #447fcc; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-border-color: #447fcc;"
-											onclick="disableReReplyDiv(<%=i%>)">취소</button>
-									</div>
-								</div>
-
-							</div>
-						</div>
-						<%
-							}
-						%>
-					</div>
+					<div id="replyContainer"></div>
 					<button id="loadMoreRepliesBtn"
 						class="btn btn-outline-secondary w-100 mt-2"
 						style="-bs-btn-color: #5c99ee; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-bg: #5c99ee; - -bs-btn-hover-border-color: #5c99ee; - -bs-btn-hover-color: #fff;">
@@ -471,21 +414,23 @@ heartIcon.addEventListener("click", () => {
 			</div>
 
 
-			<hr style="color: lightgray; margin-bottom: 50px; margin-top: 50px;">
+<!-- 			<hr style="color: lightgray; margin-bottom: 50px; margin-top: 50px;">
 
 			<div style="display: inline-block; margin-bottom: 30px;">
 				<h3 style="margin-bottom: 2rem;">다른 리뷰글</h3>
 				<a href=index.jsp class="service-link" id="write_review"> 다른 리뷰글 보러가기 <i class="bi bi-arrow-right"></i>
 				</a>
-			</div>
-			<%@ include file="/WEB-INF/views/jspf/board/others.jspf"%>
-
+			</div> -->
 		</div>
 
 	</section>
 	</main>
 
 <script>
+$(document).ready(function() {
+	loadReplies();
+});
+
 function sendFollow(){
 	const followerId = $('#user_id').text();
 	const followeeId = $('#writer').text();
@@ -524,17 +469,31 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function saveChildReply(btn){
+	if(!isLogined()){
+		alert('로그인이 필요합니다');
+		return;
+	}
 	saveReply(btn);
 	$el = $(btn).closest('.replyBox');
 	$el[0].style.display = 'none';
 }
 
 function saveReply(btn){
+	if(!isLogined()){
+		alert('로그인이 필요합니다');
+		return;
+	}
+	
 	$el = $(btn).closest('.replyBox');
 	const boardId = $('#boardId').text();
-	const content = $el.find('textarea').val()
+	const content = $el.find('textarea').val();
 	$el.find('textarea').val("");
 	const userId = $('#user_id').text();
+	const $reply =  $el.closest('.reply');
+	let replyId = null;
+	if($reply.length){
+		replyId = $reply.attr('data-reply-id');
+	}
 	
 	fetch('/tripnote/reply/save', {
 		  method: 'POST',
@@ -543,18 +502,90 @@ function saveReply(btn){
 		  },
 		  body: JSON.stringify({
 		    boardId: boardId,
-		    content: content,
-		    userId: userId
+		    replyContent: content,
+		    userId: userId,
+		    replyId: replyId
 		  })
-		});
+		})
+		 .then(res=>{ 
+			loadReplies();
+		 }
+		);
+}
+//등록한 댓글로 focus를 옮기는 함수 - 추후 부착
+function replyFocus(){
+	const element = document.getElementById('targetElement');
+	element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-function replyFocus(){
-	//등록한 댓글로 focus를 옮기는 함수
-	// 이동할 요소 선택
-	const element = document.getElementById('targetElement');
-	// 스크롤 이동
-	element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+function isLogined(){
+	$el = $('#user_id');
+	if($el.length){
+		return true
+	}else{
+		return false
+	}
+}
+
+function loadReplies(){
+	const container = $('#replyContainer');
+	container.html("");
+	const boardId = $('#boardId').text();
+    $.getJSON(`/tripnote/reply/list?id=\${boardId}`, function(data) {
+    	$.each(data.parents, function(idx, reply){
+    		const html = `
+    			<div class="d-flex flex-column mb-3 reply " data-reply-id=\${reply.id}  id="replies-\${idx}">
+    				<div class="d-flex">
+						<a href="/oti_team3/profile.jsp?identify=\${reply.username}&name=\${reply.nickname}">
+							<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
+							class="border rounded-circle me-1" alt="Avatar" style="height: 40px; border: 1px solid black; border-radius: 50%;" />
+						</a>
+						<div>
+							<div class="bg-body-tertiary rounded-3 px-3 py-1"
+								style="width: 400px;">
+								<span class="text-dark mb-0 fw-bold">\${reply.nickname}</span> <small>\${reply.createdAt}</small> 
+								<div class="text-muted d-block mt-1">\${reply.replyContent}</div>
+							</div>
+							<button type="button" class="text-muted small me-2" style="border: none; background: none;" onclick="showReReplyDiv(\${idx})">
+								<strong>댓글달기</strong>
+							</button>
+							<div id="re_reply-\${idx}" class="replyBox" style="display: none;">
+								<textarea class="form-control" rows="2" style="width: 400px;"></textarea>
+								<div class="d-flex my-2" style="justify-content: right">
+									<button type="button" class="btn btn-primary" onclick="saveChildReply(this)" style="-bs-btn-bg: #5c99ee; - -bs-btn-hover-bg: #447fcc; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-border-color: #447fcc;">등록</button>
+									<button type="button" class="btn btn-outline-primary ms-1"
+										style="-bs-btn-hover-bg: #447fcc; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-border-color: #447fcc;"
+										onclick="disableReReplyDiv(\${idx})">취소</button>
+								</div>
+							</div>
+						</div>
+    				</div>
+    				<div class="childReplyContainer"></div>
+				</div>
+    		`;
+    		container.append(html);
+    	});
+    	$.each(data.childs,function(idx, reply){
+    		const parent = container.find(`[data-reply-id="\${reply.replyId}"]`).find(".childReplyContainer");
+    		console.log("parent : " + parent +parent.attr('data-reply-id'));
+    		const html = `
+    			<div class="d-flex mb-3 reply ms-5"  id="replies-\${idx}">
+				<a href="/oti_team3/profile.jsp?identify=\${reply.username}&name=\${reply.nickname}">
+					<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
+					class="border rounded-circle me-1" alt="Avatar" style="height: 40px; border: 1px solid black; border-radius: 50%;" />
+				</a>
+				<div>
+					<div class="bg-body-tertiary rounded-3 px-3 py-1"
+						style="width: 400px;">
+						<span class="text-dark mb-0 fw-bold">\${reply.nickname}</span> <small>\${reply.createdAt}</small> 
+						<div class="text-muted d-block mt-1">\${reply.replyContent}</div>
+					</div>
+				</div>
+			</div>
+    		`;
+    		parent.append(html);
+    	});
+    });
 }
 
 </script>

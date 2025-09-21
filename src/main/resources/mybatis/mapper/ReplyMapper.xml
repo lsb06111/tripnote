@@ -2,8 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.example.tripnote.dao.ReplyDAO">
 
-<select id="getReplysByBoardId" resultType="int">
+<select id="getReplysByBoardId" resultType="replydto">
+	select r.*, TO_CHAR(r.created_At, 'YYYY.MM.dd') AS createdAt, u.*
+	from reply r
+	join users u on r.user_id = u.id 
+	where board_id = #{id} and r.reply_id is null
+	order by r.id
+</select>
 
+<select id="getChildReplysByBoardId" resultType="replydto">
+	select r.*, TO_CHAR(r.created_At, 'YYYY.MM.dd') AS createdAt , u.*
+	from reply r
+	join users u on r.user_id = u.id 
+	where board_id = #{id} and r.reply_id is not null
+	order by r.id
 </select>
 
 <insert id="save" parameterType="replydto">
@@ -11,9 +23,8 @@
 	(reply_content, board_id, user_id
 	<if test="replyId != null">,reply_id</if>
 	)
-	values(#{content}, #{boardId}, #{userId}
+	values(#{replyContent}, #{boardId}, #{userId}
 	<if test="replyId != null">,#{replyId}</if>
 	)
 </insert>
-
 </mapper>

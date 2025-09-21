@@ -10,5 +10,6 @@ import edu.example.tripnote.domain.board.ReplyDTO;
 @Mapper
 public interface ReplyDAO {
 	public List<ReplyDTO> getReplysByBoardId(int id);
+	public List<ReplyDTO> getChildReplysByBoardId(int id);
 	public boolean save(ReplyDTO dto);
 }
