@@ -24,5 +24,5 @@ public class BoardDetailDTO {
 	private String courseTitle;
 	private String startDate;
 	private String endDate;
-	private String ereaName;
+	private String areaName;
 }

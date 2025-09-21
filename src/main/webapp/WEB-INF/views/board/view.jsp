@@ -68,10 +68,10 @@
 	<div class="page-title light-background">
 		<div class="container">
 			<h1>${board.title}</h1>
+			<div id="boardId" style="display:none;'">${board.id}</div>
 		</div>
 	</div>
-	<section id="portfolio-details" class="portfolio-details section"
-		style="-subtle-border: none; padding-bottom: 0px;">
+	<section id="portfolio-details" class="portfolio-details section" style="--subtle-border: none; padding-bottom: 0px;">
 		<div class="container">
 			<div class="project-hero" style="margin-bottom: 0;">
 				<div class="project-meta-grid" style="padding-top: 0">
@@ -411,10 +411,10 @@ heartIcon.addEventListener("click", () => {
 							class="border rounded-circle me-2" alt="Avatar"
 							style="height: 40px" />
 						</a>
-						<div data-mdb-input-init class="form-outline w-100">
+						<div data-mdb-input-init class="form-outline w-100 replyBox">
 							<textarea class="form-control" id="textAreaExample" rows="2"></textarea>
 							<div class="w-100" style="text-align: right;">
-								<button type="submit" class="btn btn-primary mt-1"
+								<button type="submit" class="btn btn-primary mt-1" onclick="saveReply(this)"
 									style="-bs-btn-bg: #5c99ee; - -bs-btn-hover-bg: #447fcc; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-border-color: #447fcc;">
 									등록</button>
 							</div>
@@ -444,10 +444,10 @@ heartIcon.addEventListener("click", () => {
 									onclick="showReReplyDiv(<%=i%>)">
 									<strong>댓글달기</strong>
 								</button>
-								<div id="re_reply-<%=i%>" style="display: none;">
+								<div id="re_reply-<%=i%>" class="replyBox" style="display: none;">
 									<textarea class="form-control" rows="2" style="width: 400px;"></textarea>
 									<div class="d-flex my-2" style="justify-content: right">
-										<button type="button" class="btn btn-primary"
+										<button type="button" class="btn btn-primary" onclick="saveChildReply(this)"
 											style="-bs-btn-bg: #5c99ee; - -bs-btn-hover-bg: #447fcc; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-border-color: #447fcc;">
 											등록</button>
 										<button type="button" class="btn btn-outline-primary ms-1"
@@ -495,7 +495,6 @@ function sendFollow(){
 	});
 }
 
-
 function showReReplyDiv(replyIndex){
    document.querySelector('#re_reply-'+replyIndex).style.display = 'block';
 }
@@ -523,6 +522,41 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function saveChildReply(btn){
+	saveReply(btn);
+	$el = $(btn).closest('.replyBox');
+	$el[0].style.display = 'none';
+}
+
+function saveReply(btn){
+	$el = $(btn).closest('.replyBox');
+	const boardId = $('#boardId').text();
+	const content = $el.find('textarea').val()
+	$el.find('textarea').val("");
+	const userId = $('#user_id').text();
+	
+	fetch('/tripnote/reply/save', {
+		  method: 'POST',
+		  headers: {
+		    'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify({
+		    boardId: boardId,
+		    content: content,
+		    userId: userId
+		  })
+		});
+}
+
+function replyFocus(){
+	//등록한 댓글로 focus를 옮기는 함수
+	// 이동할 요소 선택
+	const element = document.getElementById('targetElement');
+	// 스크롤 이동
+	element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 </script>
 
 

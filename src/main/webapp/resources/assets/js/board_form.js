@@ -18,14 +18,12 @@ function savePost() {
     let content_idx = 0;
     $('.swiper-slide').each(function(index, elem) {
         const $el = $(elem);
-        const texterea = $el.find('.loc-textera').val();
+        const textarea = $el.find('.loc-textera').val();
         const file = $el.find('.postImg-input')[0].files[0];
 
         // text나 이미지 입력이 있으면 formData에 저장
-        console.log("texterea : "+ texterea);
-      
-        if ((texterea && texterea.trim() !== '')||file){
-            formData.append(`contents[${content_idx}].content`, texterea);
+        if ((textarea && textarea.trim() !== '')||file){
+            formData.append(`contents[${content_idx}].content`, textarea);
             formData.append(`contents[${content_idx}].tourlocId`, $el.attr('data-tourloc-id'));
             if(file){
             	formData.append(`contents[${content_idx}].file`, file);

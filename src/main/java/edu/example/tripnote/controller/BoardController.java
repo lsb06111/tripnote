@@ -133,5 +133,10 @@ public class BoardController {
 		}
 		return "board/view";
 	}
+	
+	@GetMapping("/view")
+	public String view() {
+		return "board/oldView";
+	}
 
 }

@@ -8,7 +8,7 @@ public class ReplyDTO {
 	private String content;
 	private String createdAt;
 	private String modifiedAt;
-	private Long boardId;
-	private Long replyId;
-	private Long userId;
+	private int boardId;
+	private int userId;
+	private Integer replyId;
 }
