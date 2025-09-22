@@ -40,7 +40,6 @@ import edu.example.tripnote.util.Attractions;
 
 @Controller
 @RequestMapping("/trip")
-@SessionAttributes("user")
 public class TripController {
 
 	private final String CLIENT_ID = "vy9ul8xfsx";
@@ -52,13 +51,10 @@ public class TripController {
 	@Autowired
 	private TripDAO tripDao;
 	
-	@ModelAttribute("user")
-	public UserDTO makeUser() {
-		return new UserDTO(1, "qwer", "qwer", "qwer@w.com", "이수빈", "짱짱맨", false);
-	}
+	
 	
 	@RequestMapping("")
-	public String goTrip(@ModelAttribute("user") UserDTO userDTO) {
+	public String goTrip() {
 		return "trip/index";
 	}
 	
