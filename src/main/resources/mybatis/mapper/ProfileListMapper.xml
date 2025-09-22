@@ -88,4 +88,16 @@
 <update id="deleteCourse" parameterType="_int">
 	update course set is_visible = 0 where id = #{id}
 </update>
+
+<select id="getCourseBoardIds" parameterType="int" resultType="BoardCourseDTO">
+	select id, course_id from board where user_id = #{id}
+</select>
+
+<select id="getFollowers" parameterType="int" resultType="UserDTO">
+	select u.* from users u where u.id in (select follow_id from follow f where f.user_id = #{userId})
+</select>
+
+<select id="getFollowings" parameterType="int" resultType="UserDTO">
+	select u.* from users u where u.id in (select user_id from follow f where f.follow_id = #{userId})
+</select>
 </mapper>

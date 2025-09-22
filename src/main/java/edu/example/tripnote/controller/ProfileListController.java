@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.example.tripnote.dao.ProfileListDAO;
 import edu.example.tripnote.domain.UserDTO;
+import edu.example.tripnote.domain.profile.BoardCourseDTO;
 import edu.example.tripnote.domain.trip.AreaVO;
 import edu.example.tripnote.domain.trip.CourseDTO;
 import edu.example.tripnote.domain.trip.CourseIconDTO;
@@ -77,7 +79,17 @@ public class ProfileListController {
 		List<String> nBaks = new ArrayList<>();
 		List<AreaVO> areas = new ArrayList<>();
 		List<String> icons = new ArrayList<>();
+		List<BoardCourseDTO> boardCourseIds = dao.getCourseBoardIds(userDTO.getId());
+		HashMap<Integer, Integer> bc = new HashMap<>();
+		List<Integer> boardIds = new ArrayList<>();
+		List<Boolean> writtens = new ArrayList<>();
+		List<UserDTO> followers = dao.getFollowers(userDTO.getId());
+		List<UserDTO> followings = dao.getFollowings(userDTO.getId());
+		
 		DateTimeFormatter formatter;
+		
+		for(BoardCourseDTO bcDto : boardCourseIds)
+			bc.put(bcDto.getCourseId(), bcDto.getId());
 
 		for(CourseDTO c : courses) {
 				areas.add(dao.getArea(c.getAreaId()));
@@ -92,13 +104,23 @@ public class ProfileListController {
 		        int totalDays = (int)ChronoUnit.DAYS.between(start, end)+1;
 		        nBaks.add((totalDays-1)+"박 "+totalDays+"일");
 		        icons.add(dao.getIcon(c.getId()));
-			
+		        if(bc.keySet().contains(c.getId().intValue())) {
+		        	writtens.add(true);
+		        	boardIds.add(bc.get(c.getId().intValue()));
+		        }else {
+		        	writtens.add(false);
+		        	boardIds.add(0);
+		        }
 		}
 		
 		model.addAttribute("courses", courses);
 		model.addAttribute("areas", areas);
 		model.addAttribute("nBaks", nBaks);
 		model.addAttribute("icons", icons);
+		model.addAttribute("writtens", writtens);
+		model.addAttribute("boardIds", boardIds);
+		model.addAttribute("followers", followers);
+		model.addAttribute("followings", followings);
 		
 		return "profile";
 	}
@@ -157,6 +179,7 @@ public class ProfileListController {
 		
 		String savedPath = saveImgToFolder(imgFile);
 		dao.updateProfileImg(loginUser.getId(), savedPath);
+		loginUser.setProfileImage(savedPath);
 		return ResponseEntity.ok("success");
 	}
 	
@@ -173,7 +196,7 @@ public class ProfileListController {
 		} catch (IOException e) {
 			throw new RuntimeException("파일 저장 실패", e);
 		}
-		return "/tripnote_resource/" + filename; // DB에 저장할 접근 경로
+		return "/tripnote_resource/profile_imgs/" + filename; // DB에 저장할 접근 경로
 	}
 	
 	@ResponseBody

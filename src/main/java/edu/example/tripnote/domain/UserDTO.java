@@ -18,5 +18,5 @@ public class UserDTO {
 	private String email;
     private String users_name;
 	private String nickname;
-    private boolean profile_image;
+    private String profileImage;
 }

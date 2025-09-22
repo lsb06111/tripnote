@@ -36,7 +36,7 @@
             </div>
 		</div>
 		<div id="trip-search-result" class="w-100" style="display:none">
-			<div class="courseId">${ courseDTO.id }</div>
+			<div class="courseId" style="display:none;">${ courseDTO.id }</div>
         	<ul id="placesList" style="padding-left:2px"></ul>
         	<div id="pagination"></div>
 		</div>

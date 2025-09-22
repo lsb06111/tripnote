@@ -8,7 +8,17 @@
             <div class="row g-0">
             
               <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;background:#5c99ee">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="img-fluid my-5" style="background:white;width:100px;border-radius: 50% !important;">
+                
+                <div class="profile-image-container my-5" onclick="document.getElementById('profileImageInput').click();">
+    <img src="${not empty loginUser.profileImage ? '/tripnote'+= loginUser.profileImage : ''}" alt="avatar" class="img-fluid" style="background:white;width:100px;border-radius: 50% !important;">
+    
+    <div class="edit-icon-overlay">
+        <i class="bi bi-camera-fill text-white fs-3"></i>
+    </div>
+</div>
+
+<input type="file" id="profileImageInput" style="display:none;" accept="image/*" onchange="uploadProfileImage(event)">
+                
                 <h5 style="color:white;"><c:out value="${reqNickname}"/></h5>
                 <p>@${loginUser.username}</p>
                 <button onclick="infoModifyOn();" style="background:none;border:none;color:white;"><i class="bi bi-pencil-square fs-4"></i></button>
@@ -106,6 +116,35 @@
       </div>
   
       <script>
+      function uploadProfileImage(event) {
+    	    // 1. 선택된 파일 가져오기
+    	    const file = event.target.files[0];
+
+    	    if (!file) {
+    	        return;
+    	    }
+    	    const formData = new FormData();
+    	    formData.append('imgFile', file);
+
+    	    $.ajax({
+    	        url: '/tripnote/saveProfileImg',
+    	        type: 'POST',
+    	        data: formData,
+    	        processData: false,  // FormData를 사용할 때 필수 설정
+    	        contentType: false,  // FormData를 사용할 때 필수 설정
+    	        success: function(data, status) {
+    	            if (status === 'success') {
+    	                alert('프로필 이미지가 성공적으로 변경되었습니다.');
+    	                location.reload(); // 페이지를 새로고침하여 변경된 이미지 확인
+    	            }
+    	        },
+    	        error: function(jqXHR, textStatus, errorThrown) {
+    	            alert('이미지 업로드에 실패했습니다: ' + textStatus);
+    	        }
+    	    });
+    	}
+      
+      
       
 	function updateAllInfo(userId, originalEmail, originalPassword, originalNickname){
 		

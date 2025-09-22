@@ -21,18 +21,29 @@
       </div>
       <div class="modal-body">
       <div class = "p-2">
-       	<div class="fs-6 mb-1">공동 편집을 위한 초대링크</div>
+       	<div class="fs-6 mb-1">여행 초대</div>
         <div class="input-group mb-4">
-		    <input readonly type="text" class="form-control" value ="http://localhost:8088/tripnote/trip/plan/result?tripDest=${ param.tripDest }&startDate=${ courseDTO.startDate }&endDate=${ courseDTO.endDate }&inviteMode=true&createdUserId=${ not empty param.createdUserId ? param.createdUserId : loginUser.id }&courseId=${courseDTO.id}">
+		    <input readonly type="text" class="form-control" value ="http://${pageContext.request.serverName}:8088/tripnote/trip/plan/result?tripDest=${ param.tripDest }&startDate=${ courseDTO.startDate }&endDate=${ courseDTO.endDate }&inviteMode=true&createdUserId=${ not empty param.createdUserId ? param.createdUserId : loginUser.id }&courseId=${courseDTO.id}">
 		    <button id = "trip-copy-btn" type="button" class="btn text-white" onclick="copy(this)" data-bs-dismiss="modal" style="--bs-btn-bg:#5c99ee; 
 		             --bs-btn-hover-bg:#447fcc; 
 		             --bs-btn-border-color:#5c99ee; 
 		             --bs-btn-hover-border-color:#447fcc;">복사
 		    </button>
   		</div>
-       	<div class="fs-6 mb-1">간단히 확인만 하려면...</div>
+  		<%
+	  		DateTimeFormatter formatters = DateTimeFormatter.ofPattern("yyyy.M.d");
+			String startStr1 = request.getParameter("startDate");
+		    String endStr1 = request.getParameter("endDate");
+	
+		    LocalDate start1 = LocalDate.parse(startStr1, formatters);
+		    LocalDate end1 = LocalDate.parse(endStr1, formatters);
+	
+	        int totalDays1 = (int)ChronoUnit.DAYS.between(start1, end1)+1;
+	        //nBaks.add((totalDays-1)+"박 "+totalDays+"일");
+  		%>
+       	<div class="fs-6 mb-1">단순히 확인만 하려면</div>
         <div class="input-group mb-2">
-		    <input readonly type="text" class="form-control" value ="http://localhost:8088/oti_team3/trip/index2.jsp">
+		    <input readonly type="text" class="form-control" value ="http://${pageContext.request.serverName}:8088/tripnote/details?title=${courseDTO.title }&nBaks=<%=(totalDays1-1)+"박 "+totalDays1+"일" %>&courseId=${courseDTO.id }">
 		    <button id = "trip-copy-btn" type="button" class="btn text-white" onclick="copy(this)" data-bs-dismiss="modal" style="--bs-btn-bg:#5c99ee; 
 		             --bs-btn-hover-bg:#447fcc; 
 		             --bs-btn-border-color:#5c99ee; 
@@ -62,7 +73,7 @@
 			</div>
 			<div>
 				<button id="trip-invite-btn" class= "btn btn-primary" data-bs-toggle="modal" data-bs-target="#trip-inviteModal" style="background: #5c99ee; margin-bottom: 10px;">초대/공유</button>
-				<button id="trip-done-btn" class= "btn btn-primary" style="background: #5c99ee; margin-bottom: 10px;">일정 저장</button>
+				
 			</div>
 		</nav>  
 		<div class="trip-step" style="flex:17;">

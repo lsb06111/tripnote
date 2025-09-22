@@ -19,10 +19,14 @@
   검색 결과가 없습니다.
 </div>
         <div class="row gy-4">
-    
+<%
+	List<UserDTO> followers = (List<UserDTO>)request.getAttribute("followers");
+	List<UserDTO> followingList1 = (List<UserDTO>)request.getAttribute("followings");
+%>    
 <% 
-
-	for(int i=0; i<followingList1.size(); i++){ 
+	Random rand2 = new Random();
+	for(int i=0; i<followers.size(); i++){ 
+		boolean randBoolean = rand2.nextBoolean();
 %>
          <div class="col-12 follow-cards">
 			  <div class="service-card" style="padding: 18px 24px; cursor:pointer;" onclick="location.href=''">
@@ -33,7 +37,7 @@
 				  </div>
 				  
 				  <div style="margin-left:10px;">
-				    <h3 class="follow-user-name" style="margin:0;"><%= followingList1.get(i).getNickname() + " @"+followers.get(i).getUsername() %></h3>
+				    <h3 class="follow-user-name" style="margin:0;"><%= followers.get(i).getNickname() + " @"+followers.get(i).getUsername() %></h3>
 				  </div>
 				  
 				  <%
@@ -45,16 +49,26 @@
 				  		}
 				  	}%>
 
-				
+					<button type="button" data-mdb-button-init data-mdb-ripple-init 
+					        class="btn btn-outline-primary do-follow-button-<%= followers.get(i).getId()%>" 
+					        style="margin-left:auto;
+					               --bs-btn-hover-bg:#447fcc; 
+					               --bs-btn-border-color:#5c99ee; 
+					               --bs-btn-hover-border-color:#447fcc;
+					               display: <%= isFollowing ? "none" : "block" %>;"
+					        onclick="followToggle(event, ${loginUser.id} ,<%= followers.get(i).getId()%>)">
+					    맞팔로우
+					</button>
 					
 					<button type="button" data-mdb-button-init data-mdb-ripple-init 
-					        class="btn btn-primary un-following-button-<%= followingList1.get(i).getId()%>"
+					        class="btn btn-primary un-follow-button-<%= followers.get(i).getId()%>"
 					        style="margin-left:auto;
 					               --bs-btn-bg:#5c99ee; 
 					               --bs-btn-hover-bg:#447fcc; 
 					               --bs-btn-border-color:#5c99ee; 
-					               --bs-btn-hover-border-color:#447fcc;"
-					        onclick="followingToggle(event, ${loginUser.id} ,<%= followingList1.get(i).getId()%>)">
+					               --bs-btn-hover-border-color:#447fcc;
+					               display: <%= isFollowing ? "block" : "none" %>;"
+					        onclick="followToggle(event, ${loginUser.id} ,<%= followers.get(i).getId()%>)">
 					    언팔로우
 					</button>
 				</div>
@@ -65,24 +79,22 @@
 </div>
 </section>
 <script>
-function followingToggle(event, follower, followee){
+function followToggle(event, follower, followee){
 	event.stopPropagation();
 	
 	$.get('/tripnote/follow?follower='+follower+'&followee='+followee,
 			function(data, status){
 				if(status ==='success'){
-					const unfollowButton = document.querySelector('.un-following-button-'+followee);
-					if(unfollowButton.innerText == '언팔로우'){
-						unfollowButton.innerText = '팔로우';
-						unfollowButton.style.setProperty('--bs-btn-bg', 'white');
-						unfollowButton.style.setProperty('color', '#5c99ee');
+					const unfollowButton = document.querySelector('.un-follow-button-'+followee);
+					const followButton = document.querySelector('.do-follow-button-'+followee);
+					if(unfollowButton.style.display == 'none'){
+						unfollowButton.style.display = 'block';
+						followButton.style.display = 'none';
 						return;
 					}else{
-						unfollowButton.innerText = '언팔로우';
-						unfollowButton.style.setProperty('--bs-btn-bg', '#5c99ee');
-						unfollowButton.style.setProperty('color', 'white');
+						unfollowButton.style.display = 'none';
+						followButton.style.display = 'block';
 					}
-					
 				}
 			});
 	

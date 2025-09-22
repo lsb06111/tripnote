@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import edu.example.tripnote.domain.UserDTO;
+import edu.example.tripnote.domain.profile.BoardCourseDTO;
 import edu.example.tripnote.domain.trip.AreaVO;
 import edu.example.tripnote.domain.trip.CourseDTO;
 import edu.example.tripnote.domain.trip.CourseIconDTO;
@@ -53,5 +54,11 @@ public interface ProfileListDAO {
 	public int updateRecommend(TourLocDTO tourLocDTO);
 	
 	public int deleteCourse(int id);
+	
+	public List<BoardCourseDTO> getCourseBoardIds(int id);
+	
+	public List<UserDTO> getFollowers(int userId);
+	
+	public List<UserDTO> getFollowings(int userId);
 	
 }

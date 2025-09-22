@@ -6,7 +6,36 @@
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/jspf/head.jspf" %> <!-- 헤드 부분 고정 -->
 <!-- 커스텀 CSS import 존 -->
+<style>
+.profile-image-container {
+    position: relative; /* 자식 요소를 절대 위치로 지정하기 위한 기준 */
+    width: 100px; /* 이미지 크기와 동일하게 지정 */
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block; /* my-5 마진이 적용되도록 */
+}
 
+.edit-icon-overlay {
+    position: absolute; /* 부모(컨테이너)를 기준으로 위치 지정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* 반투명 검은색 배경 */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    opacity: 0; /* 평소에는 투명하게 */
+    transition: opacity 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.profile-image-container:hover .edit-icon-overlay {
+    opacity: 1; /* 마우스를 올리면 보이게 */
+}
+</style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/jspf/header.jspf" %> <!-- 헤더부분 고정 -->
@@ -49,16 +78,16 @@
       <div class="col-lg-4">
         <div class="card mb-4" style="border-radius: 15px;box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);border: none;">
           <div class="card-body text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+            <img src="/tripnote${loginUser.profileImage}" alt="avatar"
                  class="rounded-circle img-fluid" style="width: 150px;">
             <h5 class="mt-3 mb-1">${reqNickname}${' @'}${reqUsername}</h5>
             <ol class="breadcrumb mb-2" style="display:flex; justify-content:center;">
               <li class="breadcrumb-item">
                 팔로워 :
-                <a href="#" id="modal-following" data-bs-toggle="modal" data-bs-target="#modalFollowing" onclick="changeModalTitle('팔로워')">213명</a>
+                <a href="#" id="modal-following" data-bs-toggle="modal" data-bs-target="#modalFollower">${followers.size()}명</a>
               </li>
-              <li class="breadcrumb-item" id="modal-following" data-bs-toggle="modal" data-bs-target="#modalFollowing" onclick="changeModalTitle('팔로잉')">
-                팔로잉 : <a href="#">129명</a>
+              <li class="breadcrumb-item" id="modal-following" data-bs-toggle="modal" data-bs-target="#modalFollowing">
+                팔로잉 : <a href="#">${followings.size()}명</a>
               </li>
             </ol>
 
@@ -215,17 +244,27 @@
 		                    	일정 편집하기
 		                    </a>
                     	<%} %>
+                    	<%if(isPast){ %>
                      / 
                     <div>
-                    <a href="/tripnote/board/write.jsp?"title=titles[i]
-                       class="service-link ms-auto"
-                       onclick="event.stopPropagation();"
-                       style="width:fit-content; transition:color 0.3s; color:inherit;"
-                       onmouseover="this.style.color='#5c99ee';"
-                       onmouseout="this.style.color='inherit';">
-                      리뷰 작성하기 <i class="bi bi-arrow-right"></i>
-                    </a></div>
-                    <%} %>
+                    <form id="mycourse-form-${status.index}" action="/tripnote/board/form" method="post" style="display:none;">
+						<input name="courseId" value=${course.id} />
+						<input name="user" value="인증정보" />
+						<input type="submit" value="제출"> 
+					</form>
+                    <a href="${writtens[status.index] ? '/tripnote/board/detail?id='+=boardIds[status.index] : 'javascript:void(0);'}"
+					   class="service-link ms-auto"
+					   data-idx="${status.index}"
+					   onclick="event.stopPropagation(); ${not writtens[status.index] ? 'submitForm(this)' : ''}"
+					   style="width:fit-content; transition:color 0.3s; color:inherit;"
+					   onmouseover="this.style.color='#5c99ee';"
+					   onmouseout="this.style.color='inherit';">
+					   ${writtens[status.index] ? '리뷰 보러가기' : '리뷰 작성하기'} <i class="bi bi-arrow-right"></i>
+					</a>
+					
+					</div>
+                    <%}
+                    } %>
                   </div>
                 </div>
               </div>
@@ -253,13 +292,27 @@
   </div>
 </div>
 
-<!-- 팔로잉/팔로워 모달 -->
+<!-- 팔로워 모달 -->
+<div class="modal fade" id="modalFollower" tabindex="-1" aria-labelledby="modalFollowerLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFollowerLabel">팔로워</h5>
+        <button type="button" class="btn-close" onclick="location.reload();" aria-label="닫기"></button>
+      </div>
+      <div class="modal-body p-4">
+        <%@ include file="/WEB-INF/views/jspf/follows/followerlist.jspf" %>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 팔로잉 모달 -->
 <div class="modal fade" id="modalFollowing" tabindex="-1" aria-labelledby="modalFollowingLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content border-0 shadow">
       <div class="modal-header">
         <h5 class="modal-title" id="modalFollowingLabel">팔로잉</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        <button type="button" class="btn-close" onclick="location.reload();" aria-label="닫기"></button>
       </div>
       <div class="modal-body p-4">
         <%@ include file="/WEB-INF/views/jspf/follows/followinglist.jspf" %>
@@ -267,6 +320,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- 정보수정 모달 -->
 <div class="modal fade" id="modalChangeinfo" tabindex="-1" aria-labelledby="modalChangeinfoLabel" aria-hidden="true">
@@ -348,6 +402,14 @@
 <%@ include file="/WEB-INF/views/jspf/footer.jspf" %> <!-- 푸터 부분 고정 -->
 
 <script>
+function submitForm(el) {
+	  const idx = el.getAttribute("data-idx");
+	  const form = document.getElementById("mycourse-form-" + idx);
+	  if (form) {
+	    form.submit();
+	  }
+	}
+
 function deleteCourse(id){
 	if(confirm('한번 삭제하면 다시는 복구할 수 없습니다. 그래도 삭제하시겠습니까?')){
 		$.get('/tripnote/deleteCourse?id='+id,
