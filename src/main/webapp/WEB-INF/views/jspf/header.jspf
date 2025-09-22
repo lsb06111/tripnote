@@ -14,7 +14,7 @@
         <ul>
           <li><a href="/tripnote/" class="active">Home</a></li>
           <li><a href="/tripnote//trip/">일정 만들기</a></li>
-          <li><a href="/tripnote/board">리뷰 게시판</a></li>
+          <li><a href="/tripnote/board">여행 후기</a></li>
           
         <c:if test="${empty loginUser}">
 	    	<li>

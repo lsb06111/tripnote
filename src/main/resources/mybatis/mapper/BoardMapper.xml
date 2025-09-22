@@ -10,6 +10,7 @@
 	    to_char(b.modified_at,'YYYY"."MM"."dd') as modifiedAt,
 	    u.username,
 	    u.nickname,
+	    u.profile_image,
 	    a.area_name,
 	    b.thumbnail,
 	    l.likes

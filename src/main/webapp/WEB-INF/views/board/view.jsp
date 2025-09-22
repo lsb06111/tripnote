@@ -411,7 +411,7 @@ heartIcon.addEventListener("click", () => {
 				<section>
 					<div class="d-flex mb-3">
 						<a href=""> <img
-							src="https://mdbcdn.b-cdn.net/img/new/avatars/18.webp"
+							src="/tripnote${loginUser.profileImage}"
 							class="border rounded-circle me-2" alt="Avatar"
 							style="height: 40px" />
 						</a>
@@ -581,7 +581,7 @@ function loadReplies(){
     			<div class="d-flex flex-column mb-3 reply " data-reply-id=\${reply.id}  id="replies-\${idx}">
     				<div class="d-flex">
 						<a href="/oti_team3/profile.jsp?identify=\${reply.username}&name=\${reply.nickname}">
-							<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
+							<img src="/tripnote\${reply.profileImage}"
 							class="border rounded-circle me-1" alt="Avatar" style="height: 40px; border: 1px solid black; border-radius: 50%;" />
 						</a>
 						<div>
@@ -615,7 +615,7 @@ function loadReplies(){
     		const html = `
     			<div class="d-flex mb-3 reply ms-5"  id="replies-\${idx}">
 				<a href="/oti_team3/profile.jsp?identify=\${reply.username}&name=\${reply.nickname}">
-					<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
+					<img src="/tripnote\${reply.profileImage}"
 					class="border rounded-circle me-1" alt="Avatar" style="height: 40px; border: 1px solid black; border-radius: 50%;" />
 				</a>
 				<div>

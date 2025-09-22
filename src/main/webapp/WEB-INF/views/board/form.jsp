@@ -25,7 +25,9 @@
 <body class="portfolio-details-page">
 	<%@ include file="/WEB-INF/views/jspf/header.jspf"%>
 	<!-- 헤더부분 고정 -->
-
+	<c:if test="${not empty sessionScope.loginUser}">
+		<span id="user_id" style="display:none;">${sessionScope.loginUser.id}</span>
+	</c:if>
 	<main class="main board-form" data-id="${locTemplate.course.id}"> <%
  	String writeTitle = request.getParameter("title");
  %>

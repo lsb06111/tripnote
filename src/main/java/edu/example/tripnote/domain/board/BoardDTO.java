@@ -15,6 +15,7 @@ public class BoardDTO {
 	private int userId;
 	private String username;
 	private String nickname;
+	private String profileImage;
 	private String createdAt;
 	private String modifiedAt;
 	private String areaName;

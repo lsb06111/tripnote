@@ -8,7 +8,7 @@ function savePost() {
     // 1. 게시물 기본 정보
     formData.append("boardTitle", $('#write_title_input').val());
     formData.append("intro", $('#post_intro').val());
-    formData.append("userId", 1);
+    formData.append("userId", $('#user_id').text());
     formData.append("courseId", $('.board-form').attr('data-id'));
     const thumbnail = $('#thumbnailImgInput')[0].files[0];
     if(thumbnail){
@@ -31,7 +31,7 @@ function savePost() {
             content_idx++;
         }
     });
-    console.log("ajax 뭐가 전달되나 : " + [...formData.entries()]);
+    console.log("board ajax 요청 내용  : " + [...formData.entries()]);
     // 3. Ajax 전송
     $.ajax({
         url: "/tripnote/board/form/save",
@@ -97,7 +97,6 @@ function saveDraft() {
 
 $(function() {
 	  // 각 .post-contents 블록(또는 이미지+input 쌍)을 기준으로 처리합니다.
-	  // 구조가 다르다면 selector를 적절히 바꿔주세요.
 	  $('.post-contents').each(function() {
 	    const $block = $(this);
 	    const $input = $block.find('.postImg-input');

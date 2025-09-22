@@ -80,7 +80,7 @@
 									<img
 										style="width: 15%; border: 1px solid black; border-radius: 50%; margin-right: 10px; cursor: pointer"
 										onclick="event.stopPropagation();"
-										src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5gLM6Ory_xq5m06Wz-ClWzfw9Yhpst-gDRA&s"
+										src="/tripnote${item.profileImage}"
 										alt="avatar">
 									<div style="display: flex; align-items: center; width: 100%">
 										<div
