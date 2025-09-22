@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 									style="padding: 18px 24px;">
 									<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px">
 										<div class="service-icon" style="margin-bottom: 0">
-											<i class="bi"></i>
+											<i class="bi ${el.iconName}"></i>
 										</div>
 										<div style="margin-left: 10px;">
 											<h3 style="margin: 0;">${el.title}</h3>

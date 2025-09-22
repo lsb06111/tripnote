@@ -101,7 +101,20 @@
 		    and f.follow_id = #{userId}
     	</if>
     	<if test="loc != null and loc != '' and loc != 'undefined'">
-    		and area_name = #{loc}
+		    and c.area_id in 
+    		 (	SELECT
+			    	id
+				FROM
+				    area
+				WHERE
+				    parent_id = (
+				        SELECT
+				            id
+				        FROM
+				            area
+				        WHERE
+				            area_name = #{loc})
+             )
     	</if>
     	<if test="keyword != null and keyword != ''">
     		and (b.title like '%' || #{keyword} || '%'

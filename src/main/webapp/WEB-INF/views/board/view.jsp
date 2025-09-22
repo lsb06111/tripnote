@@ -188,13 +188,6 @@
 									<div
 										class="d-flex align-items-center justify-content-center w-100 pb-2">
 										<%
-											String[] spots = {"게스트하우스 감천", // 시작 숙소
-														"감천문화마을", // 메인 관광지
-														"할매 가야밀면", // 관광지
-														"자갈치 시장", // 관광지
-														"부산타워" // 마지막 숙소 (처음과 동일)
-												};
-												String[] times = {"15분", "12분", "20분", "18분"};
 												String[] nodeIcons = {"house-door", "leaf-fill", "fork-knife", "leaf-fill", "leaf-fill"};
 
 												HashMap<String, String> tagContents = new HashMap<>();

@@ -9,11 +9,13 @@
 	    to_char(c.start_date, 'YYYY"."MM"."dd') startDate,
 	    to_char(c.end_date, 'YYYY"."MM"."dd') endDate,
 	    ( end_date - start_date ) AS days,
-	    a.area_name AS loc
+	    a.area_name AS loc,
+	    i.icon_name
 	FROM
         course c
 		    JOIN area  a ON c.area_id = a.id
 		    LEFT JOIN board b ON c.id = b.course_id
+		    left join course_icon i on c.id = i.course_id
 	WHERE
         c.user_id = #{id}
 	    AND b.id IS NULL

@@ -12,5 +12,6 @@ public class CourseSelectResDTO {
 	private String endDate;
 	private int days;  
 	private String loc;
-	private String transport;
+	private String iconName;
+	
 }
