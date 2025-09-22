@@ -390,6 +390,10 @@ function runEmailCheck() {
     clearError(emailEl);
 
     try {
+   	  // 성공: 인증번호 입력칸 열고 성공 메시지
+      document.querySelector('.cert-number')?.style?.setProperty('display', '');
+      document.getElementById('regCertNumber')?.focus();
+      
       const res = await fetch('<c:url value="/mail/send-cert"/>', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', ...getCsrfHeaders() },
@@ -402,10 +406,6 @@ function runEmailCheck() {
         showError(emailEl, text || '인증요청 중 문제가 발생했습니다.');
         return;
       }
-
-      // 성공: 인증번호 입력칸 열고 성공 메시지
-      document.querySelector('.cert-number')?.style?.setProperty('display', '');
-      document.getElementById('regCertNumber')?.focus();
       showSuccess(emailEl, '인증코드를 전송했습니다. (5분 유효)');
     } catch (e) {
       showError(emailEl, '네트워크 오류: ' + e.message);

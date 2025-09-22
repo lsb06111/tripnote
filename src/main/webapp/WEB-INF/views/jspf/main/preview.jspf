@@ -39,7 +39,7 @@
 			%>
 					<div class="col-lg-3 col-md-6 portfolio-item isotope-item filter-<%= category %>">
 					  <div class="location-card">
-					    <a href="/tripnote/board/?search=<%= location %>" 
+					    <a href="/tripnote/board?keyword=<%= location %>" 
 						   class="btn text-white fw-semibold w-100 shadow-sm py-2 rounded"
 						   style="--bs-btn-bg: #5c99ee; --bs-btn-hover-bg: #447fcc; --bs-btn-border-color: #5c99ee; --bs-btn-hover-border-color: #447fcc;">
 						  <%= location %>
