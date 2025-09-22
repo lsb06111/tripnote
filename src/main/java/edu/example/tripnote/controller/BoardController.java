@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.example.tripnote.dao.CourseDAO;
+import edu.example.tripnote.dao.LikesDAO;
 import edu.example.tripnote.domain.UserDTO;
 import edu.example.tripnote.domain.board.BoardDTO;
 import edu.example.tripnote.domain.board.BoardDetailResDTO;
@@ -46,6 +47,7 @@ public class BoardController {
 	private final AreaService areaService;
 	private final FollowService followService;
 	private final CourseDAO courseDAO;
+	private final LikesDAO likesDAO;
 	
 	@GetMapping
 	public String index(HttpSession httpSession,Model model,  BoardParamDTO boardParam) {
@@ -128,8 +130,14 @@ public class BoardController {
 		UserDTO currentUser = (UserDTO)httpSession.getAttribute("loginUser");
 		if (currentUser != null) {
 			int userId = currentUser.getId();
-			boolean isFollowing = followService.isFollowing(userId, boardDTO.getUserId());
+			int boardId = boardDTO.getId();
+			boolean isFollowing = followService.isFollowing(userId, boardId);
 			model.addAttribute("isFollowing", isFollowing);
+			boolean isLike = (likesDAO.isLike(boardId, userId) > 0) ? true : false;
+			log.info("^^^^^^^^^^^^^^^^^^is like : " + isLike);
+			log.info("^^^^^^^^^^^^^^^^^^likesDAO.isLike(boardId, userId) : " + likesDAO.isLike(boardId, userId));
+			model.addAttribute("isLike", isLike);
+
 		}
 		return "board/view";
 	}

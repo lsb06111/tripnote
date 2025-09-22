@@ -7,6 +7,6 @@
 	FROM
 	    area
 	WHERE
-	    parent_id IS NULL
+	    parent_id IS NULL or area_name='서울'
 </select>
 </mapper>

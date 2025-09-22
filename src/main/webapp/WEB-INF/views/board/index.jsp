@@ -43,7 +43,7 @@
 					</div>
 					<c:if test="${not empty sessionScope.loginUser}">
 						<div class="d-flex align-items-center ms-4">
-						    <span class="me-2 small">팔로우</span>
+						    <span class="me-2">팔로우</span>
 						    <div class="form-check form-switch m-0">
 						        <input class="form-check-input" type="checkbox" id="followOnlySwitch">
 						    </div>

@@ -68,8 +68,6 @@
 
 			<div class="project-hero mb-0">
 				<div class="project-meta-grid" style="padding-top: 0">
-
-
 					<div class="meta-column">
 						<div class="meta-label">여행일정</div>
 						<div class="meta-value">${locTemplate.course.startDate} ~ ${locTemplate.course.endDate}</div>
@@ -234,11 +232,13 @@
 																			<input id="postImgInput-${outerStatus.index}-${innerStatus.index}"
 																				class="postImg-input" type="file" accept="image/*"
 																				style="position: absolute; left: -9999px; display:none" />
-																				
-																			<img id="postImg-${outerStatus.index}-${innerStatus.index}"
-																				src="/tripnote/resources/assets/img/alt/no_image.png"
-																				class="postImg img-fluid" alt="클릭하여 업로드"
-																				style="width: 50%; height: 50%; max-width: 400px; object-fit: cover; border-radius: 10px; cursor: pointer;" />
+																			<div class="d-flex flex-column">
+																				<img id="postImg-${outerStatus.index}-${innerStatus.index}"
+																					src="/tripnote/resources/assets/img/alt/no_image.png"
+																					class="postImg img-fluid" alt="클릭하여 업로드"
+																					style="width: 20rem; height: 15rem; object-fit: contain; border-radius: 10px; cursor: pointer;"  />
+																				<small class="text-muted d-block mt-1">사진 업로드</small>
+																			</div>
 																			<textarea class="form-control loc-textera"
 																				style="width: 50%; resize: none;"
 																				placeholder="리뷰 내용을 입력해주세요"></textarea>

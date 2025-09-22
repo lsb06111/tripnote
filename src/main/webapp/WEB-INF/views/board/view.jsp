@@ -115,9 +115,28 @@
 						</c:choose>
 					</div>
 				</div>
+				<div class="post-contents d-flex justify-content-center align-items-stretch gap-4 mt-5">
+				    <input id="thumbnailImgInput"
+				           class="postImg-input" type="file" accept="image/*"
+				           style="position: absolute; left: -9999px; display:none;" />
+		
+				    <!-- 대표 이미지 미리보기 영역 -->
+				    <div class="thumbnail-preview text-center" style="width: 50%; max-width: 400px;">
+				        <img id="boardThumbnailImg"
+				             src="${board.thumbnail}"
+				             class="postImg img-fluid border"
+				             alt="대표 이미지"
+				             style="width: 20rem; height: 15rem; object-fit: contain; border-radius: 10px; cursor: pointer;" />
+				        <small class="text-muted d-block mt-1"></small>
+				    </div>
+		
+				    <!-- 여행 소개 입력 -->
+				    <textarea id="post_intro" class="form-control" style="width: 50%; resize: none; height: 15rem;"
+				              placeholder="이번 여행을 소개해주세요">${board.boardContent}</textarea>
+				</div>
 			</div>
 
-			<section id="tabs" class="tabs section mt-5">
+			<section id="tabs" class="tabs section">
 				<div class="container">
 					<div class="tabs-wrapper">
 						<div class="tabs-header">
@@ -267,7 +286,7 @@
 																	<img src="<%=reviewsOfLoc.get(imgIndex).getImgSrc()%>"
 																		alt="Project showcase" class="img-fluid"
 																		loading="lazy"
-																		style="width: 80%; border-radius: 10px; height: auto;">
+																		style="width: 20rem; height: 15rem; object-fit: contain; border-radius: 10px; cursor: pointer;"/>
 																</div>
 																<%
 																	}
@@ -369,18 +388,20 @@ function setReviewContent(tIndex, nIndex){
   });
 })();
 </script>
-			<div style="text-align: center;">
-				<i id="heartIcon" class="bi bi-heart"
+			<div style="text-align: center;" onclick="sendLike()">
+				<i id="heartIcon" class="bi ${isLike ? 'bi-heart-fill':'bi-heart'}"
 					style="font-size: 2.5rem; cursor: pointer; color: #5c99ee"></i>
-				<p class="mb-0" style="color: #5c99ee">
-					<strong>253</strong>
+				<p id="likesCount" class="mb-0" style="color: #5c99ee">
+					<strong>${board.likes}</strong>
 				</p>
 			</div>
 			<hr style="color: lightgray; margin-bottom: 50px; margin-top: 50px;">
-			<script>
+<script>
 heartIcon.addEventListener("click", () => {
+	if(isLogined()){
      heartIcon.classList.toggle("bi-heart");
      heartIcon.classList.toggle("bi-heart-fill");
+	}
    });
 
 </script>
@@ -434,9 +455,32 @@ $(document).ready(function() {
 function sendFollow(){
 	const followerId = $('#user_id').text();
 	const followeeId = $('#writer').text();
-	let request = `/tripnote/follow?follower=1&followee=\${followeeId}`
+	let request = `/tripnote/follow?follower=\${followerId}&followee=\${followeeId}`
 	$.get(request, function(){
 		console.log("succeed follow request");
+	});
+}
+
+function sendLike(){
+	if(isLogined()){
+		const userId = $('#user_id').text();
+		const boardId = $('#boardId').text();
+		let request = `/tripnote/board/like?userId=\${userId}&boardId=\${boardId}`
+			$.get(request, function(){
+				console.log("succeed like request");
+				getLikesCnt();
+		});		
+	}else{
+		alert("로그인이 필요합니다");
+	}
+}
+
+function getLikesCnt(){
+	const boardId = $('#boardId').text();
+	let request = `/tripnote/board/like/count?boardId=\${boardId}`
+		$.get(request, function(data){
+			console.log("succeed like count request : " + data);
+			$('#likesCount').text(data);
 	});
 }
 
@@ -560,7 +604,7 @@ function loadReplies(){
 							</div>
 						</div>
     				</div>
-    				<div class="childReplyContainer"></div>
+    				<div class="childReplyContainer mt-2"></div>
 				</div>
     		`;
     		container.append(html);

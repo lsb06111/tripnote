@@ -135,7 +135,15 @@
 	join users u on b.user_id = u.id
 	join course c on b.course_id = c.id
 	join area a on c.area_id = a.id
-	left join likes l on b.id = l.board_id
+    LEFT JOIN (
+       SELECT
+           board_id,
+           COUNT(*) AS likes
+       FROM
+           likes
+       GROUP BY
+           board_id
+   )   l ON b.id = l.board_id
 	where b.id = #{id}
 </select>
 
