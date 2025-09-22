@@ -15,6 +15,7 @@ public class PasswordResetService {
 
     private final UserDAO dao;
     private final MailService mailService;
+    private final UserService userService; // UserService를 주입받음
 
     @Transactional
     public boolean resetPasswordAndNotifyPlain(String username, String email) {
@@ -23,8 +24,13 @@ public class PasswordResetService {
         UserDTO user = dao.searchPassword(username, email);
         if (user == null) return false;
 
-        String tempPw = generateTempPassword(8);     // 임시 비번 생성
-        int updated = dao.updatePassword(user.getId(), tempPw);
+        String tempPw = generateTempPassword(8);      // 임시 비번 생성
+        
+        // --- 암호화 로직 추가 ---
+        // UserService를 통해 암호화된 비밀번호로 업데이트를 요청
+        int updated = userService.encryptUpdate(user.getId(), tempPw);
+        // -------------------------
+
         if (updated != 1) throw new IllegalStateException("Password update failed");
 
         // 메일 발송 (텍스트/HTML 중 선택)

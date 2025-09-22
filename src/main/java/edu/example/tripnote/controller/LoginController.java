@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import edu.example.tripnote.dao.UserDAO;
 import edu.example.tripnote.domain.UserDTO;
+import edu.example.tripnote.service.UserService;
 
 @Controller
 public class LoginController {
 
     @Autowired
-    private UserDAO dao;
+    private UserService passwordEncryptionService;
+    
  
     @PostMapping("/login")
     public String login(@RequestParam("login_username") String username,
@@ -26,7 +27,7 @@ public class LoginController {
                         HttpSession session,
                         RedirectAttributes ra) {
 
-        UserDTO dto = dao.login(username, password);
+        UserDTO dto = passwordEncryptionService.login(username, password);
         
         if(dto == null) {
         	ra.addFlashAttribute("loginStatus", "fail");

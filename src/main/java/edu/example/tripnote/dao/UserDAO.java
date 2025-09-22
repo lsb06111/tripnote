@@ -7,8 +7,7 @@ import edu.example.tripnote.domain.UserDTO;
 
 @Mapper
 public interface UserDAO {
-	public UserDTO login(@Param("username") String username,
-						@Param("password") String password);
+	public UserDTO login (@Param("username") String username);
 	
 	public String searchUsername(@Param("email") String email);
 	
