@@ -78,8 +78,14 @@
       <div class="col-lg-4">
         <div class="card mb-4" style="border-radius: 15px;box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);border: none;">
           <div class="card-body text-center">
+          <%if(isMe){ %>
             <img src="${not empty loginUser.profileImage ? '/tripnote'+= loginUser.profileImage : '/tripnote/resources/assets/img/profile.png'}" alt="avatar"
                  class="rounded-circle img-fluid" style="width: 150px;height:150px;">
+             <%} else{%>
+             <img src="${not empty profileUser.profileImage ? '/tripnote'+= profileUser.profileImage : '/tripnote/resources/assets/img/profile.png'}" alt="avatar"
+                 class="rounded-circle img-fluid" style="width: 150px;height:150px;">
+             
+             <%} %>
             <h5 class="mt-3 mb-1">${reqNickname}${' @'}${reqUsername}</h5>
             <ol class="breadcrumb mb-2" style="display:flex; justify-content:center;">
               <li class="breadcrumb-item">
