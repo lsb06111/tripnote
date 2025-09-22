@@ -39,6 +39,7 @@ public class ProfileListController {
 	
 	@RequestMapping("/profile")
 	public String profile(@RequestParam("username") String username,
+							@SessionAttribute("loginUser") UserDTO loginUser,
 							Model model) {
 		UserDTO userDTO = dao.getUser(username);
 		List<CourseDTO> courses = dao.getAllCourse(userDTO.getId());
@@ -46,7 +47,9 @@ public class ProfileListController {
 		List<AreaVO> areas = new ArrayList<>();
 		List<String> icons = new ArrayList<>();
 		DateTimeFormatter formatter;
-
+		List<UserDTO> followers = dao.getFollowers(userDTO.getId());
+		List<UserDTO> followings = dao.getFollowings(userDTO.getId());
+		List<UserDTO> myFollowings = dao.getFollowings(loginUser.getId());
 		for(CourseDTO c : courses) {
 				areas.add(dao.getArea(c.getAreaId()));
 				
@@ -69,6 +72,9 @@ public class ProfileListController {
 		model.addAttribute("nBaks", nBaks);
 		model.addAttribute("icons", icons);
 		model.addAttribute("profileUser", userDTO);
+		model.addAttribute("followers", followers);
+		model.addAttribute("followings", followings);
+		model.addAttribute("myFollowings", myFollowings);
 		return "profile";
 	}
 	
@@ -85,9 +91,9 @@ public class ProfileListController {
 		List<Boolean> writtens = new ArrayList<>();
 		List<UserDTO> followers = dao.getFollowers(userDTO.getId());
 		List<UserDTO> followings = dao.getFollowings(userDTO.getId());
-		
+		System.out.println(followings);
 		DateTimeFormatter formatter;
-		
+		List<UserDTO> myFollowings = dao.getFollowings(userDTO.getId());
 		for(BoardCourseDTO bcDto : boardCourseIds)
 			bc.put(bcDto.getCourseId(), bcDto.getId());
 
@@ -121,7 +127,7 @@ public class ProfileListController {
 		model.addAttribute("boardIds", boardIds);
 		model.addAttribute("followers", followers);
 		model.addAttribute("followings", followings);
-		
+		model.addAttribute("myFollowings", myFollowings);
 		return "profile";
 	}
 	

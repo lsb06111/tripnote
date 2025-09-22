@@ -21,8 +21,12 @@
         <div class="row gy-4">
     
 <% 
-
+	
 	for(int i=0; i<followingList1.size(); i++){ 
+		boolean isMyself = followingList1.get(i).getId() == loginUser.getId();
+		if(isMyself){
+			continue;
+		}
 %>
          <div class="col-12 follow-cards">
 			  <div class="service-card" style="padding: 18px 24px; cursor:pointer;" onclick="location.href=''">
@@ -33,17 +37,22 @@
 				  </div>
 				  
 				  <div style="margin-left:10px;">
-				    <h3 class="follow-user-name" style="margin:0;"><%= followingList1.get(i).getNickname() + " @"+followers.get(i).getUsername() %></h3>
+				    <h3 class="follow-user-name" style="margin:0;"><%= followingList1.get(i).getNickname() + " @"+followingList1.get(i).getUsername() %></h3>
 				  </div>
 				  
 				  <%
 				  	boolean isFollowing = false;
-				  	for(UserDTO u : followingList1){
-				  		if(followers.get(i).getId() == u.getId()){
+				  	for(UserDTO u : myFollowings){
+				  		if(followingList1.size()>0){
+				  		if(followingList1.get(i).getId() == u.getId()){
 				  			isFollowing = true;
 				  			break;
 				  		}
-				  	}%>
+				  		}
+				  	}
+				  	
+				  	//isFollowing = followers.
+				  	%>
 
 				
 					
@@ -55,7 +64,7 @@
 					               --bs-btn-border-color:#5c99ee; 
 					               --bs-btn-hover-border-color:#447fcc;"
 					        onclick="followingToggle(event, ${loginUser.id} ,<%= followingList1.get(i).getId()%>)">
-					    언팔로우
+					    <%= isFollowing ? "언팔로우" : "팔로우" %>
 					</button>
 				</div>
 			  </div>
@@ -87,6 +96,30 @@ function followingToggle(event, follower, followee){
 			});
 	
 }
+
+function followingToggle2(event, follower, followee){
+	event.stopPropagation();
+	
+	$.get('/tripnote/follow?follower='+follower+'&followee='+followee,
+			function(data, status){
+				if(status ==='success'){
+					const unfollowButton = document.querySelector('.un-following-button2-'+followee);
+					if(unfollowButton.innerText == '언팔로우'){
+						unfollowButton.innerText = '팔로우';
+						unfollowButton.style.setProperty('--bs-btn-bg', 'white');
+						unfollowButton.style.setProperty('color', '#5c99ee');
+						return;
+					}else{
+						unfollowButton.innerText = '언팔로우';
+						unfollowButton.style.setProperty('--bs-btn-bg', '#5c99ee');
+						unfollowButton.style.setProperty('color', 'white');
+					}
+					
+				}
+			});
+	
+}
+
 
 function filterCards() {
   var q = document.getElementById('searchUsername').value.trim().toLowerCase();

@@ -78,8 +78,8 @@
       <div class="col-lg-4">
         <div class="card mb-4" style="border-radius: 15px;box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);border: none;">
           <div class="card-body text-center">
-            <img src="/tripnote${loginUser.profileImage}" alt="avatar"
-                 class="rounded-circle img-fluid" style="width: 150px;">
+            <img src="${not empty loginUser.profileImage ? '/tripnote'+= loginUser.profileImage : '/tripnote/resources/assets/img/profile.png'}" alt="avatar"
+                 class="rounded-circle img-fluid" style="width: 150px;height:150px;">
             <h5 class="mt-3 mb-1">${reqNickname}${' @'}${reqUsername}</h5>
             <ol class="breadcrumb mb-2" style="display:flex; justify-content:center;">
               <li class="breadcrumb-item">
@@ -91,16 +91,35 @@
               </li>
             </ol>
 
-            <% if(!isMe) { %>
+            <% 
+            boolean followingThis = false;
+            UserDTO profileUser = (UserDTO)request.getAttribute("profileUser");
+            List<UserDTO> myFollowings1 = (List<UserDTO>)request.getAttribute("myFollowings");
+		  	for(UserDTO u : myFollowings1){
+		  		if(profileUser != null){
+			  		if(profileUser.getId() == u.getId()){
+			  			followingThis = true;
+			  			break;
+			  		}
+		  		}
+		  	}
+            if(!isMe) { 
+            	
+            %>
               <div class="d-flex justify-content-center mb-2">
+              <%if(followingThis){ %>
                 <button type="button" class="btn btn-primary"
-                        style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;">
-                  팔로잉
+                        style="--bs-btn-bg:#5c99ee; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;"
+                        onclick="sendFollow(${loginUser.id}, <%= profileUser.getId() %>)">
+                  	언팔로우
                 </button>
+                <%} else{ %>
                 <button type="button" class="btn btn-outline-primary ms-1"
-                        style="--bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;">
-                  팔로우
+                        style="--bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;"
+                        onclick="sendFollow(${loginUser.id}, <%= profileUser.getId() %>)">
+                  	팔로우
                 </button>
+                <%} %>
               </div>
             <% } %>
           </div>
@@ -402,6 +421,16 @@
 <%@ include file="/WEB-INF/views/jspf/footer.jspf" %> <!-- 푸터 부분 고정 -->
 
 <script>
+function sendFollow(followFrom, followTo){
+	$.get('/tripnote/follow?follower='+followFrom+'&followee='+followTo,
+			function(data, status){
+				if(status == 'success'){
+					location.reload();
+				}
+		})
+}
+
+
 function submitForm(el) {
 	  const idx = el.getAttribute("data-idx");
 	  const form = document.getElementById("mycourse-form-" + idx);

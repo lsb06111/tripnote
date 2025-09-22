@@ -10,7 +10,7 @@
               <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;background:#5c99ee">
                 
                 <div class="profile-image-container my-5" onclick="document.getElementById('profileImageInput').click();">
-    <img src="${not empty loginUser.profileImage ? '/tripnote'+= loginUser.profileImage : ''}" alt="avatar" class="img-fluid" style="background:white;width:100px;border-radius: 50% !important;">
+    <img src="${not empty loginUser.profileImage ? '/tripnote'+= loginUser.profileImage : '/tripnote/resources/assets/img/profile.png'}" alt="avatar" class="img-fluid" style="background:white;width:100px;height:100px;border-radius: 50% !important;">
     
     <div class="edit-icon-overlay">
         <i class="bi bi-camera-fill text-white fs-3"></i>

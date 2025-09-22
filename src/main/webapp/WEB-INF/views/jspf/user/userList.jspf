@@ -4,6 +4,7 @@
 <div class="container">
 	<div class="mb-3 input-group">
 	    <input class="form-control find-search-value" type="text" class="" placeholder="아이디 또는 닉네임을 입력해주세요" onkeydown="inputEnter(event)">
+	    <div class="currentUserId" style="display:none">${loginUser.id}</div>
 	    <button type="button" class="btn text-white"
 	      style="--bs-btn-bg:#5c99ee; 
 	             --bs-btn-hover-bg:#447fcc; 
@@ -32,12 +33,13 @@ function inputEnter(event){
 function findUser(currentUserId){
 	const findInputValue = document.querySelector('.find-search-value').value;
 	const findResultView = document.querySelector('.find-result-view');
-	
+	console.log(currentUserId);
 	if(findInputValue !== ''){
 		
 		$.get('/tripnote/findUser?target='+findInputValue,
 			function(data,status){
 				if(status === 'success'){
+					const currentUId = document.querySelector('.currentUserId').textContent;
 					findResultView.innerHTML = '';
 					const noResultsForUser = document.querySelector('#noResultsForUser');
 					if(data.length == 0){
@@ -59,10 +61,10 @@ function findUser(currentUserId){
 					                    <button type="button" 
 					                            data-mdb-button-init 
 					                            data-mdb-ripple-init 
-					                            class="btn btn-outline-primary" 
+					                            class="btn btn-outline-primary un-following-button2-\${e.id}" 
 					                            style="margin-left:auto; --bs-btn-hover-bg:#447fcc; --bs-btn-border-color:#5c99ee; --bs-btn-hover-border-color:#447fcc;"
-					                            onclick="event.stopPropagation();">
-					                        팔로우
+					                            onclick="followingToggle2(event, \${currentUId}, \${e.id})">
+					                        		팔로우
 					                    </button>
 					                </div>
 					            </div>

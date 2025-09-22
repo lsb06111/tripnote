@@ -22,11 +22,16 @@
 <%
 	List<UserDTO> followers = (List<UserDTO>)request.getAttribute("followers");
 	List<UserDTO> followingList1 = (List<UserDTO>)request.getAttribute("followings");
+	List<UserDTO> myFollowings = (List<UserDTO>)request.getAttribute("myFollowings");
+	UserDTO loginUser = (UserDTO)session.getAttribute("loginUser");
 %>    
 <% 
-	Random rand2 = new Random();
+	
 	for(int i=0; i<followers.size(); i++){ 
-		boolean randBoolean = rand2.nextBoolean();
+		boolean isMyself = followers.get(i).getId() == loginUser.getId();
+		if(isMyself){
+			continue;
+		}
 %>
          <div class="col-12 follow-cards">
 			  <div class="service-card" style="padding: 18px 24px; cursor:pointer;" onclick="location.href=''">
