@@ -1,7 +1,5 @@
 package edu.example.tripnote.domain.board;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
 
 @Data

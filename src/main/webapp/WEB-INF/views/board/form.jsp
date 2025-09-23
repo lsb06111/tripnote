@@ -115,10 +115,11 @@
 				<%
 					String[] nodeIcons = {"house-door", "leaf-fill", "fork-knife", "leaf-fill", "house-door"};
 					String[] tagNames = {"관광지", "숙소", "식당"};
-					HashMap<String, String> iconMap = new HashMap<>();
-					iconMap.put("leaf-fill", "관광지");
-					iconMap.put("house-door", "숙소");
-					iconMap.put("fork-knife", "식당");
+					
+					HashMap<String, String> courseIcons = new HashMap<>();
+					courseIcons.put("명소","leaf-fill");
+					courseIcons.put("숙소","house-door");
+					courseIcons.put("음식점","fork-knife");
 
 					HashMap<String, String> tagMap = new HashMap<>();
 					tagMap.put("관광지", "멋있어요,예뻐요,다양하게 볼게 많아요");
@@ -140,7 +141,7 @@
 												<span class="tab-number">${outerStatus.count}</span>
 												<div class="tab-text">
 													<h6 style="margin-bottom: 0">${outerStatus.count}일차</h6>
-												</div>
+										 		</div>
 											</div>
 									</a></li>
 								</c:forEach>
@@ -176,7 +177,21 @@
 									                         --bs-btn-active-border-color:#5c99ee;
 									                         --bs-btn-active-color:#fff;">
 														<!-- loc.icon 은 실제 필드명으로 교체 -->
-														<i class="bi" style="font-size: 1.4em"></i>
+														
+														<c:choose>
+														  <c:when test="${loc.typeName eq '명소'}">
+														    <i class="bi bi-leaf-fill" style="font-size: 1.4em"></i>
+														  </c:when>
+														  <c:when test="${loc.typeName eq '음식점'}">
+														    <i class="bi bi-fork-knife" style="font-size: 1.4em"></i>
+														  </c:when>
+														  <c:when test="${loc.typeName eq '숙소'}">
+														    <i class="bi bi-house-door" style="font-size: 1.4em"></i>
+														  </c:when>
+														  <c:otherwise>
+														    <i class="bi bi-question-circle" style="font-size: 1.4em"></i>
+														  </c:otherwise>
+														</c:choose>
 													</button>
 													<small id="" class="mt-1 text-muted" style="font-size: 1.05em">${loc.tourLocName}</small>
 												</div>

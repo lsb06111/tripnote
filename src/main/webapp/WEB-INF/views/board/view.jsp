@@ -194,8 +194,14 @@
 												tagContents.put("leaf-fill", "멋있어요,예뻐요,다양하게 볼게 많아요");
 												tagContents.put("house-door", "청결해요,방음이 잘 돼요,가격이 저럼해요");
 												tagContents.put("fork-knife", "식사가 맛있어요,가격이 저렴해요,매장이 청결해요");
+												
+												HashMap<String, String> courseIcons = new HashMap<>();
+												courseIcons.put("명소","leaf-fill");
+												courseIcons.put("숙소","house-door");
+												courseIcons.put("음식점","fork-knife");
 
 												for (int i = 0; i < nodeNumber; i++) {
+													String icon = contentsGroupByLoc.get(i).get(0).getTypeName();
 										%>
 										<div class="d-flex flex-column align-items-center">
 											<button type="button"
@@ -203,7 +209,7 @@
 												data-target="#spot-pane-<%=ii%>-<%=i%>"
 												data-group="<%=ii%>"
 												style="width: 60px; height: 60px; - -bs-btn-color: #5c99ee; - -bs-btn-border-color: #5c99ee; - -bs-btn-hover-bg: #5c99ee; - -bs-btn-hover-border-color: #5c99ee; - -bs-btn-hover-color: #fff; - -bs-btn-active-bg: #5c99ee; - -bs-btn-active-border-color: #5c99ee; - -bs-btn-active-color: #fff;">
-												<i class="bi bi-<%=nodeIcons[i]%>"
+												<i class="bi bi-<%=courseIcons.get(icon)%>"
 													style="font-size: 1.4em"></i>
 											</button>
 											<small class="mt-1 text-muted" style="font-size: 1.05em"><%=contentsGroupByLoc.get(i).get(0).getTourLocName() %></small>

@@ -78,7 +78,7 @@
 								style="padding: 15px 12px;">
 								<figure style="display: flex; align-items: center; margin: 0; width: 100%; margin: 5px">
 									<img
-										style="width: 15%; border: 1px solid black; border-radius: 50%; margin-right: 10px; cursor: pointer"
+										style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; cursor: pointer"
 										onclick="event.stopPropagation();"
 										src="/tripnote${item.profileImage}"
 										alt="avatar">
