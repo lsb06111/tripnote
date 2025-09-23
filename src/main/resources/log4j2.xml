@@ -9,7 +9,7 @@
 	</Appenders>
 
 	<Loggers>
-		<Logger name="edu.example.tripnote" level="info"
+		<Logger name="edu.example.tripnote" level="debug"
 			additivity="false">
 			<AppenderRef ref="Out" />
 		</Logger>

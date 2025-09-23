@@ -55,8 +55,7 @@ public class BoardService {
 		if (totalBlocks < 0)
 			totalBlocks = 0;
 		int blockStart = (block - 1) * BOARD_BlOCK_SIZE + 1;
-		int blockEnd = block < totalBlocks ? block * BOARD_BlOCK_SIZE
-				: (totalBlocks - 1) * BOARD_BlOCK_SIZE + totalPages % BOARD_BlOCK_SIZE;
+		int blockEnd = block < totalBlocks ? block * BOARD_BlOCK_SIZE : totalPages;
 		boolean hasPrev = block > 1 ? true : false;
 		boolean hasNext = totalBlocks > block ? true : false;
 		PageResponseDTO<BoardDTO> response = new PageResponseDTO<>(list, page, totalCount, totalPages, hasPrev, hasNext,
