@@ -271,9 +271,9 @@
 															<div class="technology-stack"
 																style="margin-bottom: 10px;">
 																<div class="row">
-																	<div class="col-lg-3">
+<!-- 																	<div class="col-lg-3">
 																		<h3>여행 태그</h3>
-																	</div>
+																	</div> -->
 																	<div class="col-lg-9">
 																		<div class="tech-categories">
 																			<div class="tech-category">
