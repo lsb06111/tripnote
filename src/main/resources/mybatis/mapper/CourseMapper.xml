@@ -19,6 +19,7 @@
 	WHERE
         c.user_id = #{id}
 	    AND b.id IS NULL
+	    and c.end_date &lt; (SELECT SYSDATE FROM dual)
 </select>
 <select id="getCourseById" parameterType="int" resultType="CourseDTO">
 	SELECT
