@@ -42,6 +42,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		  $.get('/tripnote/board/mycourse', function (list) {
 			  $body.html("");
 			  $.each(list,function(idx, el){
+				  let icon;
+				  if(!(el.iconName)){
+					  icon = 'bi-bus-front';
+				  }else{
+					  icon = el.iconName;
+				  }
 				  $body.append(`
 					<form id="mycourse-form-${idx}" action="/tripnote/board/form" method="post" style="display:none;">
 						<input name="courseId" value=${el.courseId} />
@@ -57,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 									style="padding: 18px 24px;">
 									<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px">
 										<div class="service-icon" style="margin-bottom: 0">
-											<i class="bi ${el.iconName}"></i>
+											<i class="bi ${icon}"></i>
 										</div>
 										<div style="margin-left: 10px;">
 											<h3 style="margin: 0;">${el.title}</h3>
