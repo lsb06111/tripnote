@@ -409,11 +409,13 @@ heartIcon.addEventListener("click", () => {
 
 				<section>
 					<div class="d-flex mb-3">
-						<a href=""> <img
-							src="/tripnote${loginUser.profileImage}"
-							class="border rounded-circle me-2" alt="Avatar"
-							style="height: 40px" />
-						</a>
+						<c:if test="${not empty sessionScope.loginUser}">
+							<a href=""> <img
+								src="/tripnote${loginUser.profileImage}"
+								class="border rounded-circle me-2" alt="Avatar"
+								style="height: 40px" />
+							</a>
+						</c:if>
 						<div data-mdb-input-init class="form-outline w-100 replyBox">
 							<textarea class="form-control" id="textAreaExample" rows="2"></textarea>
 							<div class="w-100" style="text-align: right;">
