@@ -132,7 +132,7 @@
 		
 				    <!-- 여행 소개 입력 -->
 				    <textarea id="post_intro" class="form-control" style="width: 50%; resize: none; height: 15rem;"
-				              placeholder="이번 여행을 소개해주세요">${board.boardContent}</textarea>
+				              placeholder="이번 여행을 소개해주세요" readonly>${board.boardContent}</textarea>
 				</div>
 			</div>
 

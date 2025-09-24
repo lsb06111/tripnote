@@ -132,6 +132,8 @@ public class BoardController {
 			int userId = currentUser.getId();
 			int boardId = boardDTO.getId();
 			boolean isFollowing = followService.isFollowing(userId, boardId);
+			log.info("^^^^^^^^^^^^^^^^^^isFollowing : " + isFollowing);
+
 			model.addAttribute("isFollowing", isFollowing);
 			boolean isLike = (likesDAO.isLike(boardId, userId) > 0) ? true : false;
 			log.info("^^^^^^^^^^^^^^^^^^is like : " + isLike);
