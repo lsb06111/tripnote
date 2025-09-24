@@ -579,7 +579,7 @@ function loadReplies(){
     		const html = `
     			<div class="d-flex flex-column mb-3 reply " data-reply-id=\${reply.id}  id="replies-\${idx}">
     				<div class="d-flex">
-						<a href="/oti_team3/profile.jsp?identify=\${reply.username}&name=\${reply.nickname}">
+						<a href="/tripnote/profile?username=\${reply.username}">
 							<img src="/tripnote\${reply.profileImage}"
 							class="border rounded-circle me-1" alt="Avatar" style="height: 40px; border: 1px solid black; border-radius: 50%;" />
 						</a>
@@ -613,7 +613,7 @@ function loadReplies(){
     		console.log("parent : " + parent +parent.attr('data-reply-id'));
     		const html = `
     			<div class="d-flex mb-3 reply ms-5"  id="replies-\${idx}">
-				<a href="/oti_team3/profile.jsp?identify=\${reply.username}&name=\${reply.nickname}">
+				<a href="/tripnote/profile?username=\${reply.username}">
 					<img src="/tripnote\${reply.profileImage}"
 					class="border rounded-circle me-1" alt="Avatar" style="height: 40px; border: 1px solid black; border-radius: 50%;" />
 				</a>
