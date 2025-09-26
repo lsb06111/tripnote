@@ -23,7 +23,7 @@
       <div class = "p-2">
        	<div class="fs-6 mb-1">여행 초대</div>
         <div class="input-group mb-4">
-		    <input readonly type="text" class="form-control" value ="http://${pageContext.request.serverName}:8088/tripnote/trip/plan/result?tripDest=${ param.tripDest }&startDate=${ courseDTO.startDate }&endDate=${ courseDTO.endDate }&inviteMode=true&createdUserId=${ not empty param.createdUserId ? param.createdUserId : loginUser.id }&courseId=${courseDTO.id}">
+		    <input readonly type="text" class="form-control" value ="http://${pageContext.request.serverName}:8088/tripnote/trip/plan/result?tripDest=${ param.tripDest }&startDate=${ param.startDate }&endDate=${ param.endDate }&inviteMode=true&createdUserId=${ not empty param.createdUserId ? param.createdUserId : loginUser.id }&courseId=${courseDTO.id}">
 		    <button id = "trip-copy-btn" type="button" class="btn text-white" onclick="copy(this)" data-bs-dismiss="modal" style="--bs-btn-bg:#5c99ee; 
 		             --bs-btn-hover-bg:#447fcc; 
 		             --bs-btn-border-color:#5c99ee; 

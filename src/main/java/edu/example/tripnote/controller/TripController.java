@@ -1,11 +1,18 @@
 package edu.example.tripnote.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -21,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -88,19 +94,17 @@ public class TripController {
 	public String showPlanResult(@RequestParam String tripDest,
 	                             @RequestParam String startDate,
 	                             @RequestParam String endDate,
-	                             // URL에서 courseId를 직접 받도록 파라미터 추가
 	                             @RequestParam(value = "courseId", required = false) Integer courseId,
 	                             @RequestParam(value="createdUserId", required = false) Integer fromUserId,
 	                             CourseDTO courseDTOFromFlash,
 	                             HttpSession session,
 	                             Model model) {
-
+		UserDTO loginUser = (UserDTO)session.getAttribute("loginUser");
 		if(session.getAttribute("loginUser") == null) {
 			model.addAttribute("requireLogin", "true");
 			return "redirect:/";
 		}
 		if(courseId != null) { // if invited
-			// should add to member table with the url or idk lol
 			MembersDTO mdto = new MembersDTO();
 			mdto.setFromUserId(fromUserId);
 			mdto.setToUserId(((UserDTO)session.getAttribute("loginUser")).getId());
@@ -120,38 +124,42 @@ public class TripController {
 	    CourseDTO finalCourseDTO = null;
 
 	    if (courseId != null) {
-	        // 1. URL에 courseId가 있으면 무조건 우선!
-	        //    만약 세션의 courseId와 다르다면, 세션을 새로운 정보로 덮어쓴다.
 	        if (courseInSession == null || courseInSession.getId() != (long)courseId) {
 	            finalCourseDTO = tripDao.getCourseById(courseId);
 	            if (finalCourseDTO != null) {
 	                session.setAttribute("courseDTO", finalCourseDTO);
 	            }
 	        } else {
-	            // URL의 courseId와 세션의 courseId가 같으면 그냥 세션 값 사용
 	            finalCourseDTO = courseInSession;
 	        }
 	    } else if (courseInSession != null) {
-	        // 2. URL에 courseId는 없지만 세션에 정보가 있는 경우
 	        finalCourseDTO = courseInSession;
 	    } else {
-	        // 3. 둘 다 없고 Redirect로 들어온 경우
 	        finalCourseDTO = courseDTOFromFlash;
 	        if(finalCourseDTO != null && finalCourseDTO.getId() != 0) {
 	            session.setAttribute("courseDTO", finalCourseDTO);
 	        }
 	    }
 	    
-	    // ... (기존 DB 조회 로직)
 	    List<AttractionDTO> list = attDao.getAttractionList(tripDest);
 	    List<AttractionDTO> list2 = attDao.getRestaurantList(tripDest);
 	    List<AttractionDTO> list3 = attDao.getHotelList(tripDest);
+	    List<AttractionDTO> list4 = new ArrayList<>();
+	    for(AttractionDTO att : attDao.getAttRecList(tripDest, loginUser.getId())) {
+	    	list4.add(att);
+	    }
+	    for(AttractionDTO att : attDao.getResRecList(tripDest, loginUser.getId())) {
+	    	list4.add(att);
+	    }
+	    for(AttractionDTO att : attDao.getHotRecList(tripDest, loginUser.getId())) {
+	    	list4.add(att);
+	    }
 	    
 	    model.addAttribute("tripInfoDTO", tripInfoDTO);
 	    model.addAttribute("attList", list);
 	    model.addAttribute("restaurantList", list2);
 	    model.addAttribute("hotelList", list3);
-	    model.addAttribute("friendRecList", list2);
+	    model.addAttribute("friendRecList", list4);
 	    model.addAttribute("courseDTO", finalCourseDTO); 
 
 	    return "trip/index2";
@@ -256,89 +264,70 @@ public class TripController {
 		return "trip/index";
 	}
 	
-	@ResponseBody
-	@RequestMapping("/transit")
-	public Map<String, Object> getTransit(
-            @RequestParam String start,
-            @RequestParam String goal
-    ) {
-        try {
-            String url = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/transit?start=" + start + "&goal=" + goal;
-
-            // 1. RestTemplate 객체 생성
-            RestTemplate restTemplate = new RestTemplate();
-
-            // 2. HTTP 헤더 설정
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("X-NCP-APIGW-API-KEY-ID", CLIENT_ID);
-            headers.set("X-NCP-APIGW-API-KEY", CLIENT_SECRET);
-            HttpEntity<Void> entity = new HttpEntity<>(headers);
-            
-            // 3. API 호출 및 응답을 Map<String, Object>으로 받기
-            //    - ParameterizedTypeReference는 중첩된 JSON 구조를 Map으로 변환할 때 사용합니다.
-            ParameterizedTypeReference<Map<String, Object>> responseType = new ParameterizedTypeReference<Map<String, Object>>() {};
-            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(url, HttpMethod.GET, entity, responseType);
-
-            // 4. 응답 본문(Map)을 직접 반환
-            return response.getBody();
-
-        } catch (HttpClientErrorException e) {
-            // 5. API 호출 중 에러 발생 시 (4xx, 5xx 등)
-            System.err.println("네이버 API 호출 오류: " + e.getResponseBodyAsString());
-            // 클라이언트에게 에러 상황을 알리기 위한 간단한 Map 반환
-            return Collections.singletonMap("error", e.getResponseBodyAsString());
-        }
-    }
-	@ResponseBody
-    @RequestMapping("/odsay/searchPath")
-    public Map<String, Object> searchPath(
-            @RequestParam String start, // "경도,위도" 형식
-            @RequestParam String goal   // "경도,위도" 형식
-    ) {
-        // start와 goal 파라미터를 경도(sx, ex)와 위도(sy, ey)로 분리
-        String[] startCoords = start.split(",");
-        String[] goalCoords = goal.split(",");
-        
-        String sx = startCoords[0];
-        String sy = startCoords[1];
-        String ex = goalCoords[0];
-        String ey = goalCoords[1];
-
-        // UriComponentsBuilder를 사용해 파라미터를 안전하게 인코딩하며 URL 생성
-        String url = UriComponentsBuilder.fromHttpUrl("https://api.odsay.com/v1/api/searchPubTransPathT")
-                .queryParam("apiKey", ODSAY_API_KEY)
-                .queryParam("SX", sx)
-                .queryParam("SY", sy)
-                .queryParam("EX", ex)
-                .queryParam("EY", ey)
-                .toUriString();
-
-        return callOdsayApi(url);
-    }
 	
 	
-	@ResponseBody
-    @RequestMapping("/odsay/loadLane")
-    public Map<String, Object> loadLane(@RequestParam String mapObj) {
-        
-        String url = UriComponentsBuilder.fromHttpUrl("https://api.odsay.com/v1/api/loadLane")
-                .queryParam("apiKey", ODSAY_API_KEY)
-                .queryParam("mapObject", "0:0@" + mapObj)
-                .toUriString();
-        
-        return callOdsayApi(url);
-    }
+	@RequestMapping("/modify")
+	public String modify() {
+		
+		List<AttractionDTO> attractionList = attDao.getAtt();
+		List<AttractionDTO> resList = attDao.getRes();
+		List<AttractionDTO> hotList = attDao.getHot();
+		
+		doModify(attractionList);
+		doModify(resList);
+		doModify(hotList);
+		
+		for(AttractionDTO dto : attractionList)
+			attDao.updateAtt(dto);
+		for(AttractionDTO dto : resList)
+			attDao.updateRes(dto);
+		for(AttractionDTO dto : hotList)
+			attDao.updateHot(dto);
+		
+		return "trip/index";
+	}
 	
-	private Map<String, Object> callOdsayApi(String url) {
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            // ODsay API의 응답을 바로 Map으로 변환하여 받음
-            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
-            return response;
-        } catch (HttpClientErrorException e) {
-            System.err.println("ODsay API 호출 오류: " + e.getResponseBodyAsString());
-            return Collections.singletonMap("error", e.getResponseBodyAsString());
-        }
-    }
+	public void doModify(List<AttractionDTO> attractionList) {
+		String apiKey = "lko%2FQ9p5fG2SHKaH17oj9oV1ozNgrXqumBMjwhqzbnO90KLkpGLEDHBAXlfxGwSaAyRzRJOywKsyp%2Bnm9TVThA%3D%3D";
+
+		for (AttractionDTO dto : attractionList) {
+			// contentId가 없는 경우 건너뛰기
+			if(dto.getContentId() == null || dto.getContentId().isEmpty()) continue;
+			
+			try {
+				StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B551011/KorService2/detailCommon2");
+				urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + apiKey);
+				urlBuilder.append("&" + URLEncoder.encode("MobileOS", "UTF-8") + "=ETC");
+				urlBuilder.append("&" + URLEncoder.encode("MobileApp", "UTF-8") + "=AppTest");
+				urlBuilder.append("&" + URLEncoder.encode("_type", "UTF-8") + "=json");
+				urlBuilder.append("&" + URLEncoder.encode("contentId", "UTF-8") + "=" + dto.getContentId());
+
+				URL url = new URL(urlBuilder.toString());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Content-type", "application/json");
+
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				StringBuilder sb = new StringBuilder();
+				String line;
+				while ((line = rd.readLine()) != null) {
+					sb.append(line);
+				}
+				rd.close();
+				conn.disconnect();
+				
+				JSONObject jsonResponse = new JSONObject(sb.toString());
+				if (jsonResponse.getJSONObject("response").getJSONObject("body").getInt("totalCount") > 0) {
+					JSONObject item = jsonResponse.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONArray("item").getJSONObject(0);
+					// DTO에 overview 정보 저장
+					dto.setOverview(item.optString("overview", "소개 정보가 없습니다."));
+				}
+
+			} catch (Exception e) {
+				dto.setOverview("소개가 없습니다.");
+				//e.printStackTrace();
+			}
+		}
+	}
 	
 }

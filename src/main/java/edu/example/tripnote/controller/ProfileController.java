@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
-import edu.example.tripnote.dao.ProfileListDAO;
+import edu.example.tripnote.dao.ProfileDAO;
 import edu.example.tripnote.domain.UserDTO;
 import edu.example.tripnote.domain.profile.BoardCourseDTO;
 import edu.example.tripnote.domain.trip.AreaVO;
@@ -31,10 +31,10 @@ import edu.example.tripnote.domain.trip.CourseIconDTO;
 import edu.example.tripnote.domain.trip.TourLocDTO;
 
 @Controller
-public class ProfileListController {
+public class ProfileController {
 	
 	@Autowired
-	ProfileListDAO dao;
+	ProfileDAO dao;
 	
 	
 	@RequestMapping("/profile")

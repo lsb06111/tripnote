@@ -13,7 +13,7 @@ import edu.example.tripnote.domain.trip.CourseIconDTO;
 import edu.example.tripnote.domain.trip.TourLocDTO;
 
 @Mapper
-public interface ProfileListDAO {
+public interface ProfileDAO {
 	
 	public UserDTO getUser(String username);
 	

@@ -35,7 +35,6 @@ public class TripSocketHandler {
         String courseId = getCourseIdFromSession(session);
         System.out.println("[Message Received] Course: " + courseId + ", Msg: " + msg);
         
-        // Broadcast the message to all clients in the same course "room"
         if (courseId != null) {
             broadcast(courseId, msg);
         }
@@ -68,7 +67,7 @@ public class TripSocketHandler {
     }
 
     private String getCourseIdFromSession(Session session) {
-        // A helper to find which courseId a session belongs to
+
         return sessionsByCourseId.entrySet().stream()
                 .filter(entry -> entry.getValue().contains(session))
                 .map(Map.Entry::getKey)

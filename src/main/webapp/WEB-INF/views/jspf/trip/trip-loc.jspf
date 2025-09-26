@@ -75,6 +75,7 @@
 		<div class="sl-cat d-flex justify-content-start">
 			<span class="sl-type me-1">숙소</span>
 			<a href="#" class="sl-name">${ hotel.title }</a>
+			
 			<div class="trip-sl-address" style="display:none">${ hotel.addr1 }</div>
 		</div>
 		<p class="sl-desc">${ hotel.overview }</p>
@@ -84,6 +85,34 @@
 </div>
 </c:forEach>
 </div>
+
+<div class="trip-tag tag-friend">
+<c:forEach var="friend" items="${ friendRecList }">
+<div class="trip-loc-card" onclick="drawMarkerWithXY(${friend.mapx}, ${friend.mapy})">
+	<div class="trip-loc-top">
+		<div class="sl-thumb">
+			<img src="${ friend.firstimage != null ? friend.firstimage : '/tripnote/resources/assets/img/trip/sampleTourImg.jpg' }" alt="장소 이미지">
+		</div>
+		
+		<button class="sl-add" aria-label="일정에 추가" onclick="insertToTimeline(event, this, '${friend.contentId}','${friend.title}', '${friend.firstimage}', '${courseDTO.id}', '${friend.typeName }', '${friend.mapx}', '${friend.mapy}')">+</button>
+	</div>
+	<!-- 하단: 상세 설명 박스 -->
+	<div class="trip-loc-info">
+		<div class="sl-cat d-flex justify-content-start">
+			<span class="sl-type me-1">${friend.typeName }</span>
+			<a href="#" class="sl-name">${ friend.title }</a>
+			<div class="sl-badge">친구추천</div>
+			<div class="trip-sl-address" style="display:none">${ friend.addr1 }</div>
+		</div>
+		<p class="sl-desc">${ friend.overview }</p>
+		<div class="sl-meta">
+		</div>
+	</div>
+</div>
+</c:forEach>
+</div>
+
+
 
 <script>
 let socket;

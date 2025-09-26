@@ -29,7 +29,7 @@
 	            <span class="trip-loc-tag tag-button-tour" onclick="showContentsByTag('tour')" style="cursor:pointer;background-color:color-mix(in srgb, var(--accent-color), transparent 72%)">명소</span>
 	            <span class="trip-loc-tag tag-button-restaurant" onclick="showContentsByTag('restaurant')" style="cursor:pointer">음식점</span>
 	            <span class="trip-loc-tag tag-button-hotel" onclick="showContentsByTag('hotel')" style="cursor:pointer">숙소</span>
-	            <span class="trip-loc-tag" style="cursor:pointer">친구 추천</span>
+	            <span class="trip-loc-tag tag-button-friend" onclick="showContentsByTag('friend')" style="cursor:pointer">친구 추천</span>
             </div>
             <div class="trip-cards" style=" max-height: calc(100vh - 140px); overflow-y: auto;">
 				<%@ include file="/WEB-INF/views/jspf/trip/trip-loc.jspf"%>

@@ -16,16 +16,121 @@
 </insert>
 
 <select id="getAttractionList" parameterType="string" resultType="AttractionDTO">
-	select * from attractions where locations = #{tripDest} fetch first 30 rows only
+	select * from attractions where locations = #{tripDest} and firstimage is not null order by contentid fetch first 100 rows only
 </select>
 
 <select id="getRestaurantList" parameterType="string" resultType="AttractionDTO">
-	select * from restaurants where locations = #{tripDest} fetch first 30 rows only
+	select * from restaurants where locations = #{tripDest} and firstimage is not null order by contentid fetch first 100 rows only
 </select>
+
 
 <select id="getHotelList" parameterType="string" resultType="AttractionDTO">
-	select * from hotels where locations = #{tripDest} fetch first 30 rows only
+	select * from hotels where locations = #{tripDest} and firstimage is not null order by contentid fetch first 100 rows only
 </select>
 
+<select id="getAttRecList" resultType="AttractionDTO">
+    SELECT *
+    FROM (
+        SELECT h.*,
+               t.type_name,
+               ROW_NUMBER() OVER (PARTITION BY h.title ORDER BY h.contentId) AS rn
+        FROM attractions h
+        JOIN tour_loc t
+          ON h.contentId = t.code
+        WHERE h.locations = #{tripDest}
+          AND h.contentId IN (
+                SELECT code
+                FROM tour_loc t
+                WHERE t.is_recommend = 1
+                  AND t.course_id IN (
+                        SELECT c.id
+                        FROM course c
+                        WHERE c.user_id IN (
+                              SELECT user_id
+                              FROM follow
+                              WHERE follow_id = #{id}
+                        )
+                  )
+          )
+    ) sub
+    WHERE rn = 1
+</select>
+
+<select id="getResRecList" resultType="AttractionDTO">
+    SELECT *
+    FROM (
+        SELECT h.*,
+               t.type_name,
+               ROW_NUMBER() OVER (PARTITION BY h.title ORDER BY h.contentId) AS rn
+        FROM restaurants h
+        JOIN tour_loc t
+          ON h.contentId = t.code
+        WHERE h.locations = #{tripDest}
+          AND h.contentId IN (
+                SELECT code
+                FROM tour_loc t
+                WHERE t.is_recommend = 1
+                  AND t.course_id IN (
+                        SELECT c.id
+                        FROM course c
+                        WHERE c.user_id IN (
+                              SELECT user_id
+                              FROM follow
+                              WHERE follow_id = #{id}
+                        )
+                  )
+          )
+    ) sub
+    WHERE rn = 1
+</select>
+
+<select id="getHotRecList" resultType="AttractionDTO">
+    SELECT *
+    FROM (
+        SELECT h.*,
+               t.type_name,
+               ROW_NUMBER() OVER (PARTITION BY h.title ORDER BY h.contentId) AS rn
+        FROM hotels h
+        JOIN tour_loc t
+          ON h.contentId = t.code
+        WHERE h.locations = #{tripDest}
+          AND h.contentId IN (
+                SELECT code
+                FROM tour_loc t
+                WHERE t.is_recommend = 1
+                  AND t.course_id IN (
+                        SELECT c.id
+                        FROM course c
+                        WHERE c.user_id IN (
+                              SELECT user_id
+                              FROM follow
+                              WHERE follow_id = #{id}
+                        )
+                  )
+          )
+    ) sub
+    WHERE rn = 1
+</select>
+
+
+<select id="getAtt" resultType="AttractionDTO">
+	select * from attractions where locations = '부산' and firstimage is not null order by contentid fetch first 100 rows only
+</select>
+<select id="getRes" resultType="AttractionDTO">
+	select * from restaurants where locations = '부산' and firstimage is not null order by contentid fetch first 100 rows only
+</select>
+<select id="getHot" resultType="AttractionDTO">
+	select * from hotels where locations = '부산' and firstimage is not null order by contentid fetch first 100 rows only
+</select>
+
+<update id="updateAtt" parameterType="AttractionDTO">
+	update attractions set overview = #{overview} where contentId = #{contentId}
+</update>
+<update id="updateRes" parameterType="AttractionDTO">
+	update restaurants set overview = #{overview} where contentId = #{contentId}
+</update>
+<update id="updateHot" parameterType="AttractionDTO">
+	update hotels set overview = #{overview} where contentId = #{contentId}
+</update>
 
 </mapper>
