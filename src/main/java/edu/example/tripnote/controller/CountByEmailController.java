@@ -18,7 +18,7 @@ public class CountByEmailController {
 	
 	@ResponseBody
 	@RequestMapping("/Emailcheck")
-	public Map<String, Object> checkeamil(@RequestParam String email) {
+	public Map<String, Object> checkemail(@RequestParam String email) {
 		Map<String, Object> result = new HashMap<>();
 		
 		if(dao.countByEmail(email) > 0) {

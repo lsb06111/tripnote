@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
   form.addEventListener('submit', function (e) {
     let block = false;
 
-    // (A) 비밀번호 최소 길이: 프론트에서만 검사
     if (password && password.value.length < 8 && password.value.length > 0) {
       password.setCustomValidity('비밀번호는 최소 8자리 이상입니다.');
       showPwInvalid('비밀번호는 최소 8자리 이상입니다.');
@@ -166,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
       showPwValid('사용 가능한 비밀번호입니다.');
     }
 
-    // (B) 기본 HTML5/Bootstrap 검증
     if (!form.checkValidity()) block = true;
 
     if (block) {
@@ -225,10 +223,8 @@ function runUsernameCheck() {
   })
   .done(function (res) {
     if (res && res.invalid === true) {
-      // 이미 사용 중
       showInvalid(res.msg);
     } else {
-      // 사용 가능
       showValid(res && res.msg);
     }
   })
@@ -266,8 +262,8 @@ $(document).on('click', '#emailBtn', function (e) {
   e.preventDefault();
   e.stopImmediatePropagation();
   runEmailCheck().then(function (success) {
-    if (success) {           // 사용 가능일 때만
-      showCert();       // 인증 메일 요청
+    if (success) {         
+      showCert();       
     }
   });
 });
@@ -334,18 +330,15 @@ function runEmailCheck() {
 <!-- 이메일 인증 요청 or 인증 -->
 <script>
 (function () {
-  // CSRF 메타가 없으면 자동으로 빈 헤더 리턴 → 보안 미사용 환경에서도 안전
   function getCsrfHeaders() {
     const h = document.querySelector('meta[name="_csrf_header"]')?.content;
     const t = document.querySelector('meta[name="_csrf"]')?.content;
     return h && t ? { [h]: t } : {};
   }
 
-  // 공통: 입력칸 컨테이너(.mb-2)와 피드백 엘리먼트 얻기
   function groupOf(input) { return input.closest('.mb-2'); }
   function invalidBoxOf(input) { return groupOf(input)?.querySelector('.invalid-feedback'); }
 
-  // 오류 메시지 표시: invalid-feedback + is-invalid
   function showError(input, msg) {
     const box = invalidBoxOf(input);
     if (box) {
@@ -365,7 +358,6 @@ function runEmailCheck() {
     input.removeAttribute('aria-invalid');
   }
 
-  // 성공 메시지(초록): valid-feedback 동적 생성
   function showSuccess(input, msg) {
     const group = groupOf(input);
     if (!group) return;
@@ -380,7 +372,7 @@ function runEmailCheck() {
     input.classList.add('is-valid');
   }
 
-  // === 인증코드 전송 ===
+  // 인증코드 전송
   window.showCert = async function () {
     const emailEl = document.getElementById('regEmail');
     if (!emailEl) return;
@@ -390,7 +382,7 @@ function runEmailCheck() {
     clearError(emailEl);
 
     try {
-   	  // 성공: 인증번호 입력칸 열고 성공 메시지
+   	  // 성공
       document.querySelector('.cert-number')?.style?.setProperty('display', '');
       document.getElementById('regCertNumber')?.focus();
       
@@ -412,7 +404,7 @@ function runEmailCheck() {
     }
   };
 
-  // === 인증코드 검증 ===
+  // 인증코드 검증
   window.verifyCert = async function () {
     const emailEl = document.getElementById('regEmail');
     const codeEl  = document.getElementById('regCertNumber');
@@ -443,8 +435,6 @@ function runEmailCheck() {
       // 성공 처리
       clearError(codeEl);
       showSuccess(codeEl, '이메일 인증이 완료되었습니다.');
-      // 필요 시 숨은 필드에 플래그 저장
-      // document.getElementById('emailVerified')?.value = 'true';
     } catch (e) {
       showError(codeEl, '네트워크 오류: ' + e.message);
     }
@@ -476,12 +466,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const p1 = form.querySelector('#regPassword');
     const p2 = form.querySelector('#regPassword2');
 
-    // 1) HTML5/Bootstrap 검증: 유효하지 않으면 전송 막고 invalid-feedback 표시
     if (!form.checkValidity()) {
       e.preventDefault(); e.stopPropagation();
     }
 
-    // 2) 비밀번호 일치 추가검증
+    // 비밀번호 일치 추가검증
     if (p1 && p2 && p1.value !== p2.value) {
       e.preventDefault(); e.stopPropagation();
       p2.setCustomValidity('비밀번호가 일치하지 않습니다.');
@@ -489,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function () {
       p2.setCustomValidity('');
     }
 
-    // Bootstrap 스타일 표시
     form.classList.add('was-validated');
   }, false);
 });

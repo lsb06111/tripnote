@@ -4,8 +4,8 @@
 <style>
   /* 로그인 영역에만 적용 */
   .login-component .form-control::placeholder {
-    color: #9aa0a6;   /* 연한 회색 */
-    opacity: 1;       /* 일부 브라우저는 opacity로 더 진하게 보이기도 하니 고정 */
+    color: #9aa0a6;
+    opacity: 1;
   }
 
   /* 만약 더 강한 규칙이 덮어쓴다면 특이성을 올려 비밀번호 칸을 한 번 더 지정 */
@@ -67,7 +67,6 @@
 
   const form = document.getElementById('loginForm');
 
-  // 범위 한정된 셀렉터(이 폼 내부만)
   const findIdDom      = form.querySelector('.find-component.find-id');
   const findPassDomAll = form.querySelectorAll('.find-component');
   const loginDomAll    = form.querySelectorAll('.login-component');
@@ -81,7 +80,7 @@
 
   function toggleInputsRequiredDisabled(nodeList, enable) {
     nodeList.forEach(el => {
-      el.disabled = !enable;                 // disabled면 검증 제외
+      el.disabled = !enable;   
       if (enable) el.setAttribute('required', '');
       else        el.removeAttribute('required');
     });
@@ -102,12 +101,12 @@
 
   function setFindIdMode() {
     currentMode = 'findId';
-    form.action = '<c:out value="${cxt}"/>/searchusername'; // ★ 컨트롤러 매핑으로 변경
+    form.action = '<c:out value="${cxt}"/>/searchusername';
     loginDomAll.forEach(el => el.style.setProperty('display', 'none', 'important'));
-    findPassDomAll.forEach(hide); // 모두 숨기고
-    show(findIdDom);              // 이메일만 보이게
+    findPassDomAll.forEach(hide);
+    show(findIdDom);             
     toggleInputsRequiredDisabled(loginInputs, false);
-    toggleInputsRequiredDisabled(findInputs,  true); // 이메일 input 활성화
+    toggleInputsRequiredDisabled(findInputs,  true);
     submitBtn.textContent = '아이디 찾기';
   }
 
@@ -121,19 +120,16 @@
     submitBtn.textContent = '비밀번호 찾기';
   }
 
-  // 링크에서 호출하는 전역 함수로 노출
   window.findAction = function (action) {
     if (action === 'id') setFindIdMode();
     else setFindPasswordMode();
-    return false; // a href 기본 동작 막기
+    return false;
   };
 
-  // 초기 상태: 로그인 모드
   setLoginMode();
 
   // 제출 시 검증
   form.addEventListener('submit', (event) => {
-    // 현재 모드에 맞춰 필수값 최소화(특히 findId 모드에서 이메일만 검사)
     if (currentMode === 'findId') {
       const email = form.querySelector('#findEmail');
       const msgArea = document.getElementById('msgArea');

@@ -38,16 +38,12 @@ public class UserService {
     
     // 로그인 서비스 로직
     public UserDTO login(String username, String plainPassword) {
-        // 1. DAO를 통해 사용자 이름으로 DB에서 사용자 정보(암호화된 비밀번호)를 가져옴
         UserDTO user = userDAO.login(username);
         
-        // 2. 사용자가 존재하고, 비밀번호가 일치하는지 확인
         if (user != null && matchesPassword(plainPassword, user.getPassword())) {
-            // 비밀번호가 일치하면 사용자 정보 반환
             return user;
         }
         
-        // 비밀번호가 일치하지 않거나 사용자가 없으면 null 반환
         return null;
     }
 }
