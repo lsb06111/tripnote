@@ -457,8 +457,8 @@ function sendFollow(){
 	const followerId = $('#user_id').text();
 	const followeeId = $('#writer').text();
 	let request = `/tripnote/follow?follower=\${followerId}&followee=\${followeeId}`
-	$.get(request, function(){
-		console.log("succeed follow request");
+	$.get(request, function(data, textStatus){
+		console.log("succeed follow request textStatus : " + textStatus);
 	});
 }
 

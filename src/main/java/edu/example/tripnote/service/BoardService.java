@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardService {
 	private final BoardDAO boardDAO;
 	private final ReviewContentDAO reviewContentDAO;
-	private final ReplyDAO replyDAO;
 
 	public PageResponseDTO<BoardDTO> listAll(BoardParamDTO boardParam) {
 		int page = boardParam.getPage();
@@ -152,10 +151,7 @@ public class BoardService {
 		List<List<BoardDetailDTO>> boardDetail = new ArrayList<>(boardDetailList.stream()
 							 	.collect(Collectors.groupingBy(BoardDetailDTO::getTourNth))
 								.values());
-		
-		//List<ReplyDTO> replyList = replyDAO.getReplysByBoardId(id);
-		//log.info("댓글리스트");
-		
+
 		BoardDetailResDTO response = new BoardDetailResDTO();
 		response.setContents(boardDetail);
 		response.setBoardDTO(boardDTO);

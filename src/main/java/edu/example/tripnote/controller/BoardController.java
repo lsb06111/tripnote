@@ -124,29 +124,19 @@ public class BoardController {
 		BoardDTO boardDTO = resDTO.getBoardDTO();
 		model.addAttribute("board", boardDTO);
 		model.addAttribute("contents",resDTO.getContents());
-		log.debug("************** board  :" + resDTO.getBoardDTO().toString());
-		log.debug("************** contents  :" + resDTO.getContents().toString());
 		
 		UserDTO currentUser = (UserDTO)httpSession.getAttribute("loginUser");
 		if (currentUser != null) {
 			int userId = currentUser.getId();
 			int boardId = boardDTO.getId();
-			boolean isFollowing = followService.isFollowing(userId, boardId);
-			log.info("^^^^^^^^^^^^^^^^^^isFollowing : " + isFollowing);
-
+			int writerId = boardDTO.getUserId();
+			boolean isFollowing = followService.isFollowing(userId, writerId);
 			model.addAttribute("isFollowing", isFollowing);
 			boolean isLike = (likesDAO.isLike(boardId, userId) > 0) ? true : false;
-			log.info("^^^^^^^^^^^^^^^^^^is like : " + isLike);
-			log.info("^^^^^^^^^^^^^^^^^^likesDAO.isLike(boardId, userId) : " + likesDAO.isLike(boardId, userId));
 			model.addAttribute("isLike", isLike);
 
 		}
 		return "board/view";
-	}
-	
-	@GetMapping("/view")
-	public String view() {
-		return "board/oldView";
 	}
 
 }

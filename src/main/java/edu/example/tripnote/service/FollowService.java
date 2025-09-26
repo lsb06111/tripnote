@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 
 import edu.example.tripnote.dao.FollowDAO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FollowService {

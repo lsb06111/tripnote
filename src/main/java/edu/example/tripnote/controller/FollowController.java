@@ -1,5 +1,7 @@
 package edu.example.tripnote.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +17,13 @@ public class FollowController {
 	
 	@ResponseBody
 	@GetMapping("/follow")
-	public void follow(@RequestParam("follower")int followerId, @RequestParam("followee")int followeeId) {
-		followService.follow(followerId, followeeId);
+	public ResponseEntity<Void> follow(@RequestParam("follower")int followerId, @RequestParam("followee")int followeeId) {
+		boolean isSucceeded = followService.follow(followerId, followeeId);
+		if (isSucceeded) {
+			return ResponseEntity.ok().build();
+		}else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
 	}
 	
 	@ResponseBody
